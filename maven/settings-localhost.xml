@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+        
+    <mirrors>
+        <mirror>
+            <id>dukecon</id>
+            <url>http://localhost:8081/content/groups/public</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+    
+    <activeProfiles>
+        <activeProfile>dukecon-localhost</activeProfile>
+    </activeProfiles>
+
+    <profiles>
+        <profile>
+            <id>dukecon-localhost</id>
+            <repositories>
+                <repository>
+                    <id>localhost</id>
+                    <url>http://localhost:8081/content/repositories/snapshots</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>localhost</id>
+                    <url>http://localhost:8081/content/repositories/releases</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>        
+    
+    <servers>
+        <server>
+            <id>dukecon</id>
+            <username>deployment</username>
+            <password>x9y8z7a6</password>
+        </server>
+    </servers>    
+</settings>
