@@ -20,14 +20,14 @@
             <id>dukecon-localhost</id>
             <repositories>
                 <repository>
-                    <id>localhost</id>
+                    <id>localhost-snapshots</id>
                     <url>http://localhost:8081/content/repositories/snapshots</url>
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
                 </repository>
                 <repository>
-                    <id>localhost</id>
+                    <id>localhost-releases</id>
                     <url>http://localhost:8081/content/repositories/releases</url>
                     <releases>
                         <enabled>true</enabled>
