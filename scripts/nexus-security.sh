@@ -27,6 +27,6 @@ EOF
 
 }
 
-# update_user admin "${NEXUS_ADMIN_PW}" "${NEXUS_ADMIN_NEW_PW}"
+update_user admin "${NEXUS_ADMIN_PW}" "${NEXUS_ADMIN_NEW_PW}"
 NEXUS_ADMIN_PW="${NEXUS_ADMIN_NEW_PW}"
 update_user deployment "deployment123" "x9y8z7a6"
