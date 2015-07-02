@@ -2,7 +2,7 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-        
+
     <mirrors>
         <mirror>
             <id>dukecon</id>
@@ -10,7 +10,7 @@
             <mirrorOf>*</mirrorOf>
         </mirror>
     </mirrors>
-    
+
     <activeProfiles>
         <activeProfile>dukecon</activeProfile>
     </activeProfiles>
@@ -34,6 +34,15 @@
                     </releases>
                 </repository>
             </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>dukecon-snapshots</id>
+                    <url>http://dev.dukecon.org/nexus/content/group/public</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
         </profile>
-    </profiles>        
+    </profiles>
 </settings>
