@@ -1,5 +1,13 @@
 include apache
 
+apache::vhost { 'dukecon.org':
+  port		=>	'80',
+  docroot	=>	'/var/www/html',
+}
+apache::vhost { 'www.dukecon.org':
+  port		=>	'80',
+  docroot	=>	'/var/www/html',
+}
 apache::vhost { 'dev.dukecon.org':
   port		=>	'80',
   docroot	=>	'/var/www/html',
