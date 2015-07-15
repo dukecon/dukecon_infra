@@ -25,6 +25,6 @@ apache::vhost { 'dev.dukecon.org':
 	'url'	=>	'http://localhost:9060/',
     },
   ],
-  redirect_source => ['/latest', '/testing'],
-  redirect_dest   => ['/latest/', '/testing/'],
+  redirect_source => ['/jenkins', '/nexus', '/latest', '/testing'],
+  redirect_dest   => ['/jenkins/', '/nexus/', '/latest/', '/testing/'],
 }
