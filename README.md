@@ -1,7 +1,47 @@
 # Setup DukeCon Infrastructure
 
-* Install vanilla Ubuntu 14.04 (LTS, "trusty")
+* Install vanilla Ubuntu 14.04 (LTS, "trusty", optionally run this in a Vagrant
+box, see below)
 * Perform the following actions as root in a locally checked out dukecon_infra repository
+
+## Preparations
+
+Check out the whole project into a suitable place on your system and change 
+your working directory to this place, e.g.,
+
+    mkdir -p ~/wrk
+    cd ~/wrk
+    git clone https://github.com/dukecon/dukecon_infra.git
+    cd dukecon_infra
+    
+The remaining steps are performed from this directory (unless mentioned otherwise).
+
+## Vagrant box (optional)
+
+For development and testing (or virtualization) purposes of the infrastructure we 
+provide a [Vagrant](http://vagrantup.com) box setup. This is optional, skip this 
+step if you want to install the overall infrastructure on a native Linux box.
+
+Just run the following command to get the virtual box up and running
+
+    vagrant up
+
+This will print a lot of information to keep you informed about the progress.
+You may even run into some problems (usually with etckeeper). In this case just
+run the vagrant provisioning process again:
+
+    vagrant provision
+    
+If everything is fine you can login to the new box:
+
+    vagrant ssh
+    
+You will find all files in /vagrant directory of the box (your working directory
+is mounted there).
+
+    cd /vagrant
+
+Proceed with the remaining steps from here. 
 
 ## Setup Puppet modules for EtcKeeper, Jenkins, Docker, Maven, ...
 
