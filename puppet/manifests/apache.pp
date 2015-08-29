@@ -30,3 +30,16 @@ apache::vhost { 'dev.dukecon.org':
   redirect_source => ['/nexus', '/latest', '/testing'],
   redirect_dest   => ['/nexus/', '/latest/', '/testing/'],
 }
+
+apache::vhost { 'keycloak.dukecon.org':
+  port			=>	'80',
+  docroot		=>	'/var/www/html',
+  allow_encoded_slashes	=>	'nodecode',
+  proxy_preserve_host	=>	'true',
+  proxy_pass		=>	[
+    {	'path'		=>	'/',
+	'url'		=>	'http://localhost:9041/',
+	'reverse_urls'	=>	'http://localhost:9041/',
+    },
+  ],
+}
