@@ -3,6 +3,15 @@ include apache
 apache::vhost { 'dukecon.org':
   port		=>	'80',
   docroot	=>	'/var/www/html',
+  allow_encoded_slashes	=>	'nodecode',
+  proxy_preserve_host	=>	'true',
+  proxy_pass		=>	[
+    {	'path'		=>	'/javaland/',
+	'url'		=>	'http://localhost:9080/javaland/',
+    },
+  ],
+  redirect_source => ['/javaland'],
+  redirect_dest   => ['/javaland/'],
 }
 apache::vhost { 'www.dukecon.org':
   port		=>	'80',
