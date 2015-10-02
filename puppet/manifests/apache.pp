@@ -10,8 +10,8 @@ apache::vhost { 'dukecon.org':
 	'url'		=>	'http://localhost:9080/javaland/',
     },
   ],
-  redirect_source => ['/javaland'],
-  redirect_dest   => ['/javaland/'],
+  redirect_source => ['/javaland',],
+  redirect_dest   => ['/javaland/',],
 }
 apache::vhost { 'www.dukecon.org':
   port		=>	'80',
@@ -33,12 +33,18 @@ apache::vhost { 'dev.dukecon.org':
     {	'path'		=>	'/latest/',
 	'url'		=>	'http://localhost:9050/latest/',
     },
+    {	'path'		=>	'/testdata/',
+	'url'		=>	'http://localhost:9051/testdata/',
+    },
     {	'path'		=>	'/testing/',
 	'url'		=>	'http://localhost:9060/testing/',
     },
+    {	'path'		=>	'/release/',
+	'url'		=>	'http://localhost:9070/release/',
+    },
   ],
-  redirect_source => ['/nexus', '/latest', '/testing'],
-  redirect_dest   => ['/nexus/', '/latest/', '/testing/'],
+  redirect_source => ['/nexus', '/latest', '/testdata', '/testing', '/release'],
+  redirect_dest   => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
 }
 
 apache::vhost { 'keycloak.dukecon.org':
