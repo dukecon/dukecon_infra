@@ -63,8 +63,8 @@ apache::vhost { 'keycloak.dukecon.org':
   ],
 }
 
-# SSL
-apache::vhost { 'dev-ssl.dukecon.org':
+# SSL - there can be only one!
+apache::vhost { 'ssl.dukecon.org':
   port			=>	'443',
   ssl			=>	true,
   ssl_cert		=>	'/etc/tls/server.pem',
