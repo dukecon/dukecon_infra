@@ -59,3 +59,39 @@ apache::vhost { 'keycloak.dukecon.org':
     },
   ],
 }
+
+# SSL
+apache::vhost { 'dev-ssl.dukecon.org':
+  port			=>	'443',
+  ssl			=>	true,
+  ssl_cert		=>	'/etc/tls/server.pem',
+  ssl_key		=>	'/etc/tls/key.pem',
+  ssl_ca		=>	'/etc/tls/startssl-chain.pem',
+  docroot		=>	'/var/www/html',
+  allow_encoded_slashes	=>	'nodecode',
+  proxy_preserve_host	=>	'true',
+  proxy_pass		=>	[
+    {	'path'		=>	'/jenkins',
+	'url'		=>	'http://localhost:8080/jenkins',
+	'keywords'	=>	['nocanon'],
+    },
+    {	'path'		=>	'/nexus/',
+	'url'		=>	'http://localhost:8081/',
+    },
+    {	'path'		=>	'/latest/',
+	'url'		=>	'http://localhost:9050/latest/',
+    },
+    {	'path'		=>	'/testdata/',
+	'url'		=>	'http://localhost:9051/testdata/',
+    },
+    {	'path'		=>	'/testing/',
+	'url'		=>	'http://localhost:9060/testing/',
+    },
+    {	'path'		=>	'/release/',
+	'url'		=>	'http://localhost:9070/release/',
+    },
+  ],
+  redirect_source => ['/nexus', '/latest', '/testdata', '/testing', '/release'],
+  redirect_dest   => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
+}
+
