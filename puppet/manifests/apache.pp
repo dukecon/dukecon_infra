@@ -42,6 +42,9 @@ apache::vhost { 'dev.dukecon.org':
     {	'path'		=>	'/release/',
 	'url'		=>	'http://localhost:9070/release/',
     },
+    {	'path'		=>	'/ssltest/',
+	'url'		=>	'http://localhost:9080/javaland/',
+    },
   ],
   redirect_source => ['/nexus', '/latest', '/testdata', '/testing', '/release'],
   redirect_dest   => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
@@ -90,8 +93,10 @@ apache::vhost { 'dev-ssl.dukecon.org':
     {	'path'		=>	'/release/',
 	'url'		=>	'http://localhost:9070/release/',
     },
+    {	'path'		=>	'/ssltest/',
+	'url'		=>	'http://localhost:9050/latest/',
+    },
   ],
   redirect_source => ['/nexus', '/latest', '/testdata', '/testing', '/release'],
   redirect_dest   => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
 }
-
