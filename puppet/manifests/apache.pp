@@ -1,4 +1,6 @@
-include apache
+class { 'apache':
+  keepalive		=>	'On',
+}
 
 apache::vhost { 'dukecon.org':
   port		=>	'80',
