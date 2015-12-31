@@ -6,20 +6,20 @@ box, see below)
 
 ## Preparations
 
-Check out the whole project into a suitable place on your system and change 
+Check out the whole project into a suitable place on your system and change
 your working directory to this place, e.g.,
 
     mkdir -p ~/wrk
     cd ~/wrk
     git clone https://github.com/dukecon/dukecon_infra.git
     cd dukecon_infra
-    
+
 The remaining steps are performed from this directory (unless mentioned otherwise).
 
 ## Vagrant box (optional)
 
-For development and testing (or virtualization) purposes of the infrastructure we 
-provide a [Vagrant](http://vagrantup.com) box setup. This is optional, skip this 
+For development and testing (or virtualization) purposes of the infrastructure we
+provide a [Vagrant](http://vagrantup.com) box setup. This is optional, skip this
 step if you want to install the overall infrastructure on a native Linux box.
 
 Just run the following command to get the virtual box up and running
@@ -31,17 +31,17 @@ You may even run into some problems (usually with etckeeper). In this case just
 run the vagrant provisioning process again:
 
     vagrant provision
-    
+
 If everything is fine you can login to the new box:
 
     vagrant ssh
-    
+
 You will find all files in /vagrant directory of the box (your working directory
 is mounted there).
 
     cd /vagrant
 
-Proceed with the remaining steps from here. 
+Proceed with the remaining steps from here.
 
 ## Setup Puppet modules for EtcKeeper, Jenkins, Docker, Maven, ...
 
@@ -68,23 +68,23 @@ TODO: Add these to scripts/puppet
     cp -p scripts/nexus-security.sh ~/bin
     # Set new passwords for Nexus
     vi ~/bin/nexus-security.sh
-    
+
     puppet apply puppet/manifests/docker-nexus.pp
     ~/bin/nexus-security.sh
-    
+
 ## Setup Maven
 
 You may run this as different user (not root, e.g. "jenkins")
 
     mkdir ~/.m2
-    cp maven/settings-local.xml ~/.m2/settings.xml
+    cp maven/settings-localhost.xml ~/.m2/settings.xml
     # Set deployment password from ~root/bin/nexus-security.sh
     vi ~/.m2/settings.xml
-    
+
 Run Maven to test it:
 
     mkdir ~/wrk
     cd ~/wrk
-    git clone https://github.com/jugda/dukecon_html5.git
+    git clone https://github.com/dukecon/dukecon_html5.git
     cd dukecon_html5
     mvn clean deploy
