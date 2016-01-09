@@ -63,6 +63,8 @@ apache::vhost { 'keycloak.dukecon.org':
 	'reverse_urls'	=>	'http://localhost:9041/',
     },
   ],
+  # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+  headers => 'set P3P "CP=\"Potato\""'
 }
 
 # SSL - there can be only one!
