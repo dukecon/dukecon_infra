@@ -2,12 +2,15 @@
 # vi: set ft=ruby :
 
 name = "dukecon"
-memory = 2048
-Vagrant.configure(2) do |dukecon|
-  # Generic/Defaults
-  dukecon.vm.box = "ubuntu/trusty64"
+memory = 3072
 
-  dukecon.vm.provider "virtualbox" do |vbox|
+Vagrant.configure(2) do |config|
+  # Generic/Defaults
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.hostname = name
+  config.vm.synced_folder "cache/apt-archives", "/var/cache/apt/archives"
+
+  config.vm.provider "virtualbox" do |vbox|
     vbox.name = name
     vbox.memory = memory
     # Docker
@@ -18,13 +21,13 @@ Vagrant.configure(2) do |dukecon|
     # vbox.vm.network "forwarded_port", guest: 8080, host: 38080
   end
 
-  dukecon.vm.provider "parallels" do |parallels, override|
+  config.vm.provider "parallels" do |parallels, override|
     override.vm.box = "parallels/ubuntu-14.04"
     parallels.name = name
     parallels.memory = memory
-    parallels.vm.network "private_network", ip: "10.211.55.8"
+    override.vm.network "private_network", ip: "10.211.55.8"
   end
 
-  dukecon.vm.provision "shell", path: "puppet/init-puppet-debian.sh"
+  config.vm.provision "shell", path: "puppet/init-puppet-debian.sh"
 
 end
