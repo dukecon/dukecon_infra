@@ -14,6 +14,7 @@ $plugins = [
   'jobConfigHistory',
   'build-pipeline-plugin',
   'disk-usage',
+  'jgiven',
   'monitoring',
   'ColumnsPlugin',
   'envinject',
