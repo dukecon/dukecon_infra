@@ -1,4 +1,4 @@
-$keycloak_image = "jboss/keycloak-postgres:1.7.0.Final"
+$keycloak_image = "ascheman/keycloak-postgres-https:1.7.0.Final"
 
 # Make sure the passwords are available via Puppet Hiera, e.g., in /etc/puppet/hieradata/common.yaml
 #---

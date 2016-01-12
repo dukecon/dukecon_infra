@@ -77,6 +77,7 @@ apache::vhost { 'ssl.dukecon.org':
   ssl_ca		=>	'/etc/tls/startssl-chain.pem',
   docroot		=>	'/var/www/html',
   allow_encoded_slashes	=>	'nodecode',
+  headers               =>      [ 'set X-Forwarded-Proto https' ],
   proxy_preserve_host	=>	'true',
   proxy_pass		=>	[
     {	'path'		=>	'/jenkins',
