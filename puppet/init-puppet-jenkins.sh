@@ -9,3 +9,4 @@ test -d /etc/puppet/modules/jenkins || $sudo puppet module install rtyler-jenkin
 test -d /etc/puppet/modules/maven || $sudo puppet module install maestrodev-maven
 
 $sudo puppet apply /vagrant/puppet/manifests/jenkins.pp
+$sudo puppet apply /vagrant/puppet/manifests/jenkins-dukecon.pp
