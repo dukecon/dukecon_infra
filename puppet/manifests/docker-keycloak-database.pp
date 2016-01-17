@@ -51,3 +51,27 @@ docker::run { 'postgres-keycloak':
     '/data/postgresql/keycloak/data:/var/lib/postgresql/data',
   ],
 }
+
+file { "/data/backup":
+  path          =>      "/data/backup",
+  ensure        =>      directory,
+  mode          =>      0700,
+}
+
+package { 'postgresql-client-common': }
+
+# TODO: Store password to ~/.pgpass
+file { "/etc/cron.daily/backup-postgres-keycloak":
+  path           =>      "/etc/cron.daily/backup-postgres-keycloak",
+  owner          =>      'root',
+  content        =>      "#!/bin/bash
+
+export PGPASSWORD=$keycloak_hiera_postgres_password
+exec /usr/bin/pg_dump -h localhost -p 9432 -U keycloak -f /data/backup/keycloak.sql keycloak",
+  mode           =>      0700,
+  require        =>      [
+    Service["docker-postgres-keycloak"],
+    File["/data/backup"],
+  ],
+}
+
