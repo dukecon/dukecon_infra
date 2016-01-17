@@ -40,14 +40,14 @@ file { "/data/postgresql/keycloak/data":
 docker::image { $postgres_image: }
 
 docker::run { 'postgres-keycloak':
-  image		=> $postgres_image,
-  env			=> ['POSTGRES_DATABASE=keycloak',
-		          'POSTGRES_USER=keycloak',
-		          "POSTGRES_PASSWORD=$keycloak_hiera_postgres_password",
-		          "POSTGRES_ROOT_PASSWORD=$keycloak_hiera_postgres_root_password",
-		         ],
-  ports		=> ['127.0.0.1:9432:5432'],
-  volumes	=> [# '/data/postgresql/keycloak/log:/var/log/postgresql',
-		    			'/data/postgresql/keycloak/data:/var/lib/postgresql/data',
-						 ],
+  image    => $postgres_image,
+  env      => ['POSTGRES_DATABASE=keycloak',
+    'POSTGRES_USER=keycloak',
+    "POSTGRES_PASSWORD=$keycloak_hiera_postgres_password",
+    "POSTGRES_ROOT_PASSWORD=$keycloak_hiera_postgres_root_password",
+  ],
+  ports    => ['127.0.0.1:9432:5432'],
+  volumes  => [
+    '/data/postgresql/keycloak/data:/var/lib/postgresql/data',
+  ],
 }
