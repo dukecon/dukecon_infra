@@ -114,5 +114,7 @@ if $hiera_dukecon_apache_ssl {
     ],
     redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release'],
     redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers => 'set P3P "CP=\"Potato\""'
   }
 }
