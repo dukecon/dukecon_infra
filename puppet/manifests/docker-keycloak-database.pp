@@ -17,6 +17,26 @@ $keycloak_hiera_postgres = $keycloak_hiera['postgres']
 $keycloak_hiera_postgres_password = $keycloak_hiera_postgres['password']
 $keycloak_hiera_postgres_root_password = $keycloak_hiera_postgres['root_password']
 
+file { "/data/postgresql":
+  path          =>      "/data/postgresql",
+  ensure        =>      directory,
+  mode          =>      0755,
+}
+
+file { "/data/postgresql/keycloak":
+  path          =>      "/data/postgresql/keycloak",
+  ensure        =>      directory,
+  mode          =>      0755,
+  require       =>  File["/data/postgresql"],
+}
+
+file { "/data/postgresql/keycloak/data":
+  path          =>      "/data/postgresql/keycloak/data",
+  ensure        =>      directory,
+  mode          =>      0700,
+  require       =>  File["/data/postgresql/keycloak"],
+}
+
 docker::image { $postgres_image: }
 
 docker::run { 'postgres-keycloak':
