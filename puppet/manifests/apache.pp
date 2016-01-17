@@ -1,3 +1,8 @@
+$hiera_dukecon = hiera('dukecon')
+$hiera_dukecon_apache = $hiera_dukecon['apache']
+$hiera_dukecon_apache_ssl = $hiera_dukecon_apache['ssl']
+
+
 class { 'apache':
   keepalive		=>	'On',
 }
@@ -67,47 +72,47 @@ apache::vhost { 'keycloak.dukecon.org':
   headers => 'set P3P "CP=\"Potato\""'
 }
 
-# SSL - there can be only one!
-apache::vhost { 'ssl.dukecon.org':
-  servername		=>	'dukecon.org',
-  port			=>	'443',
-  ssl			=>	true,
-  ssl_cert		=>	'/etc/tls/server.pem',
-  ssl_key		=>	'/etc/tls/key.pem',
-  ssl_ca		=>	'/etc/tls/startssl-chain.pem',
-  docroot		=>	'/var/www/html',
-  allow_encoded_slashes	=>	'nodecode',
-  # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
-  request_headers =>  [ 'set X-Forwarded-Proto https' ],
-  proxy_preserve_host	=>	'true',
-  proxy_pass		=>	[
-    {	'path'		=>	'/jenkins',
-	'url'		=>	'http://localhost:8080/jenkins',
-	'keywords'	=>	['nocanon'],
-    },
-    {	'path'		=>	'/nexus/',
-	'url'		=>	'http://localhost:8081/',
-    },
-    {	'path'		=>	'/auth/',
-	'url'		=>	'http://localhost:9041/auth/',
-	'reverse_urls'	=>	'http://localhost:9041/auth/',
-    },
-    {	'path'		=>	'/latest/',
-	'url'		=>	'http://localhost:9050/latest/',
-    },
-    {	'path'		=>	'/testdata/',
-	'url'		=>	'http://localhost:9051/testdata/',
-    },
-    {	'path'		=>	'/testing/',
-	'url'		=>	'http://localhost:9060/testing/',
-    },
-    {	'path'		=>	'/release/',
-	'url'		=>	'http://localhost:9070/release/',
-    },
-    {	'path'		=>	'/ssltest/',
-	'url'		=>	'http://localhost:9050/latest/',
-    },
-  ],
-  redirect_source => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release'],
-  redirect_dest   => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
+if $hiera_dukecon_apache_ssl {
+  # SSL - there can be only one!
+  apache::vhost { 'ssl.dukecon.org':
+    servername             =>  'dukecon.org',
+    port                   =>  '443',
+    ssl                    =>  true,
+    ssl_cert               =>  '/etc/tls/server.pem',
+    ssl_key                =>  '/etc/tls/key.pem',
+    ssl_ca                 =>  '/etc/tls/startssl-chain.pem',
+    docroot                =>  '/var/www/html',
+    allow_encoded_slashes  =>  'nodecode',
+    proxy_preserve_host    =>  'true',
+    proxy_pass             =>  [
+      { 'path'      =>  '/jenkins',
+        'url'       =>  'http://localhost:8080/jenkins',
+        'keywords'  =>  ['nocanon'],
+      },
+      { 'path'    =>  '/nexus/',
+        'url'     =>  'http://localhost:8081/',
+      },
+      { 'path'          =>  '/auth/',
+        'url'           =>  'http://localhost:9041/auth/',
+        'reverse_urls'  =>  'http://localhost:9041/auth/',
+      },
+      { 'path'    =>  '/latest/',
+        'url'     =>  'http://localhost:9050/latest/',
+      },
+      { 'path'    =>  '/testdata/',
+        'url'     =>  'http://localhost:9051/testdata/',
+      },
+      { 'path'    =>  '/testing/',
+        'url'     =>  'http://localhost:9060/testing/',
+      },
+      { 'path'    =>  '/release/',
+        'url'     =>  'http://localhost:9070/release/',
+      },
+      { 'path'    =>  '/ssltest/',
+        'url'     =>  'http://localhost:9050/latest/',
+      },
+    ],
+    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release'],
+    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
+  }
 }
