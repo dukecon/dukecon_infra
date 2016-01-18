@@ -96,15 +96,9 @@ apache::vhost { 'keycloak.dukecon.org':
   port                   =>  '80',
   docroot                =>  '/var/www/html',
   allow_encoded_slashes  =>  'nodecode',
-  proxy_preserve_host    =>  'true',
-  proxy_pass             =>  [
-    { 'path'          =>  '/',
-      'url'           =>  'http://localhost:9041/',
-      'reverse_urls'  =>  'http://localhost:9041/',
-    },
-  ],
-  # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
-  headers                => 'set P3P "CP=\"Potato\""'
+  redirect_status        =>  'permanent',
+  redirect_source        =>  [ '/', '/auth/' ],
+  redirect_dest          =>  [ '/auth/', 'https://keycloak.dukecon.org/auth/' ],
 }
 
 if $hiera_dukecon_apache_ssl {

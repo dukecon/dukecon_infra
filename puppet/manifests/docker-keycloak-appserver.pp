@@ -23,6 +23,6 @@ docker::run { 'keycloak':
 							"POSTGRES_PASSWORD=$keycloak_hiera_postgres_password",
 						 ],
   links   => ['postgres-keycloak:postgres',],
-  ports		=> ['9041:8080'],
+  ports		=> ['127.0.0.1:9041:8080'],
   depends	=> ['postgres-keycloak',],
 }
