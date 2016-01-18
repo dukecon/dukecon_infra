@@ -97,8 +97,8 @@ apache::vhost { 'keycloak.dukecon.org':
   docroot                =>  '/var/www/html',
   allow_encoded_slashes  =>  'nodecode',
   redirect_status        =>  'permanent',
-  redirect_source        =>  [ '/', '/auth/' ],
-  redirect_dest          =>  [ '/auth/', 'https://keycloak.dukecon.org/auth/' ],
+  redirect_source        =>  '/auth/',
+  redirect_dest          =>  'https://keycloak.dukecon.org/auth/',
 }
 
 if $hiera_dukecon_apache_ssl {
