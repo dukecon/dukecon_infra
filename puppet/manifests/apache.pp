@@ -29,6 +29,12 @@ if $hiera_dukecon_apache_ssl {
     port                   =>  '80',
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
+    proxy_preserve_host    =>  'true',
+    proxy_pass             =>  [
+      { 'path'    =>  '/nexus/',
+        'url'     =>  'http://localhost:8081/',
+      },
+    ],
     redirect_source        => [
       '/nexus',
       '/latest',
@@ -36,24 +42,22 @@ if $hiera_dukecon_apache_ssl {
       '/testing',
       '/release',
 
-      '/nexus/',
       '/latest/',
       '/testdata/',
       '/testing/',
       '/release/',
     ],
     redirect_dest          => [
-      'https://dev.dukecon.org/nexus/',
+      '/nexus/',
       'https://dev.dukecon.org/latest/',
       'https://dev.dukecon.org/testdata/',
       'https://dev.dukecon.org/testing/',
       'https://dev.dukecon.org/release/',
 
-      'https://dev.dukecon.org//nexus/',
-      'https://dev.dukecon.org//latest/',
-      'https://dev.dukecon.org//testdata/',
-      'https://dev.dukecon.org//testing/',
-      'https://dev.dukecon.org//release/',
+      'https://dev.dukecon.org/latest/',
+      'https://dev.dukecon.org/testdata/',
+      'https://dev.dukecon.org/testing/',
+      'https://dev.dukecon.org/release/',
     ],
   }
 } else {
