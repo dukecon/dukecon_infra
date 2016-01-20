@@ -37,11 +37,14 @@ if $hiera_dukecon_apache_ssl {
     ],
     redirect_source        => [
       '/nexus',
+
+      '/jenkins',
       '/latest',
       '/testdata',
       '/testing',
       '/release',
 
+      '/jenkins/',
       '/latest/',
       '/testdata/',
       '/testing/',
@@ -49,11 +52,14 @@ if $hiera_dukecon_apache_ssl {
     ],
     redirect_dest          => [
       '/nexus/',
-      'https://dev.dukecon.org/latest/',
-      'https://dev.dukecon.org/testdata/',
-      'https://dev.dukecon.org/testing/',
-      'https://dev.dukecon.org/release/',
 
+      'https://dev.dukecon.org/jenkins',
+      'https://dev.dukecon.org/latest',
+      'https://dev.dukecon.org/testdata',
+      'https://dev.dukecon.org/testing',
+      'https://dev.dukecon.org/release',
+
+      'https://dev.dukecon.org/jenkins/',
       'https://dev.dukecon.org/latest/',
       'https://dev.dukecon.org/testdata/',
       'https://dev.dukecon.org/testing/',
