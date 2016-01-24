@@ -29,7 +29,7 @@ file { "/data/postgresql/dukecon/$instance/data":
 }
 
 docker::run { "dukecon-postgres-$instance":
-  image         => "postgres:9.4",
+  image         => "postgres:9.3",
   volumes       => ["/data/postgresql/dukecon/$instance/data:/var/lib/postgresql/data"],
   ports         => ["127.0.0.1:${port}:5432"],
   env           => ["POSTGRES_USER=dukecon", "POSTGRES_PASSWORD=dukecon"],
