@@ -35,3 +35,26 @@ docker::run { "dukecon-postgres-$instance":
   env           => ["POSTGRES_USER=dukecon", "POSTGRES_PASSWORD=dukecon"],
   require	=> File["/data/postgresql/dukecon/$instance/data"],
 }
+
+file { "/data/backup":
+  path          =>      "/data/backup",
+  ensure        =>      directory,
+  mode          =>      0700,
+}
+
+package { 'postgresql-client-common': }
+
+# TODO: Store password to ~/.pgpass
+file { "/etc/cron.daily/backup-dukecon-postgres-$instance":
+  path           =>      "/etc/cron.daily/backup-dukecon-postgres-$instance",
+  owner          =>      'root',
+  content        =>      "#!/bin/bash
+
+export PGPASSWORD=dukecon
+exec /usr/bin/pg_dump -h localhost -p $port -U dukecon -f /data/backup/dukecon-$instance.sql dukecon",
+  mode           =>      0700,
+  require        =>      [
+    Service["docker-dukecon-postgres-$instance"],
+    File["/data/backup"],
+  ],
+}
