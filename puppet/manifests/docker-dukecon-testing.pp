@@ -5,7 +5,7 @@ docker::run { "dukecon-$instance":
   image    => "ascheman/dukecon-server:latest",
   ports    => ["127.0.0.1:$port:8080"],
   env      => [
-    "SPRING_PROFILES_ACTIVE=$instance,postgresql",
+    "SPRING_PROFILES_ACTIVE=$instance,postgresql,docker",
     # TODO: This is only a workaround!
     "DUKECON_ARGS='--postgres.host=postgres --postgres.port=5432'",
   ],
