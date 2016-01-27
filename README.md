@@ -55,6 +55,10 @@ TODO: Split this up into separate scripts
     ./puppet/init-apache-debian.sh
     puppet apply puppet/manifests/apache.pp
 
+## Setup Jenkins
+
+    ./puppet/init-puppet-jenkins.sh
+
 ## Setup Java 8
 
     ./init-java8-on-trusty.sh
