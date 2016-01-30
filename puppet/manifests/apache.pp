@@ -11,14 +11,15 @@ apache::vhost { 'dukecon.org':
   port                   =>  '80',
   docroot                =>  '/var/www/html',
   allow_encoded_slashes  =>  'nodecode',
-  proxy_preserve_host    =>  'true',
-  proxy_pass             =>  [
-    { 'path'    =>  '/javaland/',
-      'url'     =>  'http://localhost:9080/javaland/',
-    },
+  redirect_status        =>  'permanent',
+  redirect_source        => [
+    '/javaland',
+    '/javaland/',
   ],
-  redirect_source        => ['/javaland',],
-  redirect_dest          => ['/javaland/',],
+  redirect_dest          => [
+    'https://dukecon.org/javaland',
+    'https://dukecon.org/javaland/',
+  ],
 }
 apache::vhost { 'www.dukecon.org':
   port     =>  '80',
@@ -43,12 +44,14 @@ if $hiera_dukecon_apache_ssl {
       '/testdata',
       '/testing',
       '/release',
+      '/javaland',
 
       '/jenkins/',
       '/latest/',
       '/testdata/',
       '/testing/',
       '/release/',
+      '/javaland/',
     ],
     redirect_dest          => [
       '/nexus/',
@@ -58,12 +61,14 @@ if $hiera_dukecon_apache_ssl {
       'https://dev.dukecon.org/testdata',
       'https://dev.dukecon.org/testing',
       'https://dev.dukecon.org/release',
+      'https://dukecon.org/javaland',
 
       'https://dev.dukecon.org/jenkins/',
       'https://dev.dukecon.org/latest/',
       'https://dev.dukecon.org/testdata/',
       'https://dev.dukecon.org/testing/',
       'https://dev.dukecon.org/release/',
+      'https://dukecon.org/javaland/',
     ],
   }
 } else {
@@ -145,12 +150,12 @@ if $hiera_dukecon_apache_ssl {
       { 'path'    =>  '/release/',
         'url'     =>  'http://localhost:9070/release/',
       },
-      { 'path'    =>  '/ssltest/',
-        'url'     =>  'http://localhost:9050/latest/',
+      { 'path'    =>  '/javaland/',
+        'url'     =>  'http://localhost:9080/javaland/',
       },
     ],
-    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release'],
-    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
+    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release', '/javaland',],
+    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/',],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers                => 'set P3P "CP=\"Potato\""'
   }
