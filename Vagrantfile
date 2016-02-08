@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-name = "dukecon"
+name = "dukecon-vagrant"
 memory = 3072
 
 Vagrant.configure(2) do |config|
