@@ -15,10 +15,12 @@ apache::vhost { 'dukecon.org':
   redirect_source        => [
     '/javaland',
     '/javaland/',
+    '/JavaLand',
   ],
   redirect_dest          => [
     'https://dukecon.org/javaland',
     'https://dukecon.org/javaland/',
+    'https://dukecon.org/javaland',
   ],
 }
 apache::vhost { 'www.dukecon.org':
@@ -154,8 +156,8 @@ if $hiera_dukecon_apache_ssl {
         'url'     =>  'http://localhost:9080/javaland/',
       },
     ],
-    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release', '/javaland',],
-    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/',],
+    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',  '/JavaLand'],
+    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland'],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers                => 'set P3P "CP=\"Potato\""'
   }
