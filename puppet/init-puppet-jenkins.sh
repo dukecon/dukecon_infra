@@ -10,4 +10,3 @@ test -d /etc/puppet/modules/maven || $sudo puppet module install maestrodev-mave
 test -d /etc/puppet/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
 
 $sudo puppet apply /vagrant/puppet/manifests/jenkins.pp
-$sudo puppet apply /vagrant/puppet/manifests/jenkins-dukecon.pp

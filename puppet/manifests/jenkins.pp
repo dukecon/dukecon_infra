@@ -11,6 +11,11 @@ package { 'firefox':
   ensure => 'latest',
 }
 
+# firefox is needed for JavaScript test of dukecon server
+package { 'phantomjs':
+  ensure => 'latest',
+}
+
 # used for headless testing
 package { 'xvfb':
   ensure => 'installed'
