@@ -17,6 +17,8 @@ package { 'xvfb':
 }
 
 $plugins = [
+  'embeddable-build-status',
+  'description-setter',
   'git-client',
   'scm-api',
   'git',
