@@ -15,16 +15,19 @@ package { "apticron": }
 file_line { 'etckeeper:git':
   path  	=> '/etc/etckeeper/etckeeper.conf',
   line  	=> 'VCS="git"',
+  require => Package['etckeeper']
 }
 file_line { 'etckeeper:no-nightly-commit':
   path  	=> '/etc/etckeeper/etckeeper.conf',
   line  	=> 'AVOID_DAILY_AUTOCOMMITS=1',
   match 	=> '#AVOID_DAILY_AUTOCOMMITS=1',
+  require => Package['etckeeper']
 }
 file_line { 'etckeeper:no-auto-commit':
   path  	=> '/etc/etckeeper/etckeeper.conf',
   line  	=> 'AVOID_COMMIT_BEFORE_INSTALL=1',
   match 	=> '#AVOID_COMMIT_BEFORE_INSTALL=1',
+  require => Package['etckeeper']
 }
 
 # Install hiera (at least to make warnings disappear :-)
