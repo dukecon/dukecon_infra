@@ -1,4 +1,5 @@
 .vagrant
 .idea
 *.iml
+*.log
 .project
