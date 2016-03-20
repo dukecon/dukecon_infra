@@ -23,6 +23,8 @@ Vagrant.configure(2) do |config|
     override.vm.network "forwarded_port", guest: 8080, host: "#{port_unique}080"
     # Nexus
     override.vm.network "forwarded_port", guest: 8081, host: "#{port_unique}081"
+    # DukeCon latest
+    override.vm.network "forwarded_port", guest: 9050, host: "#{port_unique}950"
   end
 
   config.vm.provider "parallels" do |parallels, override|

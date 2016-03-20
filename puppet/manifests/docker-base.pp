@@ -7,6 +7,18 @@ class { 'docker':
   # extra_parameters	=> '--registry-mirror=http://10.211.55.6:5000 --insecure-registry 10.211.55.6:5000',
 }
 
+file_line { 'sudo docker restart for jenkins':
+  path  	=> '/etc/sudoers',
+  line => 'jenkins ALL = NOPASSWD: /etc/init.d/docker-dukecon-*',
+  require => Package['docker']
+}
+
+user { 'jenkins':
+  ensure => present,
+  groups => ['docker'],
+  require => Class['docker'],
+}
+
 # TODO: Only enable this on Vagrant machine
 user { 'vagrant':
   ensure => present,
