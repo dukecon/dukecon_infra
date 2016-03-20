@@ -41,6 +41,7 @@ file_line { 'JAVA_ARGS':
   line  => 'JAVA_ARGS="-Dhudson.model.DirectoryBrowserSupport.CSP=\"default-src \'self\'; style-src \'self\' \'unsafe-inline\';\" -Djava.awt.headless=true"',
   match => '^JAVA_ARGS=',
   notify  => Service['jenkins'],
+  require => Package['jenkins'],
 }
 
 
@@ -51,4 +52,5 @@ file_line { 'JENKINS_ARGS':
   line  => 'JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpListenAddress=127.0.0.1 --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --prefix=$PREFIX"',
   match => '^JENKINS_ARGS=',
   notify  => Service['jenkins'],
+  require => Package['jenkins'],
 }
