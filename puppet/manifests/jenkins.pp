@@ -17,19 +17,19 @@ package { 'xvfb':
 }
 
 $plugins = [
-  'embeddable-build-status',
+  'build-pipeline-plugin',
+  'ColumnsPlugin',
+  'disk-usage',
   'description-setter',
-  'git-client',
-  'scm-api',
+  'embeddable-build-status',
+  'envinject',
   'git',
+  'git-client',
+  'jgiven',
   'jquery',
   'jobConfigHistory',
-  'build-pipeline-plugin',
-  'disk-usage',
-  'jgiven',
   'monitoring',
-  'ColumnsPlugin',
-  'envinject',
+  'scm-api',
 ]
   
 jenkins::plugin { $plugins : }
