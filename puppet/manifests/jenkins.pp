@@ -153,3 +153,14 @@ exec { 'init dukecon develop jobs':
   ],
   command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins build -c dukecon_develop_seed',
 }
+
+file_line { 'sudo docker restart for jenkins':
+  path  	=> '/etc/sudoers',
+  line => 'jenkins ALL = NOPASSWD: /etc/init.d/docker-dukecon-*',
+}
+
+exec {"jenkins docker group membership":
+  unless => "/bin/grep -q 'docker\\S*jenkins' /etc/group",
+  command => "/usr/sbin/usermod -aG docker jenkins",
+  require => User['jenkins'],
+}
