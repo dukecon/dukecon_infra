@@ -5,29 +5,41 @@ $hiera_dukecon_apache_ssl = $hiera_dukecon_apache['ssl']
 
 class { 'apache':
   keepalive    =>  'On',
+  default_vhost => false,
 }
 
-apache::vhost { 'dukecon.org':
-  port                   =>  '80',
-  docroot                =>  '/var/www/html',
-  allow_encoded_slashes  =>  'nodecode',
-  redirect_status        =>  'permanent',
-  redirect_source        => [
-    '/javaland',
-    '/javaland/',
-    '/JavaLand',
-  ],
-  redirect_dest          => [
-    'https://dukecon.org/javaland',
-    'https://dukecon.org/javaland/',
-    'https://dukecon.org/javaland',
-  ],
-}
-apache::vhost { 'www.dukecon.org':
-  port     =>  '80',
-  docroot  =>  '/var/www/html',
-}
 if $hiera_dukecon_apache_ssl {
+  apache::vhost { 'dukecon.org':
+    port                   =>  '80',
+    docroot                =>  '/var/www/html',
+    allow_encoded_slashes  =>  'nodecode',
+    redirect_status        =>  'permanent',
+    redirect_source        => [
+      '/javaland',
+      '/javaland/',
+      '/JavaLand',
+    ],
+    redirect_dest          => [
+      'https://dukecon.org/javaland',
+      'https://dukecon.org/javaland/',
+      'https://dukecon.org/javaland',
+    ],
+  }
+
+  apache::vhost { 'www.dukecon.org':
+    port     =>  '80',
+    docroot  =>  '/var/www/html',
+  }
+
+  apache::vhost { 'keycloak.dukecon.org':
+    port                   =>  '80',
+    docroot                =>  '/var/www/html',
+    allow_encoded_slashes  =>  'nodecode',
+    redirect_status        =>  'permanent',
+    redirect_source        =>  '/auth/',
+    redirect_dest          =>  'https://keycloak.dukecon.org/auth/',
+  }
+
   apache::vhost { 'dev.dukecon.org':
     port                   =>  '80',
     docroot                =>  '/var/www/html',
@@ -73,48 +85,7 @@ if $hiera_dukecon_apache_ssl {
       'https://dukecon.org/javaland/',
     ],
   }
-} else {
-  apache::vhost { 'dev.dukecon.org':
-    port                   =>  '80',
-    docroot                =>  '/var/www/html',
-    allow_encoded_slashes  =>  'nodecode',
-    proxy_preserve_host    =>  'true',
-    proxy_pass             =>  [
-      { 'path'      =>  '/jenkins',
-        'url'       =>  'http://localhost:8080/jenkins',
-        'keywords'  =>  ['nocanon'],
-      },
-      { 'path'    =>  '/nexus/',
-        'url'     =>  'http://localhost:8081/',
-      },
-      { 'path'    =>  '/latest/',
-        'url'     =>  'http://localhost:9050/latest/',
-      },
-      { 'path'    =>  '/testdata/',
-        'url'     =>  'http://localhost:9040/testdata/',
-      },
-      { 'path'    =>  '/testing/',
-        'url'     =>  'http://localhost:9060/testing/',
-      },
-      { 'path'    =>  '/release/',
-        'url'     =>  'http://localhost:9070/release/',
-      },
-    ],
-    redirect_source        => ['/nexus', '/latest', '/testdata', '/testing', '/release'],
-    redirect_dest          => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
-  }
-}
 
-apache::vhost { 'keycloak.dukecon.org':
-  port                   =>  '80',
-  docroot                =>  '/var/www/html',
-  allow_encoded_slashes  =>  'nodecode',
-  redirect_status        =>  'permanent',
-  redirect_source        =>  '/auth/',
-  redirect_dest          =>  'https://keycloak.dukecon.org/auth/',
-}
-
-if $hiera_dukecon_apache_ssl {
   # SSL - there can be only one!
   apache::vhost { 'ssl.dukecon.org':
     servername             =>  'dukecon.org',
@@ -160,5 +131,36 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland'],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers                => 'set P3P "CP=\"Potato\""'
+  }
+} else {
+  apache::vhost { 'dev.dukecon.org':
+    servername             =>  'default',
+    port                   =>  '80',
+    docroot                =>  '/var/www/html',
+    allow_encoded_slashes  =>  'nodecode',
+    proxy_preserve_host    =>  'true',
+    proxy_pass             =>  [
+      { 'path'      =>  '/jenkins',
+        'url'       =>  'http://localhost:8080/jenkins',
+        'keywords'  =>  ['nocanon'],
+      },
+      { 'path'    =>  '/nexus/',
+        'url'     =>  'http://localhost:8081/',
+      },
+      { 'path'    =>  '/latest/',
+        'url'     =>  'http://localhost:9050/latest/',
+      },
+      { 'path'    =>  '/testdata/',
+        'url'     =>  'http://localhost:9040/testdata/',
+      },
+      { 'path'    =>  '/testing/',
+        'url'     =>  'http://localhost:9060/testing/',
+      },
+      { 'path'    =>  '/release/',
+        'url'     =>  'http://localhost:9070/release/',
+      },
+    ],
+    redirect_source        => ['/nexus', '/latest', '/testdata', '/testing', '/release'],
+    redirect_dest          => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
   }
 }

@@ -50,3 +50,21 @@ file { 'hiera.yaml':
    :datadir: /etc/puppet/hieradata
 ',
 }
+
+file { '/etc/puppet/hieradata':
+  ensure   => 'directory',
+  owner    => 'root',
+  group    => 'root',
+  mode     => 0755
+}
+
+# Only create it if it does not yet exist!
+exec { 'create /etc/puppet/hieradata/common.yaml':
+  unless   => '/usr/bin/test -s /etc/puppet/hieradata/common.yaml',
+  command  => '/bin/cat >/etc/puppet/hieradata/common.yaml<<EOF
+dukecon:
+    apache:
+        ssl: false
+EOF',
+  require  => File['/etc/puppet/hieradata'],
+}

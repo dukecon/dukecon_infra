@@ -19,12 +19,10 @@ Vagrant.configure(2) do |config|
     override.vm.network "private_network", ip: "192.168.50.#{ip_unique}", virtualbox__intnet: true
     # Docker Registry
     override.vm.network "forwarded_port", guest: 5000, host: "#{port_unique}050"
-    # Jenkins
-    override.vm.network "forwarded_port", guest: 8080, host: "#{port_unique}080"
+    # Apache
+    override.vm.network "forwarded_port", guest: 80, host: "#{port_unique}080"
     # Nexus
     override.vm.network "forwarded_port", guest: 8081, host: "#{port_unique}081"
-    # DukeCon latest
-    override.vm.network "forwarded_port", guest: 9050, host: "#{port_unique}950"
   end
 
   config.vm.provider "parallels" do |parallels, override|
@@ -38,5 +36,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "puppet/init-puppet-debian.sh"
   config.vm.provision "shell", path: "init-java8-on-trusty.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-docker-base.sh"
+  config.vm.provision "shell", path: "puppet/init-apache-debian.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-jenkins.sh"
 end
