@@ -14,4 +14,7 @@ test -d /etc/puppet/modules/maven || $sudo puppet module install maestrodev-mave
 test -d /etc/puppet/modules/jenkins || $sudo puppet module install rtyler-jenkins
 test -d /etc/puppet/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
 
+# This is the minimum DukeCon Docker application which is needed for Jenkins
+$sudo puppet apply $dir/puppet/manifests/docker-dukecon-latest.pp
+# Set up Jenkins
 $sudo puppet apply $dir/puppet/manifests/jenkins.pp
