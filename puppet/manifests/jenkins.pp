@@ -87,21 +87,6 @@ file {'/var/lib/jenkins/hudson.tasks.Maven.xml':
   notify  => Service['jenkins']
 }
 
-augeas { "add oracle jdk to jenkins":
-  lens    => "Xml.lns",
-  require => Package['jenkins'],
-  incl    => "/var/lib/jenkins/config.xml",
-  changes => [
-    'defnode jdks /files/var/lib/jenkins/config.xml/hudson/jdks "#empty"',
-    'clear $jdks',
-    'defnode oraclejdk8 $jdks/jdk[name/#text="oraclejdk8"] "#empty"',
-    'clear $oraclejdk8',
-    'set $oraclejdk8/name/#text "oraclejdk8"',
-    'set $oraclejdk8/home/#text "/usr/lib/jvm/java-8-oracle"'
-  ],
-  notify  => Service['jenkins']
-}
-
 exec {'update-java-alternatives -s java-8-oracle':
   path    => '/usr/sbin:/sbin:/usr/bin:/bin',
   require => Exec['update-java-alternatives'],
