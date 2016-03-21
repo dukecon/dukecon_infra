@@ -2,6 +2,11 @@
 
 set -e
 
+dir=`dirname $0`
+if test -d /vagrant
+   then dir=/vagrant
+fi
+
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
@@ -9,4 +14,4 @@ test -d /etc/puppet/modules/maven || $sudo puppet module install maestrodev-mave
 test -d /etc/puppet/modules/jenkins || $sudo puppet module install rtyler-jenkins
 test -d /etc/puppet/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
 
-$sudo puppet apply /vagrant/puppet/manifests/jenkins.pp
+$sudo puppet apply $dir/puppet/manifests/jenkins.pp

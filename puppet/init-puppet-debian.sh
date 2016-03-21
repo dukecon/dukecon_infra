@@ -4,6 +4,10 @@ set -e
 
 dir=`dirname $0`
 
+if test -d /vagrant
+   then dir=/vagrant
+fi
+
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
