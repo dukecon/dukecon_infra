@@ -92,9 +92,14 @@ exec {'update-java-alternatives -s java-8-oracle':
   require => Exec['update-java-alternatives'],
 }
 
+exec { 'wait for jenkins':
+  require => Package['jenkins'],
+  command => '/bin/echo "Waiting for Jenkins 60 secs to start up" && /bin/sleep 60',
+}
+
 jenkins::job { 'dukecon_develop_seed':
   enabled => 1,
-  require => Service['jenkins'],
+  require => Exec['wait for jenkins'],
   config  => '<?xml version="1.0" encoding="UTF-8"?>
 <project>
   <actions/>
@@ -141,7 +146,10 @@ jenkins::job { 'dukecon_develop_seed':
 </project>'
 }
 
-jenkins::cli::exec { 'init dukecon develop jobs':
-  require => Jenkins::Job["dukecon_develop_seed"],
-  command => 'build dukecon_develop_seed',
+exec { 'init dukecon develop jobs':
+  require => [
+    Jenkins::Job["dukecon_develop_seed"],
+#    Exec['wait for jenkins'],
+  ],
+  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins build -c dukecon_develop_seed',
 }
