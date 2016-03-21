@@ -30,6 +30,7 @@ package { 'xvfb':
 $plugins = [
   'build-pipeline-plugin',
   'ColumnsPlugin',
+  'dashboard-view',
   'disk-usage',
   'description-setter',
   'embeddable-build-status',
@@ -41,6 +42,7 @@ $plugins = [
   'jquery',
   'job-dsl',
   'jobConfigHistory',
+  'parameterized-trigger',
   'monitoring',
   'scm-api',
 ]
@@ -56,7 +58,6 @@ file_line { 'JAVA_ARGS':
   notify  => Service['jenkins'],
   require => Package['jenkins'],
 }
-
 
 file_line { 'JENKINS_ARGS':
   path  => '/etc/default/jenkins',
