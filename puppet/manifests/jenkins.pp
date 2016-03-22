@@ -97,7 +97,7 @@ exec { 'wait for jenkins':
   command => '/bin/echo "Waiting for Jenkins 60 secs to start up" && /bin/sleep 60',
 }
 
-jenkins::job { 'dukecon_develop_seed':
+jenkins::job { 'dukecon_jenkins_seed':
   enabled => 1,
   require => Exec['wait for jenkins'],
   config  => '<?xml version="1.0" encoding="UTF-8"?>
@@ -146,12 +146,11 @@ jenkins::job { 'dukecon_develop_seed':
 </project>'
 }
 
-exec { 'init dukecon develop jobs':
+exec { 'init dukecon jenkins jobs':
   require => [
-    Jenkins::Job["dukecon_develop_seed"],
-#    Exec['wait for jenkins'],
+    Jenkins::Job["dukecon_jenkins_seed"],
   ],
-  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins build -c dukecon_develop_seed',
+  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins build -c dukecon_jenkins_seed',
 }
 
 file_line { 'sudo docker restart for jenkins':
