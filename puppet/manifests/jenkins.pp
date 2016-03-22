@@ -27,6 +27,11 @@ package { 'xvfb':
   ensure => 'installed'
 }
 
+package { 'graphviz':
+  # For dukecon/dukecon project (uses asciidoctor/plantuml)
+  ensure  => installed,
+}
+
 $plugins = [
   'build-pipeline-plugin',
   'ColumnsPlugin',
