@@ -59,6 +59,7 @@ if $hiera_dukecon_apache_ssl {
       '/testing',
       '/release',
       '/javaland',
+      '/jfslatest',
 
       '/jenkins/',
       '/latest/',
@@ -66,6 +67,7 @@ if $hiera_dukecon_apache_ssl {
       '/testing/',
       '/release/',
       '/javaland/',
+      '/jfslatest/',
     ],
     redirect_dest          => [
       '/nexus/',
@@ -76,6 +78,7 @@ if $hiera_dukecon_apache_ssl {
       'https://dev.dukecon.org/testing',
       'https://dev.dukecon.org/release',
       'https://dukecon.org/javaland',
+      'https://dev.dukecon.org/jfslatest',
 
       'https://dev.dukecon.org/jenkins/',
       'https://dev.dukecon.org/latest/',
@@ -83,6 +86,7 @@ if $hiera_dukecon_apache_ssl {
       'https://dev.dukecon.org/testing/',
       'https://dev.dukecon.org/release/',
       'https://dukecon.org/javaland/',
+      'https://dev.dukecon.org/jfslatest/',
     ],
   }
 
@@ -126,9 +130,12 @@ if $hiera_dukecon_apache_ssl {
       { 'path'    =>  '/javaland/',
         'url'     =>  'http://localhost:9080/javaland/',
       },
+      { 'path'    =>  '/jfslatest/',
+        'url'     =>  'http://localhost:9051/jfslatest/',
+      },
     ],
-    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',  '/JavaLand'],
-    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland'],
+    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',  '/JavaLand', '/jfslatest',  ],
+    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland', '/jfslatest/', ],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers                => 'set P3P "CP=\"Potato\""'
   }
@@ -159,8 +166,11 @@ if $hiera_dukecon_apache_ssl {
       { 'path'    =>  '/release/',
         'url'     =>  'http://localhost:9070/release/',
       },
+      { 'path'    =>  '/jfslatest/',
+        'url'     =>  'http://localhost:9051/jfslatest/',
+      },
     ],
-    redirect_source        => ['/nexus', '/latest', '/testdata', '/testing', '/release'],
-    redirect_dest          => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/'],
+    redirect_source        => ['/nexus', '/latest', '/testdata', '/testing', '/release', '/jfslatest', ],
+    redirect_dest          => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/jfslatest/', ],
   }
 }
