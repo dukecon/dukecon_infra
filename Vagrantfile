@@ -35,6 +35,19 @@ Vagrant.configure(2) do |config|
     override.vm.network "private_network", ip: "10.211.55.#{ip_unique}", virtualbox__intnet: true
   end
 
+  # Install libvirt provider: vagrant plugin install vagrant-libvirt
+  config.vm.provider "libvirt" do |domain, override|
+    override.vm.box = "baremettle/ubuntu-14.04"
+    override.vm.hostname = name
+    override.vm.network "private_network", ip: "10.211.42.#{ip_unique}", virtualbox__intnet: true
+    prefix = name[name.index('-')+1..-1]
+    domain.default_prefix = prefix
+    # override.name = name
+    domain.memory = memory
+    domain.graphics_autoport = "no"
+    domain.graphics_port = "59#{port_unique}"
+  end
+
   config.vm.provision "shell", path: "puppet/init-puppet-debian.sh"
   config.vm.provision "shell", path: "init-java8-on-trusty.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-docker-base.sh"
