@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Make sure to have the latest Vagrant installed (>=1.8), e.g., https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
+
 name = "dukecon-vagrant"
 memory = 3072
 
