@@ -49,7 +49,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "shell", path: "puppet/init-puppet-debian.sh"
-  config.vm.provision "shell", path: "init-java8-on-trusty.sh"
+  config.vm.provision "shell", path: "modules/jdk8/scripts/init.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-docker-base.sh"
   config.vm.provision "shell", path: "puppet/init-apache-debian.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-jenkins.sh"
