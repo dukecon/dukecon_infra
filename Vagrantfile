@@ -6,7 +6,7 @@
 name = "dukecon-vagrant"
 memory = 3072
 
-ip_unique = 55
+ip_unique = ENV['VAGRANT_IP_UNIQUE'] || "55"
 port_unique = ENV['VAGRANT_PORT_UNIQUE'] || "55"
 
 Vagrant.configure(2) do |config|
