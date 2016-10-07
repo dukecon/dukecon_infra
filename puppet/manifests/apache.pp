@@ -18,11 +18,15 @@ if $hiera_dukecon_apache_ssl {
       '/javaland',
       '/javaland/',
       '/JavaLand',
+      '/jfs',
+      '/jfs/',
     ],
     redirect_dest          => [
       'https://dukecon.org/javaland',
       'https://dukecon.org/javaland/',
       'https://dukecon.org/javaland',
+      'https://dukecon.org/jfs',
+      'https://dukecon.org/jfs/',
     ],
   }
 
@@ -133,9 +137,12 @@ if $hiera_dukecon_apache_ssl {
       { 'path'    =>  '/jfslatest/',
         'url'     =>  'http://localhost:9051/jfslatest/',
       },
+      { 'path'    =>  '/jfs/',
+        'url'     =>  'http://localhost:9051/jfslatest/',
+      },
     ],
-    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',  '/JavaLand', '/jfslatest',  ],
-    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland', '/jfslatest/', ],
+    redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',  '/JavaLand', '/jfslatest',  '/jfs', ],
+    redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland', '/jfslatest/', '/jfs/',],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers                => 'set P3P "CP=\"Potato\""'
   }
