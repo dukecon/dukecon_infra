@@ -181,3 +181,118 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest          => ['/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/jfslatest/', ],
   }
 }
+
+apache::vhost { 'javaland.latest.dukecon.org':
+  port                   => '80',
+  docroot                => '/var/www/html',
+  proxy_preserve_host    => 'true',
+  proxy_pass_match       => [
+    { 'path'  =>  '^/(\d+)/init.json',
+      'url'   =>  'http://localhost:9050/latest/rest/init/javaland/$1',
+    },
+    { 'path'  =>  '^/(\d+)/(.*)',
+      'url'   =>  'http://localhost:9050/latest/$2',
+    },
+  ],
+  redirectmatch_regexp   => [
+    '^/$',
+  ],
+  redirectmatch_dest     => [
+    '/2017/',
+  ],
+  redirectmatch_status   => [
+    'temp',
+  ],
+  proxy_pass             => [
+    { 'path'    =>  '/rest/',
+      'url'     =>  'http://localhost:9050/latest/rest/',
+    },
+  ]
+}
+
+apache::vhost { 'herbstcampus.latest.dukecon.org':
+  port                   => '80',
+  docroot                => '/var/www/html',
+  proxy_preserve_host    => 'true',
+  proxy_pass_match       => [
+    { 'path'  =>  '^/(\d+)/init.json',
+      'url'   =>  'http://localhost:9050/latest/rest/init/herbstcampus/$1',
+    },
+    { 'path'  =>  '^/(\d+)/(.*)',
+      'url'   =>  'http://localhost:9050/latest/$2',
+    },
+  ],
+  redirectmatch_regexp   => [
+    '^/$',
+  ],
+  redirectmatch_dest     => [
+    '/2017/',
+  ],
+  redirectmatch_status   => [
+    'temp',
+  ],
+  proxy_pass             => [
+    { 'path'    =>  '/rest/',
+      'url'     =>  'http://localhost:9050/latest/rest/',
+    },
+  ]
+}
+
+# TODO: Move productive releases to SSL config
+# TODO: Move context path "javaland" to "release" or drop it at all
+apache::vhost { 'javaland.dukecon.org':
+  port                   => '80',
+  docroot                => '/var/www/html',
+  proxy_preserve_host    => 'true',
+  proxy_pass_match       => [
+    { 'path'  =>  '^/(\d+)/init.json',
+      'url'   =>  'http://localhost:9080/javaland/rest/init/javaland/$1',
+    },
+    { 'path'  =>  '^/(\d+)/(.*)',
+      'url'   =>  'http://localhost:9080/javaland/$2',
+    },
+  ],
+  redirectmatch_regexp   => [
+    '^/$',
+  ],
+  redirectmatch_dest     => [
+    '/2017/',
+  ],
+  redirectmatch_status   => [
+    'temp',
+  ],
+  proxy_pass             => [
+    { 'path'    =>  '/rest/',
+      'url'     =>  'http://localhost:9050/latest/rest/',
+    },
+  ]
+}
+
+apache::vhost { 'herbstcampus.dukecon.org':
+  port                   => '80',
+  docroot                => '/var/www/html',
+  proxy_preserve_host    => 'true',
+  proxy_pass_match       => [
+    { 'path'  =>  '^/(\d+)/init.json',
+      'url'   =>  'http://localhost:9080/javaland/rest/init/herbstcampus/$1',
+    },
+    { 'path'  =>  '^/(\d+)/(.*)',
+      'url'   =>  'http://localhost:9080/javaland/$2',
+    },
+  ],
+  redirectmatch_regexp   => [
+    '^/$',
+  ],
+  redirectmatch_dest     => [
+    '/2017/',
+  ],
+  redirectmatch_status   => [
+    'temp',
+  ],
+  proxy_pass             => [
+    { 'path'    =>  '/rest/',
+      'url'     =>  'http://localhost:9050/latest/rest/',
+    },
+  ]
+}
+
