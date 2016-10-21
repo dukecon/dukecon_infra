@@ -40,8 +40,8 @@ if $hiera_dukecon_apache_ssl {
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
     redirect_status        =>  'permanent',
-    redirect_source        =>  '/auth/',
-    redirect_dest          =>  'https://keycloak.dukecon.org/auth/',
+    redirect_source        =>  '/',
+    redirect_dest          =>  'https://keycloak.dukecon.org/',
   }
 
   apache::vhost { 'dev.dukecon.org':
