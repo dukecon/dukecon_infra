@@ -3,17 +3,20 @@
 
 # Make sure to have the latest Vagrant installed (>=1.8), e.g., https://releases.hashicorp.com/vagrant/1.8.5/vagrant_1.8.5_x86_64.deb
 
-name = "dukecon-vagrant"
-memory = 3072
+composite = ENV['VAGRANT_COMPOSITE'] || "minimal"
+
+name = ENV['VAGRANT_NAME'] || "dukecon-vagrant"
+memory = ENV['VAGRANT_MEMORY'] || 3072
 
 ip_unique = ENV['VAGRANT_IP_UNIQUE'] || "55"
 port_unique = ENV['VAGRANT_PORT_UNIQUE'] || "55"
 
 Vagrant.configure(2) do |config|
   # Generic/Defaults
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/trusty64" # debian/jessie64"
   config.vm.hostname = name
   config.vm.synced_folder "cache/apt-archives", "/var/cache/apt/archives"
+  config.vm.synced_folder ".", "/vagrant"
 
   config.vm.provider "virtualbox" do |vbox, override|
     vbox.name = name
@@ -29,7 +32,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "parallels" do |parallels, override|
     parallels.update_guest_tools = true
-    override.vm.box = "parallels/ubuntu-14.04"
+    override.vm.box = "parallels/ubuntu-14.04" # "debian-8.3"
     parallels.name = name
     parallels.memory = memory
     override.vm.network "private_network", ip: "10.211.55.#{ip_unique}", virtualbox__intnet: true
@@ -48,9 +51,6 @@ Vagrant.configure(2) do |config|
     domain.graphics_port = "59#{port_unique}"
   end
 
-  config.vm.provision "shell", path: "puppet/init-puppet-debian.sh"
-  config.vm.provision "shell", path: "modules/jdk8/scripts/init.sh"
-  config.vm.provision "shell", path: "puppet/init-puppet-docker-base.sh"
-  config.vm.provision "shell", path: "puppet/init-apache-debian.sh"
-  config.vm.provision "shell", path: "puppet/init-puppet-jenkins.sh"
+  config.vm.provision "shell", path: "composites/scripts/run.sh", args: composite
+
 end
