@@ -23,6 +23,9 @@ $sudo apt-get install -qq puppet
 
 test -r /etc/puppet/modules/etckeeper || $sudo puppet module install thomasvandoren-etckeeper
 test -r /etc/puppet/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
+<<<<<<< 6e7071f393d7b0dbc6dd2c7fa87d1cc992c79f0a
 test -r /etc/puppet/modules/inifile || $sudo puppet module install puppetlabs-inifile
+=======
+>>>>>>> Starting to align with "devopssquare"
 
 $sudo puppet apply ${basedir}/puppet/init.pp
