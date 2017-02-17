@@ -182,7 +182,7 @@ if $hiera_dukecon_apache_ssl {
   }
 }
 
-apache::vhost { 'javaland.latest.dukecon.org':
+apache::vhost { 'javaland-latest.dukecon.org':
   port                   => '80',
   docroot                => '/var/www/html',
   proxy_preserve_host    => 'true',
@@ -210,7 +210,7 @@ apache::vhost { 'javaland.latest.dukecon.org':
   ]
 }
 
-apache::vhost { 'herbstcampus.latest.dukecon.org':
+apache::vhost { 'herbstcampus-latest.dukecon.org':
   port                   => '80',
   docroot                => '/var/www/html',
   proxy_preserve_host    => 'true',
