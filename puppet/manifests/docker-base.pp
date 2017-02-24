@@ -13,3 +13,10 @@ user { 'vagrant':
   groups => ['docker'],
   require => Class['docker'],
 }
+
+file { "/data":
+  path          =>      "/data",
+  ensure        =>      directory,
+  mode          =>      0755,
+}
+
