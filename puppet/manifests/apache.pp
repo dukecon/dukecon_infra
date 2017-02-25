@@ -169,6 +169,9 @@ if $hiera_dukecon_apache_ssl {
       { 'path' => '^/doag/(\d+)/init.json',
         'url'  => 'http://localhost:9050/latest/rest/init/doag/$1',
       },
+      { 'path'  =>  '^/doag/(\d+)/(.*)',
+        'url'   =>  'http://localhost:9050/latest/$2',
+      },
     ],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers               => 'set P3P "CP=\"Potato\""'
