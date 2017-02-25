@@ -157,7 +157,7 @@ if $hiera_dukecon_apache_ssl {
     ip                    => '85.214.26.208',
     port                  => '443',
     ssl                   => true,
-    ssl_cert              => '/etc/tls/doag.2015.crt',
+    ssl_cert              => '/etc/tls/doag2015.crt',
     ssl_key               => '/etc/tls/doag2014.key',
     ssl_ca                => '/etc/tls/intermediate2015.crt',
     docroot               => '/var/www/html',
