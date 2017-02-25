@@ -166,11 +166,11 @@ if $hiera_dukecon_apache_ssl {
     request_headers       => [ 'set X-Forwarded-Proto https' ],
     proxy_preserve_host   => 'true',
     proxy_pass_match      => [
-      { 'path' => '^/doag/(\d+)/init.json',
-        'url'  => 'http://localhost:9050/latest/rest/init/doag/$1',
+      { 'path' => '^/(\w+)/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9050/latest/rest/init/$1/$2',
       },
-      { 'path'  =>  '^/doag/(\d+)/(.*)',
-        'url'   =>  'http://localhost:9050/latest/$2',
+      { 'path'  =>  '^/(\w+)/(\d+)/(.*)',
+        'url'   =>  'http://localhost:9050/latest/$3',
       },
     ],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
