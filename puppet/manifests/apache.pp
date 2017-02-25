@@ -10,6 +10,7 @@ class { 'apache':
 
 if $hiera_dukecon_apache_ssl {
   apache::vhost { 'dukecon.org':
+    ip                     => '85.214.26.208',
     port                   =>  '80',
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
@@ -31,11 +32,13 @@ if $hiera_dukecon_apache_ssl {
   }
 
   apache::vhost { 'www.dukecon.org':
-    port     =>  '80',
-    docroot  =>  '/var/www/html',
+    ip                     => '85.214.26.208',
+    port                   =>  '80',
+    docroot                =>  '/var/www/html',
   }
 
   apache::vhost { 'keycloak.dukecon.org':
+    ip                     => '85.214.26.208',
     port                   =>  '80',
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
@@ -45,6 +48,7 @@ if $hiera_dukecon_apache_ssl {
   }
 
   apache::vhost { 'dev.dukecon.org':
+    ip                     => '85.214.26.208',
     port                   =>  '80',
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
@@ -97,6 +101,7 @@ if $hiera_dukecon_apache_ssl {
   # SSL - there can be only one!
   apache::vhost { 'ssl.dukecon.org':
     servername             =>  'dukecon.org',
+    ip                     => '85.214.26.208',
     port                   =>  '443',
     ssl                    =>  true,
     ssl_cert               =>  '/etc/tls/server.pem',
@@ -145,6 +150,28 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland', '/jfslatest/', '/jfs/',],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers                => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'programm.doag.org':
+    servername            => 'programm.doag.org',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/etc/tls/doag.2015.crt',
+    ssl_key               => '/etc/tls/doag2014.key',
+    ssl_ca                => '/etc/tls/intermediate2015.crt',
+    docroot               => '/var/www/html',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/doag/(\d+)/init.json',
+        'url'  => 'http://localhost:9050/latest/rest/init/doag/$1',
+      },
+    ],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
   }
 } else {
   apache::vhost { 'dev.dukecon.org':
