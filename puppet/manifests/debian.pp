@@ -68,3 +68,12 @@ dukecon:
 EOF',
   require  => File['/etc/puppet/hieradata'],
 }
+
+# Enable puppet future parser (experimental in Puppet 3.x >= 3.2, cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html)
+ini_setting { "future parser for puppet":
+  ensure  => present,
+  path    => '/etc/puppet/puppet.conf',
+  section => 'main',
+  setting => 'parser',
+  value   => 'future',
+}

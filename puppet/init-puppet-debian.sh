@@ -16,5 +16,6 @@ $sudo apt-get install -qq puppet
 
 test -r /etc/puppet/modules/etckeeper || $sudo puppet module install thomasvandoren-etckeeper
 test -r /etc/puppet/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
+test -r /etc/puppet/modules/inifile || $sudo puppet module install puppetlabs-inifile
 
 $sudo puppet apply $dir/puppet/manifests/debian.pp
