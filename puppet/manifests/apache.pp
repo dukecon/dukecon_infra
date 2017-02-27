@@ -99,7 +99,7 @@ if $hiera_dukecon_apache_ssl {
   }
 
   # Iterate over an array is experimental in puppet 3.x - cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html
-  $sslnames = ['', "dev."]
+  $sslnames = ['', "dev.", "keycloak."]
   $sslnames.each |$sslname| {
     apache::vhost { "ssl-${sslname}dukecon.org":
       servername            => "${sslname}dukecon.org",
@@ -122,9 +122,9 @@ if $hiera_dukecon_apache_ssl {
         { 'path' => '/nexus/',
           'url'  => 'http://localhost:8081/',
         },
-        { 'path'         => '/auth/',
-          'url'          => 'http://localhost:9041/auth/',
-          'reverse_urls' => 'http://localhost:9041/auth/',
+        { 'path'          =>  '/auth/',
+          'url'           =>  'http://localhost:9031/auth/',
+          'reverse_urls'  =>  'http://localhost:9031/auth/',
         },
         { 'path' => '/latest/',
           'url'  => 'http://localhost:9050/latest/',
@@ -148,12 +148,10 @@ if $hiera_dukecon_apache_ssl {
           'url'  => 'http://localhost:9051/jfslatest/',
         },
       ],
-      redirect_source       => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',
-        '/JavaLand',  '/jfslatest',  '/jfs',  ],
-      redirect_dest         => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/',
-        '/javaland/', '/jfslatest/', '/jfs/', ],
+      redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',  '/JavaLand', '/jfslatest',  '/jfs', ],
+      redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland', '/jfslatest/', '/jfs/',],
       # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
-      headers               => 'set P3P "CP=\"Potato\""'
+      headers                => 'set P3P "CP=\"Potato\""'
     }
   }
 
