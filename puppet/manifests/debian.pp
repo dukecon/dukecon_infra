@@ -60,7 +60,7 @@ file { '/etc/puppet/hieradata':
 
 # Only create it if it does not yet exist!
 exec { 'create /etc/puppet/hieradata/common.yaml':
-  unless   => '/usr/bin/test -s /etc/puppet/hieradata/common.yaml',
+  unless   => '/usr/bin/test -r /etc/puppet/hieradata/common.yaml',
   command  => '/bin/cat >/etc/puppet/hieradata/common.yaml<<EOF
 dukecon:
     apache:
