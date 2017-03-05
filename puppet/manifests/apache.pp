@@ -243,6 +243,36 @@ apache::vhost { 'javaland-latest.dukecon.org':
   ]
 }
 
+apache::vhost { 'programm-latest.doag.org':
+  port                   => '80',
+  docroot                => '/var/www/html',
+  proxy_preserve_host    => 'true',
+  proxy_pass_match       => [
+    # First: conference name
+    # Second: year
+    { 'path'  =>  '^/(\w+)/(\d+)/init.json',
+      'url'   =>  'http://localhost:9050/latest/rest/init/$1/$2',
+    },
+    { 'path'  =>  '^/(\w+)/(\d+)/(.*)',
+      'url'   =>  'http://localhost:9050/latest/$3',
+    },
+  ],
+  redirectmatch_regexp   => [
+    '^/$',
+  ],
+  redirectmatch_dest     => [
+    '/2017/',
+  ],
+  redirectmatch_status   => [
+    'temp',
+  ],
+  proxy_pass             => [
+    { 'path'    =>  '/rest/',
+      'url'     =>  'http://localhost:9050/latest/rest/',
+    },
+  ]
+}
+
 apache::vhost { 'herbstcampus-latest.dukecon.org':
   port                   => '80',
   docroot                => '/var/www/html',
