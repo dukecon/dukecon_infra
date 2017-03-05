@@ -43,16 +43,26 @@ is mounted there).
 
 Proceed with the remaining steps from here.
 
+TODO: Split up for development and production system
+
 ## Setup Puppet modules for EtcKeeper, Jenkins, Docker, Maven, ...
 
 TODO: Split this up into separate scripts
 
     ./puppet/init-puppet-debian.sh
+    ./puppet/init-puppet-docker-base.sh
+    
+Both implicitely call
+
+    puppet apply puppet/manifests/debian.pp
     puppet apply puppet/manifests/docker-base.pp
 
 ## Setup Apache
 
     ./puppet/init-apache-debian.sh
+
+Implicitely calls
+
     puppet apply puppet/manifests/apache.pp
 
 ## Setup Jenkins
