@@ -13,7 +13,7 @@ port_unique = ENV['VAGRANT_PORT_UNIQUE'] || "55"
 
 Vagrant.configure(2) do |config|
   # Generic/Defaults
-  config.vm.box = "ubuntu/trusty64" # debian/jessie64"
+  config.vm.box = "ubuntu/xenial64"
   config.vm.hostname = name
   config.vm.synced_folder "cache/apt-archives", "/var/cache/apt/archives"
   config.vm.synced_folder ".", "/vagrant"
