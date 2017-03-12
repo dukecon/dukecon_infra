@@ -179,6 +179,43 @@ if $hiera_dukecon_apache_ssl {
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers               => 'set P3P "CP=\"Potato\""'
   }
+
+  apache::vhost { 'ssl-programm.javaland.eu':
+    servername            => 'programm.javaland.eu',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/etc/tls/javaland.crt',
+    ssl_key               => '/etc/tls/javaland.key',
+    ssl_ca                => '/etc/tls/javaland.intermediate.crt',
+    docroot               => '/var/www/html',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9050/latest/rest/init/javaland/$1',
+      },
+      { 'path'  =>  '^/(2016|2017)/(.*)',
+        'url'   =>  'http://localhost:9050/latest/$2',
+      },
+    ],
+    redirect_source       => ['/',      '/2016',  '/2017'],
+    redirect_dest         => ['/2017/', '/2016/', '/2017/'],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'programm.javaland.eu':
+    servername            => 'programm.javaland.eu',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://programm.javaland.eu/']
+  }
 } else {
   apache::vhost { 'dev.dukecon.org':
     servername             =>  'default',
