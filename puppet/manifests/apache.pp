@@ -155,7 +155,7 @@ if $hiera_dukecon_apache_ssl {
     }
   }
 
-  apache::vhost { 'programm.doag.org':
+  apache::vhost { 'ssl-programm.doag.org':
     servername            => 'programm.doag.org',
     ip                    => '85.214.26.208',
     port                  => '443',
@@ -178,6 +178,16 @@ if $hiera_dukecon_apache_ssl {
     ],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'programm.doag.org':
+    servername            => 'programm.doag.org',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://programm.doag.org/']
   }
 
   apache::vhost { 'ssl-programm.javaland.eu':
