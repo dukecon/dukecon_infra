@@ -195,6 +195,46 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest         => ['https://latest.dukecon.org/']
   }
 
+  apache::vhost { 'ssl-testing.dukecon.org':
+    servername            => 'testing.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/etc/tls/server.pem',
+    ssl_key               => '/etc/tls/key.pem',
+    ssl_ca                => '/etc/tls/startssl-chain.pem',
+    docroot               => '/var/www/html',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/(\w+)/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9060/testing/rest/init/$1/$2',
+      },
+      { 'path'  =>  '^/(javaland/2016|javaland/2017|doag/2016|apex/2017|datavision/2017|jfs/2016|herbstcampus/2016)/(.*)',
+        'url'   =>  'http://localhost:9060/testing/$2',
+      },
+    ],
+    # The following seems a bit odd: If there are more than one conferences we need multiple redirects, e.g.,
+    # for javaland: the first (ones) for outdated conferences, the last one to match everything else to the current
+    # instance. For other conferences we redirect to the current one.
+    redirectmatch_regexp  => ['^/$',             '^/javaland/2016$', '^/javaland/?(\d+/?)?$', '^/doag/?(\d+/?)?$', '^/apex/?(\d+/?)?$', '^/datavision/?(\d+/?)?$', '^/jfs/?(\d+/?)?$', '^/herbstcampus/?(\d+/?)?$' ],
+    redirectmatch_dest    => ['/javaland/2017/', '/javaland/2016/',  '/javaland/2017/',       '/doag/2016/',       '/apex/2017/',       '/datavision/2017/',       '/jfs/2016/',       '/herbstcampus/2016/'       ],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'testing.dukecon.org':
+    servername            => 'testing.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://testing.dukecon.org/']
+  }
+
   apache::vhost { 'ssl-programm.doag.org':
     servername            => 'programm.doag.org',
     ip                    => '85.214.26.208',
