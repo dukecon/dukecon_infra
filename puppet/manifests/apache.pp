@@ -201,8 +201,8 @@ if $hiera_dukecon_apache_ssl {
         'url'   =>  'http://localhost:9050/latest/$2',
       },
     ],
-    redirect_source       => ['/',      '/2016',  '/2017'],
-    redirect_dest         => ['/2017/', '/2016/', '/2017/'],
+    redirectmatch_regexp  => ['^/',     '^/2016', '^/2017', '^/(\d+)', '^/(\d+)/'],
+    redirectmatch_dest    => ['/2017/', '/2016/', '/2017/', '/2017/',  '/2017/'  ],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers               => 'set P3P "CP=\"Potato\""'
   }
