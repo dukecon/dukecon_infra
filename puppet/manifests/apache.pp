@@ -114,6 +114,11 @@ if $hiera_dukecon_apache_ssl {
       # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
       request_headers       => [ 'set X-Forwarded-Proto https' ],
       proxy_preserve_host   => 'true',
+      proxy_pass_match      => [
+        { 'path'  =>  '^/javaland/(.*)',
+          'url'   =>  'http://localhost:9080/javaland/$1',
+        },
+      ],
       proxy_pass            => [
         { 'path'     => '/jenkins',
           'url'      => 'http://localhost:8080/jenkins',
@@ -129,17 +134,11 @@ if $hiera_dukecon_apache_ssl {
         { 'path' => '/latest/',
           'url'  => 'http://localhost:9050/latest/',
         },
-        { 'path' => '/testdata/',
-          'url'  => 'http://localhost:9040/testdata/',
-        },
         { 'path' => '/testing/',
           'url'  => 'http://localhost:9060/testing/',
         },
-        { 'path' => '/release/',
-          'url'  => 'http://localhost:9070/release/',
-        },
-        { 'path' => '/javaland/',
-          'url'  => 'http://localhost:9080/javaland/',
+        { 'path' => '/javaland/rest/init.json',
+          'url'  => 'http://localhost:9080/javaland/rest/init/javaland/2016',
         },
         { 'path' => '/jfslatest/',
           'url'  => 'http://localhost:9051/jfslatest/',
@@ -148,8 +147,8 @@ if $hiera_dukecon_apache_ssl {
           'url'  => 'http://localhost:9051/jfslatest/',
         },
       ],
-      redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testdata',  '/testing',  '/release',  '/javaland',  '/JavaLand', '/jfslatest',  '/jfs', ],
-      redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testdata/', '/testing/', '/release/', '/javaland/', '/javaland', '/jfslatest/', '/jfs/',],
+      redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testing',  '/javaland',  '/JavaLand', '/jfslatest',  '/jfs', ],
+      redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testing/', '/javaland/', '/javaland', '/jfslatest/', '/jfs/',],
       # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
       headers                => 'set P3P "CP=\"Potato\""'
     }
