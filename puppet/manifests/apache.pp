@@ -285,6 +285,10 @@ if $hiera_dukecon_apache_ssl {
     request_headers       => [ 'set X-Forwarded-Proto https' ],
     proxy_preserve_host   => 'true',
     proxy_pass_match      => [
+      { 'path'          =>  '^/auth/',
+        'url'           =>  'http://localhost:9031',
+        'reverse_urls'  =>  'http://localhost:9031',
+      },
       { 'path' => '^/(\d+)/rest/init.json',
         'url'  => 'http://localhost:9080/javaland/rest/init/javaland/$1',
       },
