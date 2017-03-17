@@ -278,7 +278,7 @@ if $hiera_dukecon_apache_ssl {
     ssl                   => true,
     ssl_cert              => '/etc/tls/javaland.crt',
     ssl_key               => '/etc/tls/javaland.key',
-    ssl_ca                => '/etc/tls/javaland.intermediate.crt',
+    ssl_ca                => '/etc/tls/RapidSSL_SHA256_CA.txt',
     docroot               => '/var/www/html',
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
