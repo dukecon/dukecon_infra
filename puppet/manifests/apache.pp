@@ -162,7 +162,15 @@ if $hiera_dukecon_apache_ssl {
     ssl_cert              => '/etc/tls/server.pem',
     ssl_key               => '/etc/tls/key.pem',
     ssl_ca                => '/etc/tls/startssl-chain.pem',
-    docroot               => '/var/www/html',
+    docroot               => '/data/dukecon/html/latest',
+    docroot_owner         => 'jenkins',
+    aliases               => [
+      { 
+        # aliasmatch        => '/admin/(javaland/201[67]|doag/2016|apex/2017|datavision/2017)',
+        alias             => '/admin/javaland/2017',
+        path              => '/data/dukecon/html/latest/admin',
+      },
+    ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
@@ -202,7 +210,15 @@ if $hiera_dukecon_apache_ssl {
     ssl_cert              => '/etc/tls/server.pem',
     ssl_key               => '/etc/tls/key.pem',
     ssl_ca                => '/etc/tls/startssl-chain.pem',
-    docroot               => '/var/www/html',
+    docroot               => '/data/dukecon/html/testing',
+    docroot_owner         => 'jenkins',
+    aliases               => [
+      { 
+        # aliasmatch        => '/admin/(javaland/201[67]|doag/2016|apex/2017|datavision/2017)',
+        alias             => '/admin/javaland/2017',
+        path              => '/data/dukecon/html/testing/admin',
+      },
+    ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
@@ -279,7 +295,15 @@ if $hiera_dukecon_apache_ssl {
     ssl_cert              => '/etc/tls/javaland.crt',
     ssl_key               => '/etc/tls/javaland.key',
     ssl_ca                => '/etc/tls/RapidSSL_SHA256_CA.txt',
-    docroot               => '/var/www/html',
+    docroot               => '/data/dukecon/html/javaland',
+    docroot_owner         => 'jenkins',
+    aliases               => [
+      { 
+        # aliasmatch        => '/admin/201[67]',
+        alias             => '/admin/2017',
+        path              => '/data/dukecon/html/javaland/admin',
+      },
+    ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
@@ -296,8 +320,8 @@ if $hiera_dukecon_apache_ssl {
         'url'   =>  'http://localhost:9080/javaland/$2',
       },
     ],
-    redirectmatch_regexp  => ['^/',     '^/2016', '^/2017', '^/(\d+)', '^/(\d+)/'],
-    redirectmatch_dest    => ['/2017/', '/2016/', '/2017/', '/2017/',  '/2017/'  ],
+    redirectmatch_regexp  => ['^/$',    '^/2016$', '^/2017$', '^/(\d+)', '^/(\d+)/'],
+    redirectmatch_dest    => ['/2017/', '/2016/',  '/2017/',  '/2017/',  '/2017/'  ],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers               => 'set P3P "CP=\"Potato\""'
   }
