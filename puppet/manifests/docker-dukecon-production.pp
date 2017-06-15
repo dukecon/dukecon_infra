@@ -11,7 +11,7 @@ docker::run { "dukecon-$instance":
   ],
   volumes  => [
     "/data/dukecon/cache/dukecon-$instance:/var/cache/dukecon",
-    "/data/dukecon/logs/dukecon-$instance:/logs",
+    "/data/dukecon/logs/dukecon-$instance:/opt/dukecon/logs",
   ],
   links    => ["dukecon-postgres-$instance:postgres",],
   depends  => ["dukecon-postgres-$instance",],

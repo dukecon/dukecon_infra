@@ -2,7 +2,7 @@ $instance = "testing"
 $port = "9060"
 
 docker::run { "dukecon-$instance":
-  image    => "ascheman/dukecon-server:latest",
+  image    => "ascheman/dukecon-server:$instance",
   ports    => ["127.0.0.1:$port:8080"],
   env      => [
     "SPRING_PROFILES_ACTIVE=$instance,postgresql,docker",
@@ -11,7 +11,7 @@ docker::run { "dukecon-$instance":
   ],
   volumes  => [
     "/data/dukecon/cache/dukecon-$instance:/var/cache/dukecon",
-    "/data/dukecon/logs/dukecon-$instance:/logs",
+    "/data/dukecon/logs/dukecon-$instance:/opt/dukecon/logs",
   ],
   links    => ["dukecon-postgres-$instance:postgres",],
   depends  => ["dukecon-postgres-$instance",],
