@@ -23,12 +23,16 @@ Vagrant.configure(2) do |config|
     override.vm.network "forwarded_port", guest: 3000, host: "#{port_unique}030"
     # Docker Registry
     override.vm.network "forwarded_port", guest: 5000, host: "#{port_unique}050"
+    # CMR Agent (inspectIT)
+    override.vm.network "forwarded_port", guest: 9070, host: "#{port_unique}070"
     # Apache
     override.vm.network "forwarded_port", guest: 80, host: "#{port_unique}080"
     # Nexus
     override.vm.network "forwarded_port", guest: 8081, host: "#{port_unique}081"
     # InfluxDB (inspectIT)
     override.vm.network "forwarded_port", guest: 8086, host: "#{port_unique}086"
+    # CMR Agent (inspectIT)
+    override.vm.network "forwarded_port", guest: 8182, host: "#{port_unique}182"
     # Docker
     override.vm.network "forwarded_port", guest: 2375, host: "#{port_unique}375"
   end
@@ -60,5 +64,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "puppet/init-apache-debian.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-jenkins.sh"
   config.vm.provision "shell", path: "modules/influxdb/scripts/init.sh"
+  config.vm.provision "shell", path: "modules/inspectit-cmr/scripts/init.sh"
   config.vm.provision "shell", path: "modules/grafana/scripts/init.sh"
 end
