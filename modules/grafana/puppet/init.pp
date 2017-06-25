@@ -11,6 +11,7 @@ file { '/data/grafana':
 ->
 docker::run { 'grafana':
   image    => $grafana,
+  links    => 'influxdb',
   volumes  => ['/data/grafana:/var/lib/grafana'],
   ports    => ['127.0.0.1:3000:3000'],
 }
