@@ -27,6 +27,8 @@ Vagrant.configure(2) do |config|
     override.vm.network "forwarded_port", guest: 8081, host: "#{port_unique}081"
     # InfluxDB (inspectIT)
     override.vm.network "forwarded_port", guest: 8086, host: "#{port_unique}086"
+    # Docker
+    override.vm.network "forwarded_port", guest: 2375, host: "#{port_unique}375"
   end
 
   config.vm.provider "parallels" do |parallels, override|
