@@ -2,7 +2,7 @@ $grafana = 'grafana/grafana'
 
 docker::image { $grafana: }
 
-file { '/data/influxdb':
+file { '/data/grafana':
   ensure   => directory,
   owner    => root,
   group    => root,
