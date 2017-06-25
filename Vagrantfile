@@ -19,6 +19,8 @@ Vagrant.configure(2) do |config|
     vbox.name = name
     vbox.memory = memory
     override.vm.network "private_network", ip: "192.168.50.#{ip_unique}", virtualbox__intnet: true
+    # Grafana (inspectIT)
+    override.vm.network "forwarded_port", guest: 3000, host: "#{port_unique}030"
     # Docker Registry
     override.vm.network "forwarded_port", guest: 5000, host: "#{port_unique}050"
     # Apache
@@ -58,4 +60,5 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "puppet/init-apache-debian.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-jenkins.sh"
   config.vm.provision "shell", path: "modules/influxdb/scripts/init.sh"
+  config.vm.provision "shell", path: "modules/grafana/scripts/init.sh"
 end
