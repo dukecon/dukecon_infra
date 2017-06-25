@@ -57,4 +57,5 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "puppet/init-puppet-docker-base.sh"
   config.vm.provision "shell", path: "puppet/init-apache-debian.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-jenkins.sh"
+  config.vm.provision "shell", path: "modules/influxdb/scripts/init.sh"
 end
