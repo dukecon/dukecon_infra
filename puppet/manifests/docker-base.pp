@@ -17,6 +17,6 @@ user { 'vagrant':
 file { "/data":
   path          =>      "/data",
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
 }
 
