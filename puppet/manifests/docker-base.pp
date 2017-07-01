@@ -7,13 +7,6 @@ class { 'docker':
   # extra_parameters	=> '--registry-mirror=http://10.211.55.6:5000 --insecure-registry 10.211.55.6:5000',
 }
 
-# TODO: Only enable this on Vagrant machine
-user { 'vagrant':
-  ensure => present,
-  groups => ['docker'],
-  require => Class['docker'],
-}
-
 file { "/data":
   path          =>      "/data",
   ensure        =>      directory,
