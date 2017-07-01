@@ -26,7 +26,7 @@ if test -x $sudo
    else sudo=
 fi
 
-$sudo apt-get install libtest-simple-perl
+test -r /usr/share/perl5/Test/Simple.pm || $sudo apt-get install libtest-simple-perl
 $sudo puppet apply "$basedir/puppet/init.pp"
 
 set +u # Avoid hassles if $TEST_SKIP is not set!
