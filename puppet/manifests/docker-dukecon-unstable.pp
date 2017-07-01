@@ -2,7 +2,7 @@ $instance="unstable"
 $port = "9051"
 
 docker::run { "dukecon-$instance":
-  image    => "ascheman/dukecon-server:1.4-SNAPSHOT",
+  image    => "dukecon/dukecon-server:1.4-SNAPSHOT",
   ports    => ["127.0.0.1:$port:8080"],
   env      => [
     "SPRING_PROFILES_ACTIVE=$instance,docker",
