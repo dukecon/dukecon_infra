@@ -31,7 +31,7 @@ $sudo puppet apply "$basedir/puppet/init.pp"
 
 set +u # Avoid hassles if $TEST_SKIP is not set!
 if test -z "${TEST_SKIP}" -o "${TEST_SKIP}" != "false"
-   then sleeptime=20
+   then sleeptime=60
         echo "Sleeping ${sleeptime}s until Docker/${modulename} is up and running"
         sleep $sleeptime
         $dir/test.pl
