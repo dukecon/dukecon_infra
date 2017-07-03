@@ -195,6 +195,92 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest         => ['https://latest.dukecon.org/']
   }
 
+  apache::vhost { 'ssl-jfs-demo.dukecon.org':
+    servername            => 'jfs-demo.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
+    ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
+    docroot               => '/data/dukecon/html/jfs-demo',
+    docroot_owner         => 'jenkins',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9052/develop/rest/init/jfs/$1',
+      },
+      { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
+        'url'  => 'http://localhost:9052/develop/rest/image-resources/$1/$2',
+      },
+      { 'path'  =>  '^/develop/inspectIT/(.*)',
+        'url'   =>  'http://localhost:9052/develop/inspectIT/$1',
+      },
+      { 'path'  =>  '^/(2016|2017)/(.*)',
+        'url'   =>  'http://localhost:9052/develop/$2',
+      },
+    ],
+    redirectmatch_regexp  => ['^/$',    '^/2016$', '^/2017$', '^/(\d+)', '^/(\d+)/'],
+    redirectmatch_dest    => ['/2017/', '/2016/',  '/2017/',  '/2017/',  '/2017/'  ],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'jfs-demo.dukecon.org':
+    servername            => 'jfs-demo.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://jfs-demo.dukecon.org/']
+  }
+
+  apache::vhost { 'ssl-jfs.dukecon.org':
+    servername            => 'jfs.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
+    ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
+    docroot               => '/data/dukecon/html/jfs',
+    docroot_owner         => 'jenkins',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9052/develop/rest/init/jfs/$1',
+      },
+      { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
+        'url'  => 'http://localhost:9052/develop/rest/image-resources/$1/$2',
+      },
+      { 'path'  =>  '^/develop/inspectIT/(.*)',
+        'url'   =>  'http://localhost:9052/develop/inspectIT/$1',
+      },
+      { 'path'  =>  '^/(2016|2017)/(.*)',
+        'url'   =>  'http://localhost:9052/develop/$2',
+      },
+    ],
+    redirectmatch_regexp  => ['^/$',    '^/2016$', '^/2017$', '^/(\d+)', '^/(\d+)/'],
+    redirectmatch_dest    => ['/2017/', '/2016/',  '/2017/',  '/2017/',  '/2017/'  ],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'jfs.dukecon.org':
+    servername            => 'jfs.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://jfs.dukecon.org/']
+  }
+
   apache::vhost { 'ssl-unstable.dukecon.org':
     servername            => 'unstable.dukecon.org',
     ip                    => '85.214.26.208',
