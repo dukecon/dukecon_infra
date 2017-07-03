@@ -1,4 +1,6 @@
-docker::image { 'influxdb': }
+$influxdb = 'dukecon/influxdb'
+
+docker::image { $influxdb: }
 
 file { '/data/influxdb':
   ensure   => directory,
@@ -8,7 +10,7 @@ file { '/data/influxdb':
 }
 ->
 docker::run { 'influxdb':
-  image    => 'influxdb',
+  image    => $influxdb,
   volumes  => ['/data/influxdb:/var/lib/influxdb'],
   env      => ['PRE_CREATE_DB=inspectit'], # cadvisor,
   ports    => [
