@@ -63,6 +63,7 @@ if $hiera_dukecon_apache_ssl {
       '/testing',
       '/release',
       '/javaland',
+      '/grafana',
 
       '/jenkins/',
       '/latest/',
@@ -70,6 +71,7 @@ if $hiera_dukecon_apache_ssl {
       '/testing/',
       '/release/',
       '/javaland/',
+      '/grafana/',
     ],
     redirect_dest          => [
       '/nexus/',
@@ -80,6 +82,7 @@ if $hiera_dukecon_apache_ssl {
       'https://dev.dukecon.org/testing',
       'https://dev.dukecon.org/release',
       'https://dukecon.org/javaland',
+      'https://dev.dukecon.org/grafana/',
 
       'https://dev.dukecon.org/jenkins/',
       'https://dev.dukecon.org/latest/',
@@ -87,6 +90,7 @@ if $hiera_dukecon_apache_ssl {
       'https://dev.dukecon.org/testing/',
       'https://dev.dukecon.org/release/',
       'https://dukecon.org/javaland/',
+      'https://dev.dukecon.org/grafana/',
     ],
   }
 
@@ -133,6 +137,9 @@ if $hiera_dukecon_apache_ssl {
         },
         { 'path' => '/unstable/',
           'url'  => 'http://localhost:9051/unstable/',
+        },
+        { 'path'     => '/grafana/',
+          'url'      => 'http://localhost:3000/',
         },
       ],
       redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testing',  '/javaland',  '/JavaLand',],
@@ -498,6 +505,9 @@ if $hiera_dukecon_apache_ssl {
       },
       { 'path'    =>  '/testing/',
         'url'     =>  'http://localhost:9060/testing/',
+      },
+      { 'path'      =>  '/grafana/',
+        'url'       =>  'http://localhost:3000/',
       },
     ],
     redirect_source        => ['/nexus',  '/latest',  '/testing' ],
