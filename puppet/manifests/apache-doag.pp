@@ -1,8 +1,3 @@
-$hiera_dukecon = hiera('dukecon')
-$hiera_dukecon_apache = $hiera_dukecon['apache']
-$hiera_dukecon_apache_ssl = $hiera_dukecon_apache['ssl']
-
-
 class { 'apache':
   keepalive    =>  'On',
   default_vhost => false,
