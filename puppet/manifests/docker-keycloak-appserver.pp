@@ -1,4 +1,4 @@
-$keycloak_image = "ascheman/keycloak-postgres-https:1.8.0.JavaLand"
+$keycloak_image = "dukecon/dukecon-keycloak-postgres:1.1-SNAPSHOT"
 
 # Make sure the passwords are available via Puppet Hiera, e.g., in /etc/puppet/hieradata/common.yaml
 #---
