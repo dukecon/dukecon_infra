@@ -26,7 +26,13 @@ apache::vhost { 'programm1.doag.org':
     { 'path'  =>  '^/(\w+)/(\d+)/(.*)',
       'url'   =>  'http://localhost:9051/develop/$3',
     },
+    { 'path'          =>  '/auth/',
+      'url'           =>  'http://localhost:9041',
+      'reverse_urls'  =>  'http://localhost:9041',
+    },
   ],
+  redirect_source        => ['/auth',  ],
+  redirect_dest          => ['/auth/', ],
   # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
   headers               => 'set P3P "CP=\"Potato\""'
 }
