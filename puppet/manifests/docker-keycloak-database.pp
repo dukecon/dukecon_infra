@@ -1,4 +1,4 @@
-$postgres_version = "9.3"
+$postgres_version = "9.5"
 $postgres_image = "postgres:$postgres_version"
 
 package { "postgresql-client-$postgres_version": }
