@@ -36,12 +36,12 @@ docker::run { "dukecon-$instance":
   image    => $image,
   ports    => ["127.0.0.1:$port:8080"],
   env      => [
-    "SPRING_PROFILES_ACTIVE=$instance,docker",
     "SPRING_CONFIG_LOCATION=/opt/dukecon/config",
+    "SPRING_PROFILES_ACTIVE=$instance,docker",
   ],
   volumes  => [
     "/data/dukecon/$instance/cache:/opt/dukecon/cache",
-    "/data/dukecon/$instance/logs:/opt/dukecon/logs",
     "/data/dukecon/$instance/config:/opt/dukecon/config",
+    "/data/dukecon/$instance/logs:/opt/dukecon/logs",
   ],
 }
