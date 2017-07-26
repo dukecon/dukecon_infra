@@ -1,4 +1,4 @@
-$grafana = 'grafana/grafana'
+$grafana = 'dukecon/grafana'
 
 docker::image { $grafana: }
 
