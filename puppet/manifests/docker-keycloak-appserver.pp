@@ -23,6 +23,7 @@ docker::run { 'keycloak':
                     "POSTGRES_PASSWORD=$keycloak_hiera_postgres_password",
                    ],
   links         => ['postgres-keycloak:postgres',],
+  volumes       => ['/data/keycloak/configuration/keycloak-add-user.json:/opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json'],
   ports         => ['127.0.0.1:9041:8080'],
   depends       => ['postgres-keycloak',],
 }
