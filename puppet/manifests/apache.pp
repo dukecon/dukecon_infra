@@ -457,8 +457,8 @@ if $hiera_dukecon_apache_ssl {
     proxy_preserve_host   => 'true',
     proxy_pass_match      => [
       { 'path'          =>  '^/auth/',
-        'url'           =>  'http://localhost:9031',
-        'reverse_urls'  =>  'http://localhost:9031',
+        'url'           =>  'http://localhost:9041',
+        'reverse_urls'  =>  'http://localhost:9041',
       },
       { 'path' => '^/(\d+)/rest/init.json',
         'url'  => 'http://localhost:9080/javaland/rest/init/javaland/$1',
