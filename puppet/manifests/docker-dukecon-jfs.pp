@@ -1,6 +1,6 @@
 $instance="jfs"
 $port = "9052"
-$image = "dukecon/dukecon-server:1.4-SNAPSHOT"
+$image = "dukecon/dukecon-server:latest"
 
 file { "/data":
   ensure        =>      directory,
