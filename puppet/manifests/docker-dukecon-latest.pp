@@ -1,15 +1,47 @@
 $instance="latest"
 $port = "9050"
+$image = "dukecon/dukecon-server:latest"
 
+file { "/data":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
+file { "/data/dukecon":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
+file { "/data/dukecon/$instance":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
+file { "/data/dukecon/$instance/config":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
+file { "/data/dukecon/$instance/cache":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
+file { "/data/dukecon/$instance/logs":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
 docker::run { "dukecon-$instance":
-  image    => "dukecon/dukecon-server:latest",
+  image    => $image,
   ports    => ["127.0.0.1:$port:8080"],
   env      => [
-    "SPRING_PROFILES_ACTIVE=$instance,docker,private-sched-ids",
+    "SPRING_CONFIG_LOCATION=/opt/dukecon/config",
+    "SPRING_PROFILES_ACTIVE=$instance,docker",
   ],
   volumes  => [
-    "/data/dukecon/cache/dukecon-$instance:/var/cache/dukecon",
-    "/data/dukecon/logs/dukecon-$instance:/opt/dukecon/logs",
-    "/data/dukecon/config-common:/opt/dukecon/config",
+    "/data/dukecon/$instance/cache:/opt/dukecon/cache",
+    "/data/dukecon/$instance/config:/opt/dukecon/config",
+    "/data/dukecon/$instance/logs:/opt/dukecon/logs",
   ],
 }
