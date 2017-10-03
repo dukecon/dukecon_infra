@@ -165,8 +165,8 @@ if $hiera_dukecon_apache_ssl {
         path              => '/data/dukecon/html/latest/admin',
       },
       {
-        alias             => '/pwa/javaland/2017',
-        path              => '/data/dukecon/latest/pwa',
+        aliasmatch        => '^/pwa/javaland/201[678]/(.*)$',
+        path              => '/data/dukecon/latest/pwa/$1',
       },
     ],
     allow_encoded_slashes => 'nodecode',
