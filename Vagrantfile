@@ -18,6 +18,9 @@ Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |vbox, override|
     vbox.name = name
     vbox.memory = memory
+    # workaround for "NAT interface disconnected at startup"
+    # https://github.com/hashicorp/vagrant/issues/7648
+    vbox.customize ['modifyvm', :id, '--cableconnected1', 'on']
     override.vm.network "private_network", ip: "192.168.50.#{ip_unique}", virtualbox__intnet: true
     # Grafana (inspectIT)
     override.vm.network "forwarded_port", guest: 3000, host: "#{port_unique}030"
@@ -61,7 +64,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "puppet/init-puppet-debian.sh"
   config.vm.provision "shell", path: "modules/jdk8/scripts/init.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-docker-base.sh"
-  config.vm.provision "shell", path: "puppet/init-puppet-docker-vagrant.sh"
+  # config.vm.provision "shell", path: "puppet/init-puppet-docker-vagrant.sh"
   config.vm.provision "shell", path: "puppet/init-apache-debian.sh"
   config.vm.provision "shell", path: "puppet/init-puppet-jenkins.sh"
   config.vm.provision "shell", path: "modules/influxdb/scripts/init.sh"
