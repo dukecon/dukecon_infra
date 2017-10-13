@@ -65,7 +65,8 @@ exec { 'create /etc/puppet/hieradata/common.yaml':
 dukecon:
     apache:
         ssl: false
-EOF',
+EOF
+',
   require  => File['/etc/puppet/hieradata'],
 }
 
