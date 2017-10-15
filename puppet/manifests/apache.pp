@@ -169,6 +169,12 @@ if $hiera_dukecon_apache_ssl {
         path              => '/data/dukecon/latest/pwa/$1',
       },
     ],
+    # allow .htaccess files in PWA directories to configure i.e. caching headers
+    directories  => [
+      { path           => '/data/dukecon/latest/pwa',
+        allow_override => ['All'],
+      },
+    ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
@@ -183,6 +189,9 @@ if $hiera_dukecon_apache_ssl {
       },
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/conferences/(\w+)',
         'url'  => 'http://localhost:9050/rest/conferences/$3',
+      },
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/speaker/images/(\w+)',
+        'url'  => 'http://localhost:9050/rest/speaker/images/$3',
       },
       { 'path' => '^/(\w+)/(\d+)/rest/init.json',
         'url'  => 'http://localhost:9050/rest/init/$1/$2',
