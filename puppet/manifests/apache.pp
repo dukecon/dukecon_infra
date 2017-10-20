@@ -187,7 +187,7 @@ if $hiera_dukecon_apache_ssl {
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/(image-resources|init).json',
         'url'  => 'http://localhost:9050/rest/$3/$1/$2',
       },
-      { 'path' => '^/pwa/(\w+)/(\d+)/rest/conferences/(\w+)',
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/conferences/(.+)',
         'url'  => 'http://localhost:9050/rest/conferences/$3',
       },
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/speaker/images/(\w+)',
