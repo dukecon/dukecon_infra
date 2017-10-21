@@ -193,7 +193,7 @@ if $hiera_dukecon_apache_ssl {
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/(preferences)',
         'url'  => 'http://localhost:9050/rest/$3',
       },
-      { 'path' => '^/pwa/(\w+)/(\d+)/rest/conferences/(\w+)',
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/conferences/(.+)',
         'url'  => 'http://localhost:9050/rest/conferences/$3',
       },
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/speaker/images/(\w+)',
