@@ -180,18 +180,27 @@ if $hiera_dukecon_apache_ssl {
     request_headers       => [ 'set X-Forwarded-Proto https' ],
     proxy_preserve_host   => 'true',
     proxy_pass_match      => [
-      # The following looks a little bit strange - but for some reason it resolves https://github.com/dukecon/dukecon_infra/issues/28
+      # the target URL needs to have a replacement, otherwise the original path will be appended - looks strange, but works
+      # https://github.com/dukecon/dukecon_infra/issues/28
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/(keycloak).json$',
         'url'  => 'http://localhost:9050/rest/$3.json',
       },
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/(image-resources|init).json',
         'url'  => 'http://localhost:9050/rest/$3/$1/$2',
       },
+      # the target URL needs to have a replacement, otherwise the original path will be appended - looks strange, but works
+      # https://github.com/dukecon/dukecon_infra/issues/28
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/(preferences)',
+        'url'  => 'http://localhost:9050/rest/$3',
+      },
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/conferences/(.+)',
         'url'  => 'http://localhost:9050/rest/conferences/$3',
       },
       { 'path' => '^/pwa/(\w+)/(\d+)/rest/speaker/images/(\w+)',
         'url'  => 'http://localhost:9050/rest/speaker/images/$3',
+      },
+      { 'path' => '^/pwa/(\w+)/(\d+)/img/favicon.ico',
+        'url'  => 'http://localhost:9050/img/$1$2/favicon/favicon.ico',
       },
       { 'path' => '^/(\w+)/(\d+)/rest/init.json',
         'url'  => 'http://localhost:9050/rest/init/$1/$2',
