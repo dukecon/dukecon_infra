@@ -19,15 +19,11 @@ if $hiera_dukecon_apache_ssl {
       '/javaland',
       '/javaland/',
       '/JavaLand',
-      '/jfs',
-      '/jfs/',
     ],
     redirect_dest          => [
       'https://dukecon.org/javaland',
       'https://dukecon.org/javaland/',
       'https://dukecon.org/javaland',
-      'https://dukecon.org/jfs',
-      'https://dukecon.org/jfs/',
     ],
   }
 
@@ -67,7 +63,7 @@ if $hiera_dukecon_apache_ssl {
       '/testing',
       '/release',
       '/javaland',
-      '/jfslatest',
+      '/grafana',
 
       '/jenkins/',
       '/latest/',
@@ -75,7 +71,7 @@ if $hiera_dukecon_apache_ssl {
       '/testing/',
       '/release/',
       '/javaland/',
-      '/jfslatest/',
+      '/grafana/',
     ],
     redirect_dest          => [
       '/nexus/',
@@ -86,7 +82,7 @@ if $hiera_dukecon_apache_ssl {
       'https://dev.dukecon.org/testing',
       'https://dev.dukecon.org/release',
       'https://dukecon.org/javaland',
-      'https://dev.dukecon.org/jfslatest',
+      'https://dev.dukecon.org/grafana/',
 
       'https://dev.dukecon.org/jenkins/',
       'https://dev.dukecon.org/latest/',
@@ -94,7 +90,7 @@ if $hiera_dukecon_apache_ssl {
       'https://dev.dukecon.org/testing/',
       'https://dev.dukecon.org/release/',
       'https://dukecon.org/javaland/',
-      'https://dev.dukecon.org/jfslatest/',
+      'https://dev.dukecon.org/grafana/',
     ],
   }
 
@@ -127,11 +123,11 @@ if $hiera_dukecon_apache_ssl {
           'url'  => 'http://localhost:8081/',
         },
         { 'path'          =>  '/auth/',
-          'url'           =>  'http://localhost:9031/auth/',
-          'reverse_urls'  =>  'http://localhost:9031/auth/',
+          'url'           =>  'http://localhost:9041/auth/',
+          'reverse_urls'  =>  'http://localhost:9041/auth/',
         },
         { 'path' => '/latest/',
-          'url'  => 'http://localhost:9050/latest/',
+          'url'  => 'http://localhost:9050/',
         },
         { 'path' => '/testing/',
           'url'  => 'http://localhost:9060/testing/',
@@ -139,15 +135,15 @@ if $hiera_dukecon_apache_ssl {
         { 'path' => '/javaland/rest/init.json',
           'url'  => 'http://localhost:9080/javaland/rest/init/javaland/2016',
         },
-        { 'path' => '/jfslatest/',
-          'url'  => 'http://localhost:9051/jfslatest/',
+        { 'path' => '/unstable/',
+          'url'  => 'http://localhost:9051/',
         },
-        { 'path' => '/jfs/',
-          'url'  => 'http://localhost:9051/jfslatest/',
+        { 'path'     => '/grafana/',
+          'url'      => 'http://localhost:3000/',
         },
       ],
-      redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testing',  '/javaland',  '/JavaLand', '/jfslatest',  '/jfs', ],
-      redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testing/', '/javaland/', '/javaland', '/jfslatest/', '/jfs/',],
+      redirect_source        => ['/auth',  '/nexus',  '/latest',  '/testing',  '/javaland',  '/JavaLand',],
+      redirect_dest          => ['/auth/', '/nexus/', '/latest/', '/testing/', '/javaland/', '/javaland',],
       # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
       headers                => 'set P3P "CP=\"Potato\""'
     }
@@ -168,30 +164,69 @@ if $hiera_dukecon_apache_ssl {
         alias             => '/admin/javaland/2017',
         path              => '/data/dukecon/html/latest/admin',
       },
+      {
+        aliasmatch        => '^/pwa/javaland/201[678]/(.*)$',
+        path              => '/data/dukecon/latest/pwa/$1',
+      },
+    ],
+    # allow .htaccess files in PWA directories to configure i.e. caching headers
+    directories  => [
+      { path           => '/data/dukecon/latest/pwa',
+        allow_override => ['All'],
+      },
     ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
     proxy_preserve_host   => 'true',
     proxy_pass_match      => [
+      # the target URL needs to have a replacement, otherwise the original path will be appended - looks strange, but works
+      # https://github.com/dukecon/dukecon_infra/issues/28
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/(keycloak).json$',
+        'url'  => 'http://localhost:9050/rest/$3.json',
+      },
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/(image-resources|init).json',
+        'url'  => 'http://localhost:9050/rest/$3/$1/$2',
+      },
+      # the target URL needs to have a replacement, otherwise the original path will be appended - looks strange, but works
+      # https://github.com/dukecon/dukecon_infra/issues/28
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/(preferences)',
+        'url'  => 'http://localhost:9050/rest/$3',
+      },
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/conferences/(.+)',
+        'url'  => 'http://localhost:9050/rest/conferences/$3',
+      },
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/eventsBooking/(.+)',
+        'url'  => 'http://localhost:9050/rest/eventsBooking/$3',
+      },
+      { 'path' => '^/pwa/(\w+)/(\d+)/rest/speaker/images/(\w+)',
+        'url'  => 'http://localhost:9050/rest/speaker/images/$3',
+      },
+      { 'path' => '^/pwa/(\w+)/(\d+)/img/favicon.ico',
+        'url'  => 'http://localhost:9050/img/$1$2/favicon/favicon.ico',
+      },
       { 'path' => '^/(\w+)/(\d+)/rest/init.json',
-        'url'  => 'http://localhost:9050/latest/rest/init/$1/$2',
+        'url'  => 'http://localhost:9050/rest/init/$1/$2',
       },
       { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
-        'url'  => 'http://localhost:9050/latest/rest/image-resources/$1/$2',
+        'url'  => 'http://localhost:9050/rest/image-resources/$1/$2',
       },
       { 'path' => '^/admin/(\w+)/rest/conferences/update/(\w+)',
-        'url'  => 'http://localhost:9050/latest/rest/conferences/update/$2',
+        'url'  => 'http://localhost:9050/rest/conferences/update/$2',
       },
-      { 'path'  =>  '^/(javaland/2016|javaland/2017|doag/201[67]|apex/2017|datavision/2017|jfs/2016|jfs/2017|herbstcampus/2016)/(.*)',
-        'url'   =>  'http://localhost:9050/latest/$2',
+      { 'path' => '^/(\w+)/(\d+)/img/favicon.ico',
+        'url'  => 'http://localhost:9050/img/$1$2/favicon/favicon.ico',
+      },
+      { 'path'  =>  '^/(javaland/201[678]|doag/201[67]|apex/2017|datavision/2017|jfs/201[67]|herbstcampus/2016)/(.*)',
+        'url'   =>  'http://localhost:9050/$2',
       },
     ],
     # The following seems a bit odd: If there are more than one conferences we need multiple redirects, e.g.,
     # for javaland: the first (ones) for outdated conferences, the last one to match everything else to the current
     # instance. For other conferences we redirect to the current one.
-    redirectmatch_regexp  => ['^/$',             '^/javaland/2016$', '^/javaland/?(\d+/?)?$', '^/doag/?(\d+/?)?$', '^/doag/2016$', '^/apex/?(\d+/?)?$', '^/datavision/?(\d+/?)?$', '^/jfs/2017$', '^/jfs/?(\d+/?)?$', '^/herbstcampus/?(\d+/?)?$' ],
-    redirectmatch_dest    => ['/javaland/2017/', '/javaland/2016/',  '/javaland/2017/',       '/doag/2017/',       '/doag/2016/',  '/apex/2017/',       '/datavision/2017/',       '/jfs/2017/',  '/jfs/2016/',       '/herbstcampus/2016/'       ],
+    redirectmatch_regexp  => ['^/$',             '^/javaland/2016$', '^/javaland/2017$', '^/javaland/?(\d+/?)?$', '^/doag/?(\d+/?)?$', '^/apex/?(\d+/?)?$', '^/datavision/?(\d+/?)?$', '^/jfs/?(\d+/?)?$', '^/herbstcampus/?(\d+/?)?$' ],
+    redirectmatch_dest    => ['/javaland/2018/', '/javaland/2016/',  '/javaland/2017/' , '/javaland/2018/',       '/doag/2016/',       '/apex/2017/',       '/datavision/2017/',       '/jfs/2016/',       '/herbstcampus/2016/'       ],
+
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers               => 'set P3P "CP=\"Potato\""'
   }
@@ -204,6 +239,151 @@ if $hiera_dukecon_apache_ssl {
     allow_encoded_slashes =>  'nodecode',
     redirect_source       => ['/'],
     redirect_dest         => ['https://latest.dukecon.org/']
+  }
+
+  apache::vhost { 'ssl-jfs-demo.dukecon.org':
+    servername            => 'jfs-demo.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
+    ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
+    docroot               => '/data/dukecon/html/jfs-demo',
+    docroot_owner         => 'jenkins',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9052/rest/init/jfs/$1',
+      },
+      { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
+        'url'  => 'http://localhost:9052/rest/image-resources/$1/$2',
+      },
+      { 'path'  =>  '^/develop/inspectIT/(.*)',
+        'url'   =>  'http://localhost:9052/inspectIT/$1',
+      },
+      { 'path'  =>  '^/(2016|2017)/(.*)',
+        'url'   =>  'http://localhost:9052/$2',
+      },
+    ],
+    redirectmatch_regexp  => ['^/$',    '^/2016$', '^/2017$', '^/(\d+)', '^/(\d+)/'],
+    redirectmatch_dest    => ['/2017/', '/2016/',  '/2017/',  '/2017/',  '/2017/'  ],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'jfs-demo.dukecon.org':
+    servername            => 'jfs-demo.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://jfs-demo.dukecon.org/']
+  }
+
+  apache::vhost { 'ssl-jfs.dukecon.org':
+    servername            => 'jfs.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
+    ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
+    docroot               => '/data/dukecon/html/jfs',
+    docroot_owner         => 'jenkins',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9052/rest/init/jfs/$1',
+      },
+      { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
+        'url'  => 'http://localhost:9052/rest/image-resources/$1/$2',
+      },
+      { 'path' => '^/(\w+)/(\d+)/img/favicon.ico',
+        'url'  => 'http://localhost:9052/img/$1$2/favicon/favicon.ico',
+      },
+      { 'path'  =>  '^/develop/inspectIT/(.*)',
+        'url'   =>  'http://localhost:9052/inspectIT/$1',
+      },
+      { 'path'  =>  '^/(2016|2017)/(.*)',
+        'url'   =>  'http://localhost:9052/$2',
+      },
+    ],
+    redirectmatch_regexp  => ['^/$',    '^/2016$', '^/2017$', '^/(\d+)', '^/(\d+)/'],
+    redirectmatch_dest    => ['/2017/', '/2016/',  '/2017/',  '/2017/',  '/2017/'  ],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'jfs.dukecon.org':
+    servername            => 'jfs.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://jfs.dukecon.org/']
+  }
+
+  apache::vhost { 'ssl-unstable.dukecon.org':
+    servername            => 'unstable.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
+    ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
+    docroot               => '/data/dukecon/html/unstable',
+    docroot_owner         => 'jenkins',
+    aliases               => [
+      { 
+        # aliasmatch        => '/admin/(javaland/201[67]|doag/201[67]|apex/2017|datavision/2017)',
+        alias             => '/admin/javaland/2017',
+        path              => '/data/dukecon/html/unstable/admin',
+      },
+    ],
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path' => '^/(\w+)/(\d+)/rest/init.json',
+        'url'  => 'http://localhost:9051/rest/init/$1/$2',
+      },
+      { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
+        'url'  => 'http://localhost:9051/rest/image-resources/$1/$2',
+      },
+      { 'path' => '^/admin/(\w+)/rest/conferences/update/(\w+)',
+        'url'  => 'http://localhost:9051/rest/conferences/update/$2',
+      },
+      { 'path' => '^/(\w+)/(\d+)/img/favicon.ico',
+        'url'  => 'http://localhost:9051/img/$1$2/favicon/favicon.ico',
+      },
+      { 'path'  =>  '^/(javaland/2016|javaland/2017|doag/201[67]|apex/2017|datavision/2017|jfs/2016|jfs/2017|herbstcampus/2016)/(.*)',
+        'url'   =>  'http://localhost:9051/$2',
+      },
+    ],
+    # The following seems a bit odd: If there are more than one conferences we need multiple redirects, e.g.,
+    # for javaland: the first (ones) for outdated conferences, the last one to match everything else to the current
+    # instance. For other conferences we redirect to the current one.
+    redirectmatch_regexp  => ['^/$',             '^/javaland/2016$', '^/javaland/?(\d+/?)?$', '^/doag/?(\d+/?)?$', '^/doag/2016$', '^/apex/?(\d+/?)?$', '^/datavision/?(\d+/?)?$', '^/jfs/2017$', '^/jfs/?(\d+/?)?$', '^/herbstcampus/?(\d+/?)?$' ],
+    redirectmatch_dest    => ['/javaland/2017/', '/javaland/2016/',  '/javaland/2017/',       '/doag/2017/',       '/doag/2016/',  '/apex/2017/',       '/datavision/2017/',       '/jfs/2017/',  '/jfs/2016/',       '/herbstcampus/2016/'       ],
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'unstable.dukecon.org':
+    servername            => 'unstable.dukecon.org',
+    ip                    => '85.214.26.208',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://unstable.dukecon.org/']
   }
 
   apache::vhost { 'ssl-testing.dukecon.org':
@@ -319,8 +499,8 @@ if $hiera_dukecon_apache_ssl {
     proxy_preserve_host   => 'true',
     proxy_pass_match      => [
       { 'path'          =>  '^/auth/',
-        'url'           =>  'http://localhost:9031',
-        'reverse_urls'  =>  'http://localhost:9031',
+        'url'           =>  'http://localhost:9041',
+        'reverse_urls'  =>  'http://localhost:9041',
       },
       { 'path' => '^/(\d+)/rest/init.json',
         'url'  => 'http://localhost:9080/javaland/rest/init/javaland/$1',
@@ -370,6 +550,9 @@ if $hiera_dukecon_apache_ssl {
       },
       { 'path'    =>  '/testing/',
         'url'     =>  'http://localhost:9060/testing/',
+      },
+      { 'path'      =>  '/grafana/',
+        'url'       =>  'http://localhost:3000/',
       },
     ],
     redirect_source        => ['/nexus',  '/latest',  '/testing' ],

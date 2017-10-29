@@ -18,7 +18,7 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-test -d /etc/puppet/modules/apache || $sudo puppet module install puppetlabs-apache
+test -d /etc/puppet/modules/apache || $sudo puppet module install --version 1.11.0 puppetlabs-apache
 
 $sudo puppet apply ${basedir}/puppet/init.pp
 

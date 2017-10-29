@@ -1,5 +1,5 @@
-$instance="latest"
-$port = "9050"
+$instance="jfs"
+$port = "9052"
 $image = "dukecon/dukecon-server:latest"
 
 file { "/data":
@@ -36,12 +36,16 @@ docker::run { "dukecon-$instance":
   image    => $image,
   ports    => ["127.0.0.1:$port:8080"],
   env      => [
-    "SPRING_CONFIG_LOCATION=/opt/dukecon/config",
     "SPRING_PROFILES_ACTIVE=$instance,docker",
+    "SPRING_CONFIG_LOCATION=/opt/dukecon/config",
+    "JAVA_OPTS='-javaagent:/opt/inspectit/agent/inspectit-agent.jar -Dinspectit.repository=inspectit:9070 -Dinspectit.agent.name=DukeCon-$instance'",
   ],
+  links    => ["inspectit"],
   volumes  => [
     "/data/dukecon/$instance/cache:/opt/dukecon/cache",
     "/data/dukecon/$instance/config:/opt/dukecon/config",
     "/data/dukecon/$instance/logs:/opt/dukecon/logs",
+    "/opt/inspectit/agent:/opt/inspectit/agent",
   ],
 }
+

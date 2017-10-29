@@ -1,6 +1,6 @@
-$instance="latest"
-$port = "9050"
-$image = "dukecon/dukecon-server:latest"
+$instance="unstable"
+$port = "9051"
+$image = "dukecon/dukecon-server:unstable"
 
 file { "/data":
   ensure        =>      directory,

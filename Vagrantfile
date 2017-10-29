@@ -21,15 +21,26 @@ Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |vbox, override|
     vbox.name = name
     vbox.memory = memory
+    # workaround for "NAT interface disconnected at startup"
+    # https://github.com/hashicorp/vagrant/issues/7648
+    vbox.customize ['modifyvm', :id, '--cableconnected1', 'on']
     override.vm.network "private_network", ip: "192.168.50.#{ip_unique}", virtualbox__intnet: true
+    # Grafana (inspectIT)
+    override.vm.network "forwarded_port", guest: 3000, host: "#{port_unique}030"
     # Docker Registry
     override.vm.network "forwarded_port", guest: 5000, host: "#{port_unique}050"
+    # CMR Agent (inspectIT)
+    override.vm.network "forwarded_port", guest: 9070, host: "#{port_unique}070"
     # Apache
     override.vm.network "forwarded_port", guest: 80, host: "#{port_unique}080"
     # Nexus
     override.vm.network "forwarded_port", guest: 8081, host: "#{port_unique}081"
     # InfluxDB (inspectIT)
     override.vm.network "forwarded_port", guest: 8086, host: "#{port_unique}086"
+    # CMR Agent (inspectIT)
+    override.vm.network "forwarded_port", guest: 8182, host: "#{port_unique}182"
+    # Docker
+    override.vm.network "forwarded_port", guest: 2375, host: "#{port_unique}375"
   end
 
   config.vm.provider "parallels" do |parallels, override|
@@ -54,5 +65,4 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "shell", path: "composites/scripts/run.sh", args: composite
-
 end

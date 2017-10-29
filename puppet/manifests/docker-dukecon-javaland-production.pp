@@ -1,6 +1,6 @@
-$instance="latest"
-$port = "9050"
-$image = "dukecon/dukecon-server:latest"
+$instance = "javaland"
+$port = "9090"
+$image = "dukecon/dukecon-server:1.4-SNAPSHOT"
 
 file { "/data":
   ensure        =>      directory,
@@ -33,15 +33,20 @@ file { "/data/dukecon/$instance/logs":
 }
 ->
 docker::run { "dukecon-$instance":
-  image    => $image,
+  image    => $image, 
   ports    => ["127.0.0.1:$port:8080"],
   env      => [
-    "SPRING_CONFIG_LOCATION=/opt/dukecon/config",
-    "SPRING_PROFILES_ACTIVE=$instance,docker",
+    "SPRING_PROFILES_ACTIVE=$instance,postgresql,docker",
+    # TODO: This is only a workaround!
+    "DUKECON_ARGS='--postgres.host=postgres --postgres.port=5432'",
+    "SPRING_CONFIG_LOCATION=/opt/dukecon/config", 
+    "JAVA_DEFAULT_OPTS='-Xms768M -Xmx1536M'",
   ],
   volumes  => [
-    "/data/dukecon/$instance/cache:/opt/dukecon/cache",
+     "/data/dukecon/$instance/cache:/opt/dukecon/cache",
     "/data/dukecon/$instance/config:/opt/dukecon/config",
-    "/data/dukecon/$instance/logs:/opt/dukecon/logs",
+    "/data/dukecon/$instance/logs:/opt/dukecon/logs", 
   ],
+  links    => ["dukecon-postgres-production:postgres",],
+  depends  => ["dukecon-postgres-production",],
 }
