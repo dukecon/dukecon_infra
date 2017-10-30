@@ -4,35 +4,26 @@ Package {
     ensure 	=> "latest"
 }
 
-# Should be already there through "init-puppet-debian.sh"
+# Delete some default packages ...
+package { 'nfs-common':
+  ensure  => "purged"
+}
+package { 'rpcbind':
+  ensure  => "purged"
+}
+
+# The minimal set of packages we would like to see!
 package { "git": }
 package { "etckeeper": }
-# The minimal set of packages we would like to see!
 package { "screen": }
 package { "apticron": }
 
-# Tweak etckeeper
-file_line { 'etckeeper:git':
-  path  	=> '/etc/etckeeper/etckeeper.conf',
-  line  	=> 'VCS="git"',
-  require => Package['etckeeper']
-}
-file_line { 'etckeeper:no-nightly-commit':
-  path  	=> '/etc/etckeeper/etckeeper.conf',
-  line  	=> 'AVOID_DAILY_AUTOCOMMITS=1',
-  match 	=> '#AVOID_DAILY_AUTOCOMMITS=1',
-  require => Package['etckeeper']
-}
-file_line { 'etckeeper:no-auto-commit':
-  path  	=> '/etc/etckeeper/etckeeper.conf',
-  line  	=> 'AVOID_COMMIT_BEFORE_INSTALL=1',
-  match 	=> '#AVOID_COMMIT_BEFORE_INSTALL=1',
-  require => Package['etckeeper']
-}
+# Some Packages required for testing
+package { "libwww-mechanize-perl": }
+package { "libtest-html-content-perl": }
 
-# Install hiera (at least to make warnings disappear :-)
-file { 'hiera.yaml':
-  path		=> '/etc/puppet/hiera.yaml',
+# Minimal hiera + puppet setup (at least to make warnings disappear :-)
+file { '/etc/puppet/hiera.yaml':
   owner		=> 'root',
   group		=> 'root',
   mode		=> 0444,
@@ -50,14 +41,19 @@ file { 'hiera.yaml':
    :datadir: /etc/puppet/hieradata
 ',
 }
-
+->
+file { '/etc/hiera.yaml':
+  ensure  => 'link',
+  target  => 'puppet/hiera.yaml',
+}
+->
 file { '/etc/puppet/hieradata':
   ensure   => 'directory',
   owner    => 'root',
   group    => 'root',
   mode     => 0755
 }
-
+->
 # Only create it if it does not yet exist!
 exec { 'create /etc/puppet/hieradata/common.yaml':
   unless   => '/usr/bin/test -r /etc/puppet/hieradata/common.yaml',
@@ -67,9 +63,8 @@ dukecon:
         ssl: false
 EOF
 ',
-  require  => File['/etc/puppet/hieradata'],
 }
-
+->
 # Enable puppet future parser (experimental in Puppet 3.x >= 3.2, cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html)
 ini_setting { "future parser for puppet":
   ensure  => present,
@@ -78,3 +73,42 @@ ini_setting { "future parser for puppet":
   setting => 'parser',
   value   => 'future',
 }
+
+include etckeeper
+
+# Tweak etckeeper
+file_line { 'etckeeper:git':
+  path  	=> '/etc/etckeeper/etckeeper.conf',
+  line  	=> 'VCS="git"',
+  require => [
+    Package['etckeeper'],
+    Package['git'],
+  ],
+}
+->
+file_line { 'etckeeper:no-nightly-commit':
+  path  	=> '/etc/etckeeper/etckeeper.conf',
+  line  	=> 'AVOID_DAILY_AUTOCOMMITS=1',
+  match 	=> '#AVOID_DAILY_AUTOCOMMITS=1',
+}
+->
+file_line { 'etckeeper:no-auto-commit':
+  path  	=> '/etc/etckeeper/etckeeper.conf',
+  line  	=> 'AVOID_COMMIT_BEFORE_INSTALL=1',
+  match 	=> '#AVOID_COMMIT_BEFORE_INSTALL=1',
+}
+->
+exec { 'etckeeper-init-git':
+  command  => 'git init',
+  creates  => '/etc/.git',
+  cwd      => '/etc',
+  path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+}
+->
+exec { 'etckeeper-initial-commit':
+  command  => 'git commit -m "Initial commit"',
+  creates  => '/etc/.git/refs/heads/master',
+  cwd      => '/etc',
+  path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+}
+
