@@ -10,7 +10,7 @@ class { 'apache':
 
 if $hiera_dukecon_apache_ssl {
   apache::vhost { 'dukecon.org':
-    ip                     => '85.214.26.208',
+    ip                     => '94.130.153.250',
     port                   =>  '80',
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
@@ -28,13 +28,13 @@ if $hiera_dukecon_apache_ssl {
   }
 
   apache::vhost { 'www.dukecon.org':
-    ip                     => '85.214.26.208',
+    ip                     => '94.130.153.250',
     port                   =>  '80',
     docroot                =>  '/var/www/html',
   }
 
   apache::vhost { 'keycloak.dukecon.org':
-    ip                     => '85.214.26.208',
+    ip                     => '94.130.153.250',
     port                   =>  '80',
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
@@ -44,7 +44,7 @@ if $hiera_dukecon_apache_ssl {
   }
 
   apache::vhost { 'dev.dukecon.org':
-    ip                     => '85.214.26.208',
+    ip                     => '94.130.153.250',
     port                   =>  '80',
     docroot                =>  '/var/www/html',
     allow_encoded_slashes  =>  'nodecode',
@@ -99,7 +99,7 @@ if $hiera_dukecon_apache_ssl {
   $sslnames.each |$sslname| {
     apache::vhost { "ssl-${sslname}dukecon.org":
       servername            => "${sslname}dukecon.org",
-      ip                    => '85.214.26.208',
+      ip                    => '94.130.153.250',
       port                  => '443',
       ssl                   => true,
       ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
@@ -151,7 +151,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'ssl-latest.dukecon.org':
     servername            => 'latest.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  => '443',
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
@@ -233,7 +233,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'latest.dukecon.org':
     servername            => 'latest.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  =>  '80',
     docroot               =>  '/var/www/html',
     allow_encoded_slashes =>  'nodecode',
@@ -243,7 +243,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'ssl-jfs-demo.dukecon.org':
     servername            => 'jfs-demo.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  => '443',
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
@@ -276,7 +276,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'jfs-demo.dukecon.org':
     servername            => 'jfs-demo.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  =>  '80',
     docroot               =>  '/var/www/html',
     allow_encoded_slashes =>  'nodecode',
@@ -286,7 +286,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'ssl-jfs.dukecon.org':
     servername            => 'jfs.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  => '443',
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
@@ -322,7 +322,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'jfs.dukecon.org':
     servername            => 'jfs.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  =>  '80',
     docroot               =>  '/var/www/html',
     allow_encoded_slashes =>  'nodecode',
@@ -332,7 +332,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'ssl-unstable.dukecon.org':
     servername            => 'unstable.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  => '443',
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
@@ -378,7 +378,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'unstable.dukecon.org':
     servername            => 'unstable.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  =>  '80',
     docroot               =>  '/var/www/html',
     allow_encoded_slashes =>  'nodecode',
@@ -388,7 +388,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'ssl-testing.dukecon.org':
     servername            => 'testing.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  => '443',
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
@@ -431,7 +431,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'testing.dukecon.org':
     servername            => 'testing.dukecon.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  =>  '80',
     docroot               =>  '/var/www/html',
     allow_encoded_slashes =>  'nodecode',
@@ -441,7 +441,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'ssl-programm.doag.org':
     servername            => 'programm.doag.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  => '443',
     ssl                   => true,
     ssl_cert              => '/etc/tls/doag2015.crt',
@@ -468,7 +468,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'programm.doag.org':
     servername            => 'programm.doag.org',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  =>  '80',
     docroot               =>  '/var/www/html',
     allow_encoded_slashes =>  'nodecode',
@@ -478,7 +478,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'ssl-programm.javaland.eu':
     servername            => 'programm.javaland.eu',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  => '443',
     ssl                   => true,
     ssl_cert              => '/etc/tls/javaland.crt',
@@ -523,7 +523,7 @@ if $hiera_dukecon_apache_ssl {
 
   apache::vhost { 'programm.javaland.eu':
     servername            => 'programm.javaland.eu',
-    ip                    => '85.214.26.208',
+    ip                    => '94.130.153.250',
     port                  =>  '80',
     docroot               =>  '/var/www/html',
     allow_encoded_slashes =>  'nodecode',
