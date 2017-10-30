@@ -14,7 +14,7 @@ package { 'rpcbind':
 
 # The minimal set of packages we would like to see!
 package { "git": }
-package { "etckeeper": }
+# package { "etckeeper": } - is implicitely declared!
 package { "screen": }
 package { "apticron": }
 
