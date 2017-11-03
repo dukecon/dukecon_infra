@@ -165,8 +165,8 @@ if $hiera_dukecon_apache_ssl {
         path              => '/data/dukecon/html/latest/admin',
       },
       {
-        aliasmatch        => '^/pwa/javaland/201[678]/(.*)$',
-        path              => '/data/dukecon/latest/pwa/$1',
+        aliasmatch        => '^/pwa/(javaland|doag|apex)/201[678]/(.*)$',
+        path              => '/data/dukecon/latest/pwa/$2',
       },
     ],
     # allow .htaccess files in PWA directories to configure i.e. caching headers
