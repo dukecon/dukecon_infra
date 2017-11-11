@@ -27,3 +27,5 @@ test -r /etc/puppet/modules/apt || $sudo puppet module install --force puppetlab
 test -r /etc/puppet/modules/inifile || $sudo puppet module install puppetlabs-inifile
 
 $sudo puppet apply ${basedir}/puppet/init.pp
+
+$sudo apt-get autoremove -y
