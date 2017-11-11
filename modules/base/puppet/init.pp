@@ -94,8 +94,8 @@ file_line { 'etckeeper:no-nightly-commit':
 ->
 file_line { 'etckeeper:no-auto-commit':
   path  	=> '/etc/etckeeper/etckeeper.conf',
-  line  	=> 'AVOID_COMMIT_BEFORE_INSTALL=1',
-  match 	=> '#AVOID_COMMIT_BEFORE_INSTALL=1',
+  match  	=> 'AVOID_COMMIT_BEFORE_INSTALL=1',
+  line  	=> '#AVOID_COMMIT_BEFORE_INSTALL=1',
 }
 ->
 exec { 'etckeeper-init-git':
