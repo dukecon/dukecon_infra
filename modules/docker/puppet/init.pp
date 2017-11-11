@@ -13,3 +13,12 @@ file { "/data":
   mode          =>      '0755',
 }
 
+exec { '/bin/echo "This is a Vagrant Host"':
+  onlyif        => '/bin/grep -q vagrant /etc/passwd',
+}
+->
+user { 'vagrant':
+  ensure        => present,
+  groups        => ['docker'],
+  require       => Class['docker'],
+}
