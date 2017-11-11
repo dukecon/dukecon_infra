@@ -26,7 +26,7 @@ package { "libtest-html-content-perl": }
 file { '/etc/puppet/hiera.yaml':
   owner		=> 'root',
   group		=> 'root',
-  mode		=> 0444,
+  mode		=> '0444',
   content	=> '---
 :backends:
   - yaml
@@ -51,7 +51,7 @@ file { '/etc/puppet/hieradata':
   ensure   => 'directory',
   owner    => 'root',
   group    => 'root',
-  mode     => 0755
+  mode     => '0755',
 }
 ->
 # Only create it if it does not yet exist!
