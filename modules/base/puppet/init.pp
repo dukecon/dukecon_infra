@@ -65,6 +65,25 @@ EOF
 ',
 }
 ->
+file { '/etc/puppetlabs':
+  ensure   => 'directory',
+  owner    => 'root',
+  group    => 'root',
+  mode     => '0755',
+}
+->
+file { '/etc/puppetlabs/code':
+  ensure   => 'directory',
+  owner    => 'root',
+  group    => 'root',
+  mode     => '0755',
+}
+->
+file { '/etc/puppetlabs/code/hiera.yaml':
+  ensure  => 'link',
+  target  => '/etc/puppet/hiera.yaml',
+}
+
 # Enable puppet future parser (experimental in Puppet 3.x >= 3.2, cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html)
 ini_setting { "future parser for puppet":
   ensure  => present,
