@@ -67,12 +67,6 @@ hierarchy:
     path: "common.yaml"
 ',
 }
-->
-file { '/etc/hiera.yaml':
-  ensure  => 'link',
-  target  => 'puppet/hiera.yaml',
-}
-->
 file { '/etc/puppetlabs/puppet/hieradata':
   ensure   => 'directory',
   owner    => 'root',
