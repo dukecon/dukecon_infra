@@ -19,7 +19,7 @@ sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
 test -d /etc/puppetlabs/code/environments/production/modules/maven || $sudo /opt/puppetlabs/bin/puppet module install maestrodev-maven
-test -d /etc/puppetlabs/code/environments/production/modules/jenkins || $sudo /opt/puppetlabs/bin/puppet module install rtyler-jenkins
+test -d /etc/puppetlabs/code/environments/production/modules/jenkins || $sudo /opt/puppetlabs/bin/puppet module install rtyler-jenkins --version '>=1.7.0'
 
 # This is the minimum DukeCon Docker application which is needed for Jenkins
 $sudo /opt/puppetlabs/bin/puppet apply ${dir}/../../../puppet/manifests/docker-dukecon-latest.pp
