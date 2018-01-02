@@ -3,7 +3,6 @@ $hiera_docker_registry = $hiera_docker['registry']
 $hiera_docker_registry_mirror = $hiera_docker_registry['mirror']
 
 class { 'docker':
-  manage_kernel 	=> false,
   # TODO: Enable this on "development" (i.e., "local" Vagrant machine)
   tcp_bind         => 'tcp://127.0.0.1:2375',
   socket_bind	   => 'unix:///var/run/docker.sock',
