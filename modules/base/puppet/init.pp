@@ -87,11 +87,11 @@ file { '/etc/puppetlabs/code':
   group    => 'root',
   mode     => '0755',
 }
-->
-file { '/etc/puppetlabs/code/hiera.yaml':
-  ensure  => 'link',
-  target  => '/etc/puppet/hiera.yaml',
-}
+# ->
+# file { '/etc/puppetlabs/code/hiera.yaml':
+#   ensure  => 'link',
+#   target  => '/etc/puppet/hiera.yaml',
+# }
 
 # Add Network configuration!
 file { '/etc/puppet/hieradata/networks':
