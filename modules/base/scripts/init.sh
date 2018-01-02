@@ -29,6 +29,8 @@ $sudo /bin/sh -c '
 
 export PATH=$PATH:/opt/puppetlabs/bin
 
+$sudo apt-get upgrade
+
 test -r /etc/puppetlabs/code/environments/production/modules/etckeeper || $sudo puppet module install thomasvandoren-etckeeper
 test -r /etc/puppetlabs/code/environments/production/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
 test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo puppet module install --force puppetlabs-apt
