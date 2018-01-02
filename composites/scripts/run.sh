@@ -13,7 +13,7 @@ test -d ${compositesdir} || compositesdir=${dir}/..
 for comp in "$*"
 do
     echo "Applying '${comp}'"
-    modules=`cat ${compositesdir}/lists/${comp}`
+    modules=`grep -v '^#' ${compositesdir}/lists/${comp}`
 
     for module in ${modules}
     do
