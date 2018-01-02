@@ -33,10 +33,14 @@ Vagrant.configure(2) do |config|
     override.vm.network "forwarded_port", guest: 9070, host: "#{port_unique}070"
     # Apache
     override.vm.network "forwarded_port", guest: 80, host: "#{port_unique}080"
+    # Jenkins
+    override.vm.network "forwarded_port", guest: 8080, host: "#{port_unique}080"
     # Nexus
     override.vm.network "forwarded_port", guest: 8081, host: "#{port_unique}081"
     # InfluxDB (inspectIT)
     override.vm.network "forwarded_port", guest: 8086, host: "#{port_unique}086"
+    # Rancher
+    override.vm.network "forwarded_port", guest: 8888, host: "#{port_unique}888"
     # CMR Agent (inspectIT)
     override.vm.network "forwarded_port", guest: 8182, host: "#{port_unique}182"
     # Docker
