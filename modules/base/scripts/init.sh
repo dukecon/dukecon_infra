@@ -18,13 +18,21 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-$sudo apt-get update
-$sudo apt-get install -qq puppet
+$sudo /bin/sh -c '
+  cd /tmp \
+  && wget https://apt.puppetlabs.com/puppet5-release-xenial.deb \
+  && dpkg -i puppet5-release-xenial.deb \
+  && apt update \
+  && apt-get install -qq puppetserver \
+  && /bin/rm -f puppet5-release-xenial.deb \
+  '
 
-test -r /etc/puppet/modules/etckeeper || $sudo puppet module install thomasvandoren-etckeeper
-test -r /etc/puppet/modules/stdlib || $sudo puppet module install puppetlabs-stdlib --version 4.12.0
-test -r /etc/puppet/modules/apt || $sudo puppet module install --force puppetlabs-apt --version 2.3.0
-test -r /etc/puppet/modules/inifile || $sudo puppet module install puppetlabs-inifile
+export PATH=$PATH:/opt/puppetlabs/bin
+
+test -r /etc/puppetlabs/code/environments/production/modules/etckeeper || $sudo puppet module install thomasvandoren-etckeeper
+test -r /etc/puppetlabs/code/environments/production/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
+test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo puppet module install --force puppetlabs-apt
+test -r /etc/puppetlabs/code/environments/production/modules/inifile || $sudo puppet module install puppetlabs-inifile
 
 $sudo puppet apply ${basedir}/puppet/init.pp
 

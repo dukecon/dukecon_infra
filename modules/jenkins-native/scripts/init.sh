@@ -18,8 +18,8 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-test -d /etc/puppet/modules/maven || $sudo puppet module install maestrodev-maven
-test -d /etc/puppet/modules/jenkins || $sudo puppet module install rtyler-jenkins
+test -d /etc/puppetlabs/code/environments/production/modules/maven || $sudo puppet module install maestrodev-maven
+test -d /etc/puppetlabs/code/environments/production/modules/jenkins || $sudo puppet module install rtyler-jenkins
 
 # This is the minimum DukeCon Docker application which is needed for Jenkins
 $sudo puppet apply ${dir}/../../../puppet/manifests/docker-dukecon-latest.pp

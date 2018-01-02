@@ -21,7 +21,7 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-test -d /etc/puppet/modules/oraclejdk8 || $sudo puppet module install zuinnote-oraclejdk8
+test -d /etc/puppetlabs/code/environments/production/modules/oraclejdk8 || $sudo puppet module install zuinnote-oraclejdk8
 
 $sudo puppet apply ${basedir}/puppet/init.pp
 # For some reason the first attempt fails very often if not always - so give it a second try

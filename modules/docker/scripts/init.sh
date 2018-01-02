@@ -19,7 +19,7 @@ sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
 # Avoid the following error 'Error: Error while evaluating a Function Call, Must pass update_defaults to Class[Apt]' - which seem to occur with apt module >= 3.0.0
-test -r /etc/puppet/modules/apt || $sudo puppet module install puppetlabs-apt --version 2.4.0
-test -r /etc/puppet/modules/docker || $sudo puppet module install garethr-docker
+test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo puppet module install puppetlabs-apt --version 2.4.0
+test -r /etc/puppetlabs/code/environments/production/modules/docker || $sudo puppet module install garethr-docker
 
 $sudo puppet apply ${basedir}/puppet/init.pp
