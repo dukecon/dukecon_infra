@@ -74,17 +74,6 @@ file { '/etc/puppetlabs/puppet/hieradata':
   mode     => '0755',
 }
 ->
-# Only create it if it does not yet exist!
-exec { 'create /etc/puppetlabs/puppet/hieradata/common.yaml':
-  unless   => '/usr/bin/test -r /etc/puppetlabs/puppet/hieradata/common.yaml',
-  command  => '/bin/cat >/etc/puppetlabs/puppet/hieradata/common.yaml<<EOF
-dukecon:
-    apache:
-        ssl: false
-EOF
-',
-}
-->
 # Add Network configuration!
 file { '/etc/puppetlabs/puppet/hieradata/networks':
   ensure  => 'directory',
@@ -105,6 +94,17 @@ docker:
         mirror: 10.0.2.3:5000
 ',
   require => File['/etc/puppetlabs/puppet/hieradata/networks'],
+}
+->
+# Only create it if it does not yet exist!
+exec { 'create /etc/puppetlabs/puppet/hieradata/common.yaml':
+  unless   => '/usr/bin/test -r /etc/puppetlabs/puppet/hieradata/common.yaml',
+  command  => '/bin/cat >/etc/puppetlabs/puppet/hieradata/common.yaml<<EOF
+dukecon:
+    apache:
+        ssl: false
+EOF
+',
 }
 
 # Enable puppet future parser (experimental in Puppet 3.x >= 3.2, cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html)
