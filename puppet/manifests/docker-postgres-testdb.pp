@@ -1,20 +1,20 @@
 file { '/data/postgresql':
   path          =>      '/data/postgresql',
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
 }
 
 file { '/data/postgresql/testdb':
   path          =>      '/data/postgresql/testdb',
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
   require	=>	File['/data/postgresql'],
 }
 
 file { '/data/postgresql/testdb/data':
   path          =>      '/data/postgresql/testdb/data',
   ensure        =>      directory,
-  mode          =>      0700,
+  mode          =>      '0700',
   require	=>	File['/data/postgresql/testdb'],
 }
 

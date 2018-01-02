@@ -4,13 +4,13 @@ file { '/data/nexus':
   ensure   => directory,
   owner    => root,
   group    => root,
-  mode     => 0777,
+  mode     => '0777',
 }
 file { '/data/nexus/sonatype':
   ensure   => directory,
   owner    => root,
   group    => root,
-  mode     => 0777,
+  mode     => '0777',
   require  => File['/data/nexus']
 }
 

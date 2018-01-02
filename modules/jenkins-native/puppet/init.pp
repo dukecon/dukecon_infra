@@ -77,7 +77,7 @@ file_line { 'JENKINS_ARGS':
 file {'/var/lib/jenkins/hudson.tasks.Maven.xml':
   owner   => 'jenkins',
   group   => 'jenkins',
-  mode    => 0644,
+  mode    => '0644',
   content => "<?xml version='1.0' encoding='UTF-8'?>
 <hudson.tasks.Maven_-DescriptorImpl>
   <installations>
