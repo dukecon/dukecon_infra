@@ -34,6 +34,13 @@ file { '/etc/puppet/hiera.yaml':
 :logger: console
 
 :hierarchy:
+  # Works for Ubuntu >= 16.04 (or even older ones?)
+  - "networks/%{::network_enp0s3}"
+  # Some default networks for wired and wireless LAN
+  - "networks/%{::network_eth0}"
+  - "networks/%{::network_eth1}"
+  # This is a work around for older hiera versions! It may not work for hosts without any default network!!!
+  # - "networks/$network_eth0"
   - "%{operatingsystem}"
   - common
 
