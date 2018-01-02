@@ -68,7 +68,7 @@ file_line { 'JENKINS_ARGS':
   path  => '/etc/default/jenkins',
   # headless: Allow graphs etc. to work even when an X server is present
   # CSP: content security policy - allow HTML reports for JGiven 
-  line  => 'JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpListenAddress=127.0.0.1 --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT --prefix=$PREFIX"',
+  line  => 'JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpListenAddress=127.0.0.1 --httpPort=$HTTP_PORT --ajp13Port=${AJP_PORT:-\"-1\"} --prefix=$PREFIX"',
   match => '^JENKINS_ARGS=',
   notify  => Service['jenkins'],
   require => Package['jenkins'],
