@@ -1,0 +1,93 @@
+= Infrastructure Dukecon
+
+== Overview
+
+Dukecon Server is just a Spring Boot app which can be started with `java -jar ...`. But integration of database, security, etc. needs a more complicated setup. The goal of this document is to describe the whole Dukecon infrastructure and the interaction between its building blocks and tools.
+
+Configuration and initial setup of Dukecon infrastructure can be found here: https://github.com/dukecon/dukecon_infra
+
+=== Tools, Server, Frameworks
+
+|===
+|Tools (OS/Server/Provisioning) |Description |Usage
+
+|Ubuntu
+|
+|
+
+|Vagrant
+|
+|
+
+|Puppet
+|
+|
+
+|Docker
+|
+|
+
+|Keycloak
+|
+|
+
+|Databases
+|
+|
+
+|Jenkins
+|
+|
+
+|Nexus
+|
+|
+
+|Maven
+|
+|
+
+|===
+
+== Host System (Ubuntu)
+
+
+.Important folders
+|===
+|Folder |Description |Used by
+
+|/data/dukecon
+|
+|
+
+|/data/grafana
+|
+|
+
+|/data/influxdb
+|
+|
+
+|/data/inspectit
+|
+|
+
+|/data/keycloak
+|
+|
+
+|/data/postgresql
+|
+|
+
+|/data/sonatype
+|
+|
+
+|===
+
+
+== Docker-Images
+
+== Jenkins
+
