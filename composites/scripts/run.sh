@@ -1,6 +1,8 @@
 #!/bin/bash
 
-set -e
+set -eu
+
+set -o pipefail
 
 dir=`dirname $0`
 
@@ -12,7 +14,9 @@ test -d ${compositesdir} || compositesdir=${dir}/..
 
 for comp in "$*"
 do
+    echo '************************************************************'
     echo "Applying '${comp}'"
+    echo '************************************************************'
     modules=`grep -v '^#' ${compositesdir}/lists/${comp}`
 
     for module in ${modules}
