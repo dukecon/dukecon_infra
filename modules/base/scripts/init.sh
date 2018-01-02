@@ -29,7 +29,7 @@ $sudo /bin/sh -c '
 
 export PATH=$PATH:/opt/puppetlabs/bin
 
-$sudo apt-get -qq -y upgrade
+DEBIAN_FRONTEND=noninteractive $sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 test -r /etc/puppetlabs/code/environments/production/modules/etckeeper || $sudo /opt/puppetlabs/bin/puppet module install thomasvandoren-etckeeper
 test -r /etc/puppetlabs/code/environments/production/modules/stdlib || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-stdlib
