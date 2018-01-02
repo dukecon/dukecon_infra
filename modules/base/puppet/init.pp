@@ -25,29 +25,49 @@ package { "libwww-mechanize-perl": }
 package { "libtest-html-content-perl": }
 
 # Minimal hiera + puppet setup (at least to make warnings disappear :-)
-file { '/etc/puppet/hiera.yaml':
+file { '/etc/puppetlabs':
+  ensure   => 'directory',
+  owner    => 'root',
+  group    => 'root',
+  mode     => '0755',
+}
+->
+file { '/etc/puppetlabs/puppet':
+  ensure   => 'directory',
+  owner    => 'root',
+  group    => 'root',
+  mode     => '0755',
+}
+->
+file { '/etc/puppetlabs/puppet/hiera.yaml':
   owner		=> 'root',
   group		=> 'root',
   mode		=> '0444',
   content	=> '---
-:backends:
-  - yaml
+version: 5
+defaults:  # Used for any hierarchy level that omits these keys.
+  datadir: hieradata    # This path is relative to hiera.yaml\'s directory.
+  data_hash: yaml_data  # Use the built-in YAML backend.
 
-:logger: console
 
-:hierarchy:
+hierarchy:
   # Works for Ubuntu >= 16.04 (or even older ones?)
-  - "networks/%{::network_enp0s3}"
+  - name: "Ubuntu >= 16.04 default network file"
+    path: "networks/%{::network_enp0s3}"
   # Some default networks for wired and wireless LAN
-  - "networks/%{::network_eth0}"
-  - "networks/%{::network_eth1}"
+  - name: "Wired LAN"
+    path: "networks/%{::network_eth0}.yaml"
+  - name: "Wireless LAN"
+    path: "networks/%{::network_eth1}.yaml"
   # This is a work around for older hiera versions! It may not work for hosts without any default network!!!
   # - "networks/$network_eth0"
-  - "%{operatingsystem}"
-  - common
+  - name: "Old operating systems values"
+    path: "%{operatingsystem}.yaml"
 
-:yaml:
-   :datadir: /etc/puppet/hieradata
+  - name: "Per-OS defaults"
+    path: "os/%{facts.os.family}.yaml"
+  - name: "Common data"
+    path: "common.yaml"
 ',
 }
 ->
@@ -56,7 +76,7 @@ file { '/etc/hiera.yaml':
   target  => 'puppet/hiera.yaml',
 }
 ->
-file { '/etc/puppet/hieradata':
+file { '/etc/puppetlabs/puppet/hieradata':
   ensure   => 'directory',
   owner    => 'root',
   group    => 'root',
@@ -64,9 +84,9 @@ file { '/etc/puppet/hieradata':
 }
 ->
 # Only create it if it does not yet exist!
-exec { 'create /etc/puppet/hieradata/common.yaml':
-  unless   => '/usr/bin/test -r /etc/puppet/hieradata/common.yaml',
-  command  => '/bin/cat >/etc/puppet/hieradata/common.yaml<<EOF
+exec { 'create /etc/puppetlabs/puppet/hieradata/common.yaml':
+  unless   => '/usr/bin/test -r /etc/puppetlabs/puppet/hieradata/common.yaml',
+  command  => '/bin/cat >/etc/puppetlabs/puppet/hieradata/common.yaml<<EOF
 dukecon:
     apache:
         ssl: false
@@ -74,35 +94,16 @@ EOF
 ',
 }
 ->
-file { '/etc/puppetlabs':
-  ensure   => 'directory',
-  owner    => 'root',
-  group    => 'root',
-  mode     => '0755',
-}
-->
-file { '/etc/puppetlabs/code':
-  ensure   => 'directory',
-  owner    => 'root',
-  group    => 'root',
-  mode     => '0755',
-}
-# ->
-# file { '/etc/puppetlabs/code/hiera.yaml':
-#   ensure  => 'link',
-#   target  => '/etc/puppet/hiera.yaml',
-# }
-
 # Add Network configuration!
-file { '/etc/puppet/hieradata/networks':
+file { '/etc/puppetlabs/puppet/hieradata/networks':
   ensure  => 'directory',
   owner   => 'root',
   group   => 'root',
   mode    => '0755',
-  require => File['/etc/puppet/hieradata'],
+  require => File['/etc/puppetlabs/puppet/hieradata'],
 }
 ->
-file { '/etc/puppet/hieradata/networks/10.0.2.0.yaml':
+file { '/etc/puppetlabs/puppet/hieradata/networks/10.0.2.0.yaml':
   owner    => 'root',
   group    => 'root',
   mode     => '0444',
@@ -112,13 +113,13 @@ docker:
     registry:
         mirror: 10.0.2.3:5000
 ',
-  require => File['/etc/puppet/hieradata/networks'],
+  require => File['/etc/puppetlabs/puppet/hieradata/networks'],
 }
 
 # Enable puppet future parser (experimental in Puppet 3.x >= 3.2, cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html)
 ini_setting { "future parser for puppet":
   ensure  => present,
-  path    => '/etc/puppet/puppet.conf',
+  path    => '/etc/puppetlabs/puppet/puppet.conf',
   section => 'main',
   setting => 'parser',
   value   => 'future',
