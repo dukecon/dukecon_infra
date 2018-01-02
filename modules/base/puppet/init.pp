@@ -51,9 +51,6 @@ defaults:  # Used for any hierarchy level that omits these keys.
 
 
 hierarchy:
-  # Works for Ubuntu >= 16.04 (or even older ones?)
-  - name: "Ubuntu >= 16.04 default network file"
-    path: "networks/%{::network_enp0s3}"
   # Some default networks for wired and wireless LAN
   - name: "Wired LAN"
     path: "networks/%{::network_eth0}.yaml"
