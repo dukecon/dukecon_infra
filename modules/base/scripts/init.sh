@@ -33,7 +33,7 @@ $sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-conf
 
 test -r /etc/puppetlabs/code/environments/production/modules/etckeeper || $sudo /opt/puppetlabs/bin/puppet module install thomasvandoren-etckeeper
 test -r /etc/puppetlabs/code/environments/production/modules/stdlib || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-stdlib
-test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo /opt/puppetlabs/bin/puppet module install --force puppetlabs-apt
+test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apt --version 2.4.0 # Needed for rtyler-jenkins in an optional subsequent step
 test -r /etc/puppetlabs/code/environments/production/modules/inifile || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-inifile
 
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
