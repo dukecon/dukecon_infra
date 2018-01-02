@@ -27,7 +27,7 @@ if test -x $sudo
 fi
 
 test -r /usr/share/perl5/Test/Simple.pm || $sudo apt-get install libtest-simple-perl
-$sudo puppet apply "$basedir/puppet/init.pp"
+$sudo /opt/puppetlabs/bin/puppet apply "$basedir/puppet/init.pp"
 
 set +u # Avoid hassles if $TEST_SKIP is not set!
 if test -z "${TEST_SKIP}" -o "${TEST_SKIP}" != "false"

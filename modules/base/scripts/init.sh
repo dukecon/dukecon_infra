@@ -31,11 +31,11 @@ export PATH=$PATH:/opt/puppetlabs/bin
 
 $sudo apt-get upgrade
 
-test -r /etc/puppetlabs/code/environments/production/modules/etckeeper || $sudo puppet module install thomasvandoren-etckeeper
-test -r /etc/puppetlabs/code/environments/production/modules/stdlib || $sudo puppet module install puppetlabs-stdlib
-test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo puppet module install --force puppetlabs-apt
-test -r /etc/puppetlabs/code/environments/production/modules/inifile || $sudo puppet module install puppetlabs-inifile
+test -r /etc/puppetlabs/code/environments/production/modules/etckeeper || $sudo /opt/puppetlabs/bin/puppet module install thomasvandoren-etckeeper
+test -r /etc/puppetlabs/code/environments/production/modules/stdlib || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-stdlib
+test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo /opt/puppetlabs/bin/puppet module install --force puppetlabs-apt
+test -r /etc/puppetlabs/code/environments/production/modules/inifile || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-inifile
 
-$sudo puppet apply ${basedir}/puppet/init.pp
+$sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
 
 $sudo apt-get autoremove -y
