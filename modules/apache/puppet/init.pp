@@ -1,6 +1,4 @@
-$hiera_dukecon = hiera('dukecon')
-$hiera_dukecon_apache = $hiera_dukecon['apache']
-$hiera_dukecon_apache_ssl = $hiera_dukecon_apache['ssl']
+$hiera_dukecon_apache_ssl = lookup('dukecon::apache::ssl', Boolean, 'unique', false)
 
 
 class { 'apache':

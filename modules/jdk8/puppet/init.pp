@@ -1,5 +1,4 @@
-# TODO: Check lookup mechanisms of Hiera for nested data!
-$hiera_java_jdk_avoid_oracle_jdk = hiera('java::jdk::avoid_oracle_jdk', false)
+$hiera_java_jdk_avoid_oracle_jdk = lookup('java::jdk::avoid_oracle_jdk', Boolean, 'unique', false)
 
 if !$hiera_java_jdk_avoid_oracle_jdk {
   # This is not automatically installed on all Ubuntu 14.x / Debian ...
