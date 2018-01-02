@@ -91,6 +91,28 @@ file { '/etc/puppetlabs/code/hiera.yaml':
   target  => '/etc/puppet/hiera.yaml',
 }
 
+# Add Network configuration!
+file { '/etc/puppet/hieradata/networks':
+  ensure  => 'directory',
+  owner   => 'root',
+  group   => 'root',
+  mode    => '0755',
+  require => File['/etc/puppet/hieradata'],
+}
+->
+file { '/etc/puppet/hieradata/networks/10.0.2.0.yaml':
+  owner    => 'root',
+  group    => 'root',
+  mode     => '0444',
+  content  => '---
+# Make use of Docker Registry on VirtualBox host!
+docker:
+    registry:
+        mirror: 10.0.2.3:5000
+',
+  require => File['/etc/puppet/hieradata/networks'],
+}
+
 # Enable puppet future parser (experimental in Puppet 3.x >= 3.2, cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html)
 ini_setting { "future parser for puppet":
   ensure  => present,
