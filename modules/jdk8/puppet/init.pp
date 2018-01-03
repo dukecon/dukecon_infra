@@ -1,4 +1,4 @@
-$hiera_java_jdk_avoid_oracle_jdk = lookup('java::jdk::avoid_oracle_jdk', Boolean, 'unique', false)
+$hiera_java_jdk_avoid_oracle_jdk = lookup('java::jdk::avoid_oracle_jdk', Boolean, 'unique', true)
 
 if !$hiera_java_jdk_avoid_oracle_jdk {
   # This is not automatically installed on all Ubuntu 14.x / Debian ...
