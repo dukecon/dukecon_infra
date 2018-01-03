@@ -18,14 +18,18 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-$sudo /bin/sh -c '
-  cd /tmp \
-  && wget https://apt.puppetlabs.com/puppet5-release-xenial.deb \
-  && dpkg -i puppet5-release-xenial.deb \
-  && apt update \
-  && apt-get install -qq puppetserver \
-  && /bin/rm -f puppet5-release-xenial.deb \
-  '
+if test -d /opt/puppetlabs; then
+    $sudo /bin/sh -c '
+      cd /tmp \
+      && wget https://apt.puppetlabs.com/puppet5-release-xenial.deb \
+      && dpkg -i puppet5-release-xenial.deb \
+      && apt-get update \
+      && apt-get install -qq puppetserver \
+      && /bin/rm -f puppet5-release-xenial.deb \
+      '
+else
+    $sudo apt-get update
+fi
 
 export PATH=$PATH:/opt/puppetlabs/bin
 
