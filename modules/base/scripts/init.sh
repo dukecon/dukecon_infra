@@ -43,3 +43,5 @@ test -r /etc/puppetlabs/code/environments/production/modules/inifile || $sudo /o
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
 
 $sudo apt-get autoremove -y
+
+$sudo sudo update-locale LANG=C LANGUAGE=C
