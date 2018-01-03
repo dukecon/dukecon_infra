@@ -216,7 +216,7 @@ exec { 'create job dukecon_jenkins_seed':
 }
 ->
 exec { 'init dukecon jenkins jobs':
-  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` build -c dukecon_jenkins_seed',
+  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` build -s dukecon_jenkins_seed',
 }
 
 file_line { 'enable sudo docker-dukecon restart for jenkins':
