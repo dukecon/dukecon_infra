@@ -19,6 +19,8 @@ sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
 if test -d /opt/puppetlabs; then
+    $sudo apt-get update
+else
     $sudo /bin/sh -c '
       cd /tmp \
       && wget https://apt.puppetlabs.com/puppet5-release-xenial.deb \
@@ -27,8 +29,6 @@ if test -d /opt/puppetlabs; then
       && apt-get install -qq puppetserver \
       && /bin/rm -f puppet5-release-xenial.deb \
       '
-else
-    $sudo apt-get update
 fi
 
 export PATH=$PATH:/opt/puppetlabs/bin
