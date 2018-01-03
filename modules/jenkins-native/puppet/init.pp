@@ -6,6 +6,8 @@ if !$hiera_java_jdk_avoid_oracle_jdk {
   }
 }
 
+$jenkins_globalJobDslSecurityConfig = "/var/lib/jenkins/javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration.xml"
+
 $config_hash = {
   'PREFIX' => { value => '/jenkins'},
 }
@@ -123,6 +125,27 @@ file_line { 'JENKINS_ARGS':
   # CSP: content security policy - allow HTML reports for JGiven 
   line  => 'JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpListenAddress=127.0.0.1 --httpPort=$HTTP_PORT --ajp13Port=${AJP_PORT:-\"-1\"} --prefix=$PREFIX"',
   match => '^JENKINS_ARGS=',
+  notify  => Service['jenkins'],
+}
+->
+file {$jenkins_globalJobDslSecurityConfig:
+  owner    => 'jenkins',
+  group    => 'jenkins',
+  mode     => '0600',
+  content  => "<?xml version='1.0' encoding='UTF-8'?>
+<javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration>
+  <category class=\"jenkins.model.GlobalConfigurationCategory\$Security\"/>
+  <useScriptSecurity>false</useScriptSecurity>
+</javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration>"
+}
+->
+augeas {"Disable Jenkins Job DSL security":
+  lens       => 'Xml.lns',
+  incl       => $jenkins_globalJobDslSecurityConfig,
+  context    => "/files$jenkins_globalJobDslSecurityConfig",
+  changes    => [
+    'set javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration/useScriptSecurity/#text "false"',
+  ],
   notify  => Service['jenkins'],
 }
 ->
