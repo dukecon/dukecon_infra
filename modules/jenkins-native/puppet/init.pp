@@ -163,14 +163,19 @@ file {'/var/lib/jenkins/hudson.tasks.Maven.xml':
     </hudson.tasks.Maven_-MavenInstallation>
   </installations>
 </hudson.tasks.Maven_-DescriptorImpl>",
-  require => Package['jenkins'],
   notify  => Service['jenkins']
 }
 ->
 jenkins::plugin { $plugins : }
 ->
-exec { 'wait for jenkins':
+exec { 'Finish Jenkins Setup':
   command => '/bin/echo "Waiting 30 secs for Jenkins to start up" >&2 && /bin/sleep 30',
+}
+
+# Now wait until Jenkins is up and running again and start to execute Jobs then
+exec { 'Wait for Jenkins':
+  command => '/bin/echo "Waiting another 10 secs for Jenkins to start up" >&2 && /bin/sleep 10',
+  require => Exec['Finish Jenkins Setup']
 }
 ->
 file {'/var/lib/jenkins/initfiles':
