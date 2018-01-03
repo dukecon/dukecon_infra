@@ -1,3 +1,11 @@
+$hiera_java_jdk_avoid_oracle_jdk = lookup('java::jdk::avoid_oracle_jdk', Boolean, 'unique', true)
+if !$hiera_java_jdk_avoid_oracle_jdk {
+  exec { 'update-java-alternatives -s java-8-oracle':
+    path    => '/usr/sbin:/sbin:/usr/bin:/bin',
+    require => Exec['update-java-alternatives'],
+  }
+}
+
 $config_hash = {
   'PREFIX' => { value => '/jenkins'},
 }
@@ -86,8 +94,6 @@ $plugins = [
   'workflow-support',
 ]
 
-jenkins::plugin { $plugins : }
-
 file_line { 'JAVA_ARGS':
   path  => '/etc/default/jenkins',
   # Add ' -Djava.util.logging.config.file=/var/lib/jenkins/logging.properties' to enable debugging with the config like
@@ -109,7 +115,7 @@ file_line { 'JAVA_ARGS':
   notify  => Service['jenkins'],
   require => Package['jenkins'],
 }
-
+->
 file_line { 'JENKINS_ARGS':
   path  => '/etc/default/jenkins',
   # headless: Allow graphs etc. to work even when an X server is present
@@ -117,9 +123,8 @@ file_line { 'JENKINS_ARGS':
   line  => 'JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpListenAddress=127.0.0.1 --httpPort=$HTTP_PORT --ajp13Port=${AJP_PORT:-\"-1\"} --prefix=$PREFIX"',
   match => '^JENKINS_ARGS=',
   notify  => Service['jenkins'],
-  require => Package['jenkins'],
 }
-
+->
 file {'/var/lib/jenkins/hudson.tasks.Maven.xml':
   owner   => 'jenkins',
   group   => 'jenkins',
@@ -137,21 +142,26 @@ file {'/var/lib/jenkins/hudson.tasks.Maven.xml':
   require => Package['jenkins'],
   notify  => Service['jenkins']
 }
-
-exec {'update-java-alternatives -s java-8-oracle':
-  path    => '/usr/sbin:/sbin:/usr/bin:/bin',
-  require => Exec['update-java-alternatives'],
-}
-
+->
+jenkins::plugin { $plugins : }
+->
 exec { 'wait for jenkins':
-  require => Package['jenkins'],
-  command => '/bin/echo "Waiting for Jenkins 60 secs to start up" && /bin/sleep 60',
+  command => '/bin/echo "Waiting 30 secs for Jenkins to start up" >&2 && /bin/sleep 30',
 }
-
-jenkins::job { 'dukecon_jenkins_seed':
-  enabled => 1,
-  require => Exec['wait for jenkins'],
-  config  => '<?xml version="1.0" encoding="UTF-8"?>
+->
+file {'/var/lib/jenkins/initfiles':
+  owner   => 'jenkins',
+  group   => 'jenkins',
+  ensure  => 'directory',
+  mode    => '0755',
+}
+->
+file {'/var/lib/jenkins/initfiles/dukecon_jenkins_seed':
+  owner   => 'jenkins',
+  group   => 'jenkins',
+  ensure  => 'present',
+  mode    => '0644',
+  content => '<?xml version="1.0" encoding="UTF-8"?>
 <project>
   <actions/>
   <description></description>
@@ -200,16 +210,16 @@ jenkins::job { 'dukecon_jenkins_seed':
   <publishers/>
   <buildWrappers/>
 </project>'
+}->
+exec { 'create job dukecon_jenkins_seed':
+  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://localhost:8080/jenkins/ -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` create-job dukecon_jenkins_seed < /var/lib/jenkins/initfiles/dukecon_jenkins_seed'
 }
-
+->
 exec { 'init dukecon jenkins jobs':
-  require => [
-    Jenkins::Job["dukecon_jenkins_seed"],
-  ],
-  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins build -c dukecon_jenkins_seed',
+  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://127.0.0.1:8080/jenkins -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` build -c dukecon_jenkins_seed',
 }
 
-file_line { 'sudo docker restart for jenkins':
+file_line { 'enable sudo docker-dukecon restart for jenkins':
   path  	=> '/etc/sudoers',
   line => 'jenkins ALL = NOPASSWD: /etc/init.d/docker-dukecon-*',
 }
