@@ -10,36 +10,6 @@ $config_hash = {
   'PREFIX' => { value => '/jenkins'},
 }
 
-class {'jenkins':
-  config_hash => $config_hash,
-}
-
-class { 'maven': }
-
-package { 'git' :
-  ensure => installed,
-}
-
-package { 'augeas-tools':
-  # For command line config file evaluation and editing
-  ensure  => installed,
-}
-
-# firefox is needed for GUI test of dukecon
-package { 'firefox':
-  ensure => 'latest',
-}
-
-# used for headless testing
-package { 'xvfb':
-  ensure => 'installed'
-}
-
-package { 'graphviz':
-  # For dukecon/dukecon project (uses asciidoctor/plantuml)
-  ensure  => installed,
-}
-
 $plugins = [
   'antisamy-markup-formatter',
   'ant',
@@ -50,7 +20,7 @@ $plugins = [
   'ColumnsPlugin',
   'command-launcher',
   'conditional-buildstep',
-#  'credentials', # This is a Puppet Jenkins Default Plugin, don't declare it twice!
+  #  'credentials', # This is a Puppet Jenkins Default Plugin, don't declare it twice!
   'dashboard-view',
   'description-setter',
   'disk-usage',
@@ -94,6 +64,37 @@ $plugins = [
   'workflow-support',
 ]
 
+class {'jenkins':
+  config_hash => $config_hash,
+}
+
+class { 'maven': }
+
+package { 'git' :
+  ensure => installed,
+}
+
+package { 'augeas-tools':
+  # For command line config file evaluation and editing
+  ensure  => installed,
+}
+
+# firefox is needed for GUI test of dukecon
+package { 'firefox':
+  ensure => 'latest',
+}
+
+# used for headless testing
+package { 'xvfb':
+  ensure => 'installed'
+}
+
+package { 'graphviz':
+  # For dukecon/dukecon project (uses asciidoctor/plantuml)
+  ensure  => installed,
+}
+
+# Start initializing rules
 file_line { 'JAVA_ARGS':
   path  => '/etc/default/jenkins',
   # Add ' -Djava.util.logging.config.file=/var/lib/jenkins/logging.properties' to enable debugging with the config like
