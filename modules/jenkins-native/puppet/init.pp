@@ -90,6 +90,18 @@ jenkins::plugin { $plugins : }
 
 file_line { 'JAVA_ARGS':
   path  => '/etc/default/jenkins',
+  # Add ' -Djava.util.logging.config.file=/var/lib/jenkins/logging.properties' to enable debugging with the config like
+    # .level = FINEST
+    # handlers= java.util.logging.ConsoleHandler, java.util.logging.FileHandler
+    #
+    # java.util.logging.ConsoleHandler.level=INFO
+    # java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+    #
+    # java.util.logging.FileHandler.level=FINEST
+    # java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+    # java.util.logging.FileHandler.pattern=/var/lib/jenkins/logs/debug.log
+    # java.util.logging.FileHandler.limit=50000000
+    # java.util.logging.FileHandler.count=5
   # headless: Allow graphs etc. to work even when an X server is present
   # CSP: content security policy - allow HTML reports for JGiven 
   line  => 'JAVA_ARGS="-Dhudson.model.DirectoryBrowserSupport.CSP=\"default-src \'self\'; style-src \'self\' \'unsafe-inline\';\" -Djava.awt.headless=true"',
