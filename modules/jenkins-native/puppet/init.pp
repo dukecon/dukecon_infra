@@ -173,6 +173,68 @@ file {'/var/lib/jenkins/hudson.tasks.Maven.xml':
   notify  => Service['jenkins']
 }
 ->
+file {'/var/lib/jenkins/.m2':
+  owner   => 'jenkins',
+  group   => 'jenkins',
+  ensure  => 'directory',
+  mode    => '0755',
+}
+->
+file {'/var/lib/jenkins/.m2/settings.xml':
+  owner   => 'jenkins',
+  group   => 'jenkins',
+  mode    => '0600',
+  content => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<settings xmlns=\"http://maven.apache.org/SETTINGS/1.0.0\"
+    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+    xsi:schemaLocation=\"http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd\">
+
+    <mirrors>
+        <mirror>
+            <id>dukecon</id>
+            <url>http://localhost:8081/nexus/content/groups/public</url>
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+
+    <activeProfiles>
+        <activeProfile>dukecon-localhost</activeProfile>
+    </activeProfiles>
+
+    <profiles>
+        <profile>
+            <id>dukecon-localhost</id>
+            <repositories>
+                <repository>
+                    <id>localhost-snapshots</id>
+                    <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>localhost-releases</id>
+                    <url>http://localhost:8081/nexus/content/repositories/releases</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>dukecon-snapshots</id>
+                    <url>http://localhost:8081/nexus/nexus/content/group/public</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+</settings>",
+  notify  => Service['jenkins']
+}
+->
 jenkins::plugin { $plugins : }
 ->
 exec { 'Finish Jenkins Setup':
