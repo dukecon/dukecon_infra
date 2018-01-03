@@ -241,7 +241,8 @@ file {'/var/lib/jenkins/initfiles/dukecon_jenkins_seed':
 </project>'
 }->
 exec { 'create job dukecon_jenkins_seed':
-  command => '/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://localhost:8080/jenkins/ -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` create-job dukecon_jenkins_seed < /var/lib/jenkins/initfiles/dukecon_jenkins_seed'
+  # If Jenkins CLI comes back with return code 4, the seed job already exists - ignore this
+  command => '/bin/sh -c "/usr/bin/java -jar /usr/share/jenkins/jenkins-cli.jar -s http://localhost:8080/jenkins/ -auth admin:`cat /var/lib/jenkins/secrets/initialAdminPassword` create-job dukecon_jenkins_seed < /var/lib/jenkins/initfiles/dukecon_jenkins_seed; if test $? -eq 4; then exit 0; else exit $?; fi"'
 }
 ->
 exec { 'init dukecon jenkins jobs':
