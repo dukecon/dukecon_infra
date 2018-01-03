@@ -18,7 +18,6 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-test -d /etc/puppetlabs/code/environments/production/modules/maven || $sudo /opt/puppetlabs/bin/puppet module install maestrodev-maven
 test -d /etc/puppetlabs/code/environments/production/modules/jenkins || $sudo /opt/puppetlabs/bin/puppet module install rtyler-jenkins --version '>=1.7.0'
 
 # Set up Jenkins

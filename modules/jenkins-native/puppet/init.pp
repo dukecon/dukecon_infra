@@ -70,7 +70,7 @@ class {'jenkins':
   config_hash => $config_hash,
 }
 
-class { 'maven': }
+$maven_default_version = '3.5.2'
 
 package { 'git' :
   ensure => installed,
@@ -157,9 +157,16 @@ file {'/var/lib/jenkins/hudson.tasks.Maven.xml':
 <hudson.tasks.Maven_-DescriptorImpl>
   <installations>
     <hudson.tasks.Maven_-MavenInstallation>
-      <name>maven-3.2.5</name>
-      <home>/opt/apache-maven-3.2.5</home>
-      <properties/>
+      <name>maven-$maven_default_version</name>
+      <properties>
+        <hudson.tools.InstallSourceProperty>
+          <installers>
+            <hudson.tasks.Maven_-MavenInstaller>
+              <id>$maven_default_version</id>
+            </hudson.tasks.Maven_-MavenInstaller>
+          </installers>
+        </hudson.tools.InstallSourceProperty>
+      </properties>
     </hudson.tasks.Maven_-MavenInstallation>
   </installations>
 </hudson.tasks.Maven_-DescriptorImpl>",
