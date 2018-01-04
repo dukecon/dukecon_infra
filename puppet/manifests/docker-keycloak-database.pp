@@ -10,8 +10,8 @@ package { "postgresql-client-$postgres_version": }
 #    password: xxx
 #	   root_password: yyy
 
-$keycloak_hiera_postgres_password = lookup('keycloak::postgres::password', String, 'unique', "test1234")
-$keycloak_hiera_postgres_root_password = lookup('keycloak::postgres::password', String, 'unique', "test1234")
+$keycloak_hiera_postgres_password = lookup('keycloak.postgres.password', String, 'deep', "test1234")
+$keycloak_hiera_postgres_root_password = lookup('keycloak.postgres.password', String, 'deep', "test1234")
 
 file { "/data/postgresql":
   path          =>      "/data/postgresql",

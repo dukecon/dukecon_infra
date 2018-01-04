@@ -1,4 +1,4 @@
-$hiera_docker_registry_mirror = lookup('docker::registry::mirror', String, 'unique', 'localhost:5000')
+$hiera_docker_registry_mirror = lookup('docker.registry.mirror', String, 'deep', 'localhost:5000')
 
 class { 'docker':
   # TODO: Enable this on "development" (i.e., "local" Vagrant machine)

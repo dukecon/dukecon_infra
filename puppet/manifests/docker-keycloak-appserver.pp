@@ -7,7 +7,7 @@ $keycloak_image = "dukecon/dukecon-keycloak-postgres:1.1-SNAPSHOT"
 #   password: xxx
 #   root_password: yyy
 
-$keycloak_hiera_postgres_password = lookup('keycloak::postgres::password', String, 'unique', "test1234")
+$keycloak_hiera_postgres_password = lookup('keycloak.postgres.password', String, 'deep', "test1234")
 
 docker::image { $keycloak_image: }
 

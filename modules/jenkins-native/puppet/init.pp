@@ -1,4 +1,4 @@
-$hiera_java_jdk_avoid_oracle_jdk = lookup('java::jdk::avoid_oracle_jdk', Boolean, 'unique', true)
+$hiera_java_jdk_avoid_oracle_jdk = lookup('java.jdk.avoid_oracle_jdk', Boolean, 'deep', true)
 if !$hiera_java_jdk_avoid_oracle_jdk {
   exec { 'update-java-alternatives -s java-8-oracle':
     path    => '/usr/sbin:/sbin:/usr/bin:/bin',

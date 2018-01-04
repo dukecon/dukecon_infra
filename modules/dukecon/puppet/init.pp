@@ -1,7 +1,7 @@
-$docker_compose_version = lookup("docker::compose::version", String, 'unique', '1.18.0')
+$docker_compose_version = lookup("docker.compose.version", String, 'deep', '1.18.0')
 
 $dukecon_postgres_version = '9.5'
-$dukecon_docker_instances = lookup ("dukecon::docker::instances",
+$dukecon_docker_instances = lookup ("dukecon.docker.instances",
   Array[Hash[String, String]],
   # Data,
   'deep', [
