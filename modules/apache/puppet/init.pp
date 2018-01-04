@@ -390,7 +390,7 @@ if $hiera_dukecon_apache_ssl {
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
     ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
-    docroot               => '/data/dukecon/html/testing',
+    docroot               => '/data/dukecon/testing/html',
     docroot_owner         => 'jenkins',
     aliases               => [
       { 
