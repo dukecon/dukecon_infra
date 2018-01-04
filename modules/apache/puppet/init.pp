@@ -403,9 +403,9 @@ if $hiera_dukecon_apache_ssl {
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
     proxy_preserve_host   => 'true',
-    proxy_pass             =>  [
-      { 'path'      =>  '/',
-        'url'       =>  'http://localhost:9060/',
+    proxy_pass_match      =>  [
+      { 'path'      =>  '^/(.+)',
+        'url'       =>  'http://localhost:9060/$1',
       },
     ],
     # The following seems a bit odd: If there are more than one conferences we need multiple redirects, e.g.,
