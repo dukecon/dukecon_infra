@@ -1,6 +1,7 @@
 base
 docker
 nexus
+dukecon
 jdk8
 jenkins-native
 # scm-manager

@@ -1,0 +1,41 @@
+version: "2"
+
+services:
+  dukecon-pwa:
+    image: dukecon/dukecon-pwa:latest
+    restart: always
+
+  dukecon-postgres:
+    image: "postgres:<%= @dukecon_postgres_version %>"
+    restart: always
+    environment:
+      - "POSTGRES_USER=dukecon"
+      - "POSTGRES_PASSWORD=dukecon"
+    ports:
+      - "127.0.0.1:<%= @dukecon_instance_postgres_port %>:5432"
+    volumes:
+      - "/data/dukecon/<%= @dukecon_instance_name %>/postgresql/data:/var/lib/postgresql/data"
+
+  dukecon-server:
+    image: dukecon/dukecon-server:latest
+    restart: always
+    depends_on:
+      - dukecon-postgres
+    links:
+      - dukecon-postgres:postgres
+    environment:
+      - "SPRING_CONFIG_LOCATION=/opt/dukecon/config"
+      - "SPRING_PROFILES_ACTIVE=<%= @dukecon_instance_name %>,postgresql,docker"
+    volumes:
+      - "/data/dukecon/<%= @dukecon_instance_name %>/server/cache:/opt/dukecon/cache"
+      - "/data/dukecon/<%= @dukecon_instance_name %>/server/config:/opt/dukecon/config"
+      - "/data/dukecon/<%= @dukecon_instance_name %>/server/logs:/opt/dukecon/logs"
+
+  dukecon-edge:
+    image: dukecon/dukecon-httpd-edge:latest
+    restart: always
+    depends_on:
+      - dukecon-pwa
+      - dukecon-server
+    ports:
+      - "127.0.0.1:<%= @dukecon_instance_server_port %>:80"
