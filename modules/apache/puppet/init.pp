@@ -404,25 +404,16 @@ if $hiera_dukecon_apache_ssl {
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
     proxy_preserve_host   => 'true',
-    proxy_pass_match      => [
-      { 'path' => '^/(\w+)/(\d+)/rest/init.json',
-        'url'  => 'http://localhost:9060/testing/rest/init/$1/$2',
-      },
-      { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
-        'url'  => 'http://localhost:9060/testing/rest/image-resources/$1/$2',
-      },
-      { 'path' => '^/admin/(\w+)/rest/conferences/update/(\w+)',
-        'url'  => 'http://localhost:9060/testing/rest/conferences/update/$2',
-      },
-      { 'path'  =>  '^/(javaland/201[67]|doag/201[67]|apex/2017|datavision/2017|jfs/201[67]|herbstcampus/2016)/(.*)',
-        'url'   =>  'http://localhost:9060/testing/$2',
+    proxy_pass             =>  [
+      { 'path'      =>  '/',
+        'url'       =>  'http://localhost:9060/',
       },
     ],
     # The following seems a bit odd: If there are more than one conferences we need multiple redirects, e.g.,
     # for javaland: the first (ones) for outdated conferences, the last one to match everything else to the current
     # instance. For other conferences we redirect to the current one.
-    redirectmatch_regexp  => ['^/$',             '^/javaland/2016$', '^/javaland/?(\d+/?)?$', '^/doag/?(\d+/?)?$', '^/doag/2016$', '^/apex/?(\d+/?)?$', '^/datavision/?(\d+/?)?$', '^/jfs/2017$', '^/jfs/?(\d+/?)?$', '^/herbstcampus/?(\d+/?)?$' ],
-    redirectmatch_dest    => ['/javaland/2017/', '/javaland/2016/',  '/javaland/2017/',       '/doag/2017/',       '/doag/2016/',  '/apex/2017/',       '/datavision/2017/',       '/jfs/2017/',  '/jfs/2016/',       '/herbstcampus/2016/'       ],
+    redirectmatch_regexp  => ['^/$',             '^/javaland/2016$', '^/javaland/2017$', '^/javaland/?(\d+/?)?$', '^/doag/?(\d+/?)?$', '^/doag/2016$', '^/apex/2017$', '^/apex/?(\d+/?)?$', '^/datavision/?(\d+/?)?$', '^/jfs/2016$', '^/jfs/?(\d+/?)?$', '^/herbstcampus/?(\d+/?)?$' ],
+    redirectmatch_dest    => ['/javaland/2018/', '/javaland/2016/',  '/javaland/2017/',  '/javaland/2018/',       '/doag/2017/',       '/doag/2016/',  '/apex/2017/',  '/apex/2018/',       '/datavision/2017/',       '/jfs/2016/',  '/jfs/2017/',       '/herbstcampus/2016/'       ],
     # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
     headers               => 'set P3P "CP=\"Potato\""'
   }
