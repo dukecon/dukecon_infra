@@ -1,5 +1,4 @@
-$hiera_dukecon_apache_ssl = lookup('dukecon::apache::ssl', Boolean, 'unique', false)
-
+$hiera_dukecon_apache_ssl = lookup('dukecon.apache.ssl', Boolean, 'deep', false) #, Hash[String, Any], 'unique')
 
 class { 'apache':
   keepalive    =>  'On',
