@@ -54,19 +54,13 @@ apache::vhost { 'programm.javaland.eu':
   # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
   request_headers       => [ 'set X-Forwarded-Proto https' ],
   proxy_preserve_host   => 'true',
-  proxy_pass_match      => [
-    { 'path' => '^/(\d+)/rest/(init|image-resources).json',
-      'url'  => 'http://localhost:9090/rest/$2/javaland/$1',
-    },
-    { 'path' => '^/(\d+)/img/favicon.ico',
-      'url'  => 'http://localhost:9090/img/javaland$1/favicon/favicon.ico',
-    },
-    { 'path'  =>  '^/(\d+)/(.*)',
-      'url'   =>  'http://localhost:9090/$2',
-    },
+  proxy_pass_match      =>  [
     { 'path'          =>  '/auth/',
       'url'           =>  'http://localhost:9041',
       'reverse_urls'  =>  'http://localhost:9041',
+    },
+    { 'path'      =>  '^/(.+)',
+      'url'       =>  'http://localhost:9090/javaland/$1',
     },
   ],
   redirectmatch_regexp  => ['/auth',  '^/$',    '^/2016$', '^/2017$', '^/2018$', '^/(\d+)', '^/(\d+)/'],
