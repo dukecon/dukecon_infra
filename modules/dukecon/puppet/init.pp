@@ -95,4 +95,14 @@ $dukecon_docker_instances.each |$docker_instance| {
   docker_compose { "/etc/docker-compose/dukecon-$dukecon_instance_name/docker-compose.yml":
     ensure => present,
   }
+  ->
+  # TODO: Store password to ~/.pgpass
+  file { "/etc/cron.daily/backup-dukecon-postgres-$dukecon_instance_name":
+    owner          =>      'root',
+    content        =>      "#!/bin/bash
+
+export PGPASSWORD=dukecon
+exec /usr/bin/pg_dump -h localhost -p $dukecon_instance_postgres_port -U dukecon -f /data/dukecon/$dukecon_instance_name/postgresql/backup/dukecon-$dukecon_instance_name.sql dukecon",
+    mode           =>      '0700',
+  }
 }
