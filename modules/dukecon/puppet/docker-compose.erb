@@ -9,6 +9,7 @@ services:
     image: "postgres:<%= @dukecon_postgres_version %>"
     restart: always
     environment:
+      - "JAVA_OPTS=-XX:+ExitOnOutOfMemoryError"
       - "POSTGRES_USER=dukecon"
       - "POSTGRES_PASSWORD=dukecon"
     ports:
