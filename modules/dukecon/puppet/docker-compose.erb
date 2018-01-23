@@ -5,6 +5,10 @@ services:
     image: dukecon/dukecon-pwa:latest
     restart: always
 
+  dukecon-admin-client:
+    image: dukecon/dukecon-admin-client:latest
+    restart: always
+
   dukecon-postgres:
     image: "postgres:<%= @dukecon_postgres_version %>"
     restart: always
