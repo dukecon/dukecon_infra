@@ -152,13 +152,6 @@ if $hiera_dukecon_apache_ssl {
     ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
     docroot               => '/data/dukecon/html/latest',
     docroot_owner         => 'jenkins',
-    aliases               => [
-      { 
-        # aliasmatch        => '/admin/(javaland/201[67]|doag/201[67]|apex/2017|datavision/2017)',
-        alias             => '/admin/javaland/2017',
-        path              => '/data/dukecon/html/latest/admin',
-      },
-    ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
@@ -286,13 +279,6 @@ if $hiera_dukecon_apache_ssl {
     ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
     docroot               => '/data/dukecon/testing/html',
     docroot_owner         => 'jenkins',
-    aliases               => [
-      { 
-        # aliasmatch        => '/admin/(javaland/201[67]|doag/2016|apex/2017|datavision/2017)',
-        alias             => '/admin/javaland/2017',
-        path              => '/data/dukecon/html/testing/admin',
-      },
-    ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
@@ -368,13 +354,6 @@ if $hiera_dukecon_apache_ssl {
     ssl_ca                => '/etc/tls/RapidSSL_SHA256_CA.txt',
     docroot               => '/data/dukecon/html/javaland',
     docroot_owner         => 'jenkins',
-    aliases               => [
-      { 
-        # aliasmatch        => '/admin/201[67]',
-        alias             => '/admin/2017',
-        path              => '/data/dukecon/html/javaland/admin',
-      },
-    ],
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
     request_headers       => [ 'set X-Forwarded-Proto https' ],
@@ -389,9 +368,6 @@ if $hiera_dukecon_apache_ssl {
       },
       { 'path' => '^/(\w+)/(\d+)/rest/image-resources.json',
         'url'  => 'http://localhost:9080/javaland/rest/image-resources/$1/$2',
-      },
-      { 'path' => '^/admin/rest/conferences/update/(\w+)',
-        'url'  => 'http://localhost:9080/javaland/rest/conferences/update/$1',
       },
       { 'path'  =>  '^/(2016|2017)/(.*)',
         'url'   =>  'http://localhost:9080/javaland/$2',
