@@ -75,6 +75,11 @@ $dukecon_docker_instances.each |$docker_instance| {
     mode          =>      '0755',
   }
   ->
+  file { "/data/dukecon/$dukecon_instance_name/server/heapdumps":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
   file { "/data/dukecon/$dukecon_instance_name/server/logs":
     ensure        =>      directory,
     mode          =>      '0755',

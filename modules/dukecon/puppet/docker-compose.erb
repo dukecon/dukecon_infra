@@ -13,7 +13,6 @@ services:
     image: "postgres:<%= @dukecon_postgres_version %>"
     restart: always
     environment:
-      - "JAVA_OPTS=-XX:+ExitOnOutOfMemoryError"
       - "POSTGRES_USER=dukecon"
       - "POSTGRES_PASSWORD=dukecon"
     ports:
@@ -29,11 +28,13 @@ services:
     links:
       - dukecon-postgres:postgres
     environment:
+      - "JAVA_OPTS=-XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dukecon/heapdumps"
       - "SPRING_CONFIG_LOCATION=/opt/dukecon/config"
       - "SPRING_PROFILES_ACTIVE=<%= @dukecon_instance_name %>,postgresql,docker"
     volumes:
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/cache:/opt/dukecon/cache"
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/config:/opt/dukecon/config"
+      - "/data/dukecon/<%= @dukecon_instance_name %>/server/heapdumps:/opt/dukecon/heapdumps"
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/logs:/opt/dukecon/logs"
 
   dukecon-edge:
