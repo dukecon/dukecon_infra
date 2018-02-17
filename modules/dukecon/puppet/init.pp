@@ -12,6 +12,7 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
   # },
   {
     'name'            => 'testing',
+    'label'            => 'testing',
     'server_port'     => '9060',
     'internal_port'   => '9061',
     'postgres_port'   => '9062',
@@ -39,6 +40,7 @@ file { "/etc/docker-compose":
 # ->
 $dukecon_docker_instances.each |$docker_instance| {
   $dukecon_instance_name = $docker_instance['name']
+  $dukecon_instance_label = $docker_instance['label']
   $dukecon_instance_server_port = $docker_instance['server_port']
   $dukecon_instance_internal_port = $docker_instance['internal_port']
   $dukecon_instance_postgres_port = $docker_instance['postgres_port']

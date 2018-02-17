@@ -2,11 +2,11 @@ version: "2"
 
 services:
   dukecon-pwa:
-    image: dukecon/dukecon-pwa:<%= @dukecon_instance_name %>
+    image: dukecon/dukecon-pwa:<%= @dukecon_instance_label %>
     restart: always
 
   dukecon-admin-client:
-    image: dukecon/dukecon-admin-client:<%= @dukecon_instance_name %>
+    image: dukecon/dukecon-admin-client:<%= @dukecon_instance_label %>
     restart: always
 
   dukecon-postgres:
@@ -21,7 +21,7 @@ services:
       - "/data/dukecon/<%= @dukecon_instance_name %>/postgresql/data:/var/lib/postgresql/data"
 
   dukecon-server:
-    image: dukecon/dukecon-server:<%= @dukecon_instance_name %>
+    image: dukecon/dukecon-server:<%= @dukecon_instance_label %>
     restart: always
     depends_on:
       - dukecon-postgres
@@ -40,7 +40,7 @@ services:
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/logs:/opt/dukecon/logs"
 
   dukecon-edge:
-    image: dukecon/dukecon-httpd-edge:<%= @dukecon_instance_name %>
+    image: dukecon/dukecon-httpd-edge:<%= @dukecon_instance_label %>
     restart: always
     depends_on:
       - dukecon-pwa
