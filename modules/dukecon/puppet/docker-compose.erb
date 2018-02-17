@@ -31,6 +31,8 @@ services:
       - "JAVA_OPTS=-XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dukecon/heapdumps"
       - "SPRING_CONFIG_LOCATION=/opt/dukecon/config"
       - "SPRING_PROFILES_ACTIVE=<%= @dukecon_instance_name %>,postgresql,docker"
+    ports:
+      - "127.0.0.1:<%= @dukecon_instance_internal_port %>:8080"
     volumes:
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/cache:/opt/dukecon/cache"
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/config:/opt/dukecon/config"
