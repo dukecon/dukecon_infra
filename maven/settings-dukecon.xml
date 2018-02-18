@@ -11,9 +11,9 @@
         </mirror>
     </mirrors>
 
-    <activeProfiles>
-        <activeProfile>dukecon</activeProfile>
-    </activeProfiles>
+    <!--<activeProfiles>-->
+        <!--<activeProfile>dukecon</activeProfile>-->
+    <!--</activeProfiles>-->
 
     <profiles>
         <profile>
