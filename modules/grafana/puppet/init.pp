@@ -16,5 +16,6 @@ docker::run { 'grafana':
     'GF_SERVER_ROOT_URL=https://dev.dukecon.org/grafana'
   ],
   volumes  => ['/data/grafana:/var/lib/grafana'],
+  net      => 'inspectit',
   ports    => ['127.0.0.1:3000:3000'],
 }

@@ -53,6 +53,7 @@ docker::run { 'inspectit':
   ],
   links    => ['influxdb:influxdb'],
   env      => ['INFLUXDB_PORT=8086'],
+  net      => 'inspectit',
   ports    => [
     '127.0.0.1:8182:8182',
     '127.0.0.1:9070:9070',  ],

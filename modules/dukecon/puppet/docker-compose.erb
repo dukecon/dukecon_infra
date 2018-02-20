@@ -1,5 +1,10 @@
 version: "2"
 
+networks:
+  default:
+  inspectit:
+    external: true
+
 services:
   dukecon-pwa:
     image: dukecon/dukecon-pwa:<%= @dukecon_instance_label %>
@@ -31,6 +36,9 @@ services:
       - "JAVA_OPTS=-XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dukecon/heapdumps"
       - "SPRING_CONFIG_LOCATION=/opt/dukecon/config"
       - "SPRING_PROFILES_ACTIVE=<%= @dukecon_instance_name %>,postgresql,docker"
+    networks:
+      - default
+      - inspectit
     ports:
       - "127.0.0.1:<%= @dukecon_instance_internal_port %>:8080"
     volumes:

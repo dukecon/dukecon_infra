@@ -7,6 +7,10 @@ class { 'docker':
   # TODO: clean this up/ensure the mirror is only set in local Vagrant box
   extra_parameters => "--registry-mirror=http://$hiera_docker_registry_mirror --insecure-registry $hiera_docker_registry_mirror",
 }
+->
+docker_network { 'inspectit':
+  ensure           => 'present',
+}
 
 file { "/data":
   path             =>      "/data",
