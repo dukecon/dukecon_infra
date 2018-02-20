@@ -25,7 +25,8 @@ $plugins = [
   #  'credentials', # This is a Puppet Jenkins Default Plugin, don't declare it twice!
   'dashboard-view',
   'description-setter',
-  'disk-usage',
+  # disk-usage@v0.28 does not work due to https://issues.jenkins-ci.org/browse/JENKINS-47546
+  # 'disk-usage',
   'display-url-api',
   'embeddable-build-status',
   'envinject-api',
