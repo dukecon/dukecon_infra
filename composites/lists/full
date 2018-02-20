@@ -1,8 +1,9 @@
 base
 docker
+nexus
+dukecon
 jdk8
 jenkins-native
-nexus
 # scm-manager
 apache
 influxdb

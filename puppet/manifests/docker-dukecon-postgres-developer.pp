@@ -3,27 +3,27 @@ $instance = "developer"
 file { "/data/postgresql":
   path          =>      "/data/postgresql",
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
 }
 
 file { "/data/postgresql/dukecon":
   path          =>      "/data/postgresql/dukecon",
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
   require	=>	File["/data/postgresql"],
 }
 
 file { "/data/postgresql/dukecon/$instance":
   path          =>      "/data/postgresql/dukecon/$instance",
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
   require	=>	File["/data/postgresql/dukecon"],
 }
 
 file { "/data/postgresql/dukecon/$instance/data":
   path          =>      "/data/postgresql/dukecon/$instance/data",
   ensure        =>      directory,
-  mode          =>      0700,
+  mode          =>      '0700',
   require	=>	File["/data/postgresql/dukecon/$instance"],
 }
 

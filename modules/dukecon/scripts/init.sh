@@ -18,7 +18,9 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-test -d /etc/puppetlabs/code/environments/production/modules/apache || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apache
+#test -x /usr/local/bin/docker-compose || \
+#  $sudo curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 
-$sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
+#export
 
+$sudo FACTER_module_basedir=`realpath "${basedir}"` /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp

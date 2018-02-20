@@ -3,37 +3,33 @@ $postgres_image = "postgres:$postgres_version"
 
 package { "postgresql-client-$postgres_version": }
 
-# Make sure the passwords are available via Puppet Hiera, e.g., in /etc/puppet/hieradata/common.yaml
+# Make sure the passwords are available via Puppet Hiera, e.g., in /etc/puppetlabs/puppet/hieradata/common.yaml
 #---
 #keycloak:
 #  postgres:
 #    password: xxx
 #	   root_password: yyy
 
-# TODO: Check if there is a better way to set these variables, e.g., by "Automatic Parameter Lookup",
-# cf. https://docs.puppetlabs.com/hiera/3.0/puppet.html#automatic-parameter-lookup
-$keycloak_hiera = hiera('keycloak')
-$keycloak_hiera_postgres = $keycloak_hiera['postgres']
-$keycloak_hiera_postgres_password = $keycloak_hiera_postgres['password']
-$keycloak_hiera_postgres_root_password = $keycloak_hiera_postgres['root_password']
+$keycloak_hiera_postgres_password = lookup('keycloak.postgres.password', String, 'deep', "test1234")
+$keycloak_hiera_postgres_root_password = lookup('keycloak.postgres.password', String, 'deep', "test1234")
 
 file { "/data/postgresql":
   path          =>      "/data/postgresql",
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
 }
 
 file { "/data/postgresql/keycloak":
   path          =>      "/data/postgresql/keycloak",
   ensure        =>      directory,
-  mode          =>      0755,
+  mode          =>      '0755',
   require       =>  File["/data/postgresql"],
 }
 
 file { "/data/postgresql/keycloak/data":
   path          =>      "/data/postgresql/keycloak/data",
   ensure        =>      directory,
-  mode          =>      0700,
+  mode          =>      '0700',
   require       =>  File["/data/postgresql/keycloak"],
 }
 
@@ -55,7 +51,7 @@ docker::run { 'postgres-keycloak':
 file { "/data/backup":
   path          =>      "/data/backup",
   ensure        =>      directory,
-  mode          =>      0700,
+  mode          =>      '0700',
 }
 
 package { 'postgresql-client-common': }
@@ -68,7 +64,7 @@ file { "/etc/cron.daily/backup-postgres-keycloak":
 
 export PGPASSWORD=$keycloak_hiera_postgres_password
 exec /usr/bin/pg_dump -h localhost -p 9432 -U keycloak -f /data/backup/keycloak.sql keycloak",
-  mode           =>      0700,
+  mode           =>      '0700',
   require        =>      [
     Service["docker-postgres-keycloak"],
     File["/data/backup"],

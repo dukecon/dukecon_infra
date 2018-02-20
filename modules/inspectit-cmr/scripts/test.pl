@@ -12,4 +12,4 @@ my $url = 'http://localhost:8182/';
 # Associate the mechanize object with a URL
 $mech->get($url);
 # Test for the logo in the content of the URL
-ok ("200" eq $mech->status(), "inspecit is running");
+ok ("200" eq $mech->status(), "inspectit is running");

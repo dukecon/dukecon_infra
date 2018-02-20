@@ -1,5 +1,6 @@
 base
 docker
 apache
+nexus
 jdk8
 jenkins-native

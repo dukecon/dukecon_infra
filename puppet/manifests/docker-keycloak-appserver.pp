@@ -1,18 +1,13 @@
 $keycloak_image = "dukecon/dukecon-keycloak-postgres:1.1-SNAPSHOT"
 
-# Make sure the passwords are available via Puppet Hiera, e.g., in /etc/puppet/hieradata/common.yaml
+# Make sure the passwords are available via Puppet Hiera, e.g., in /etc/puppetlabs/puppet/hieradata/common.yaml
 #---
 #keycloak:
 #  postgres:
 #   password: xxx
 #   root_password: yyy
 
-# TODO: Check if there is a better way to set these variables, e.g., by "Automatic Parameter Lookup",
-# cf. https://docs.puppetlabs.com/hiera/3.0/puppet.html#automatic-parameter-lookup
-$keycloak_hiera = hiera('keycloak')
-$keycloak_hiera_postgres = $keycloak_hiera['postgres']
-$keycloak_hiera_postgres_password = $keycloak_hiera_postgres['password']
-$keycloak_hiera_postgres_root_password = $keycloak_hiera_postgres['root_password']
+$keycloak_hiera_postgres_password = lookup('keycloak.postgres.password', String, 'deep', "test1234")
 
 docker::image { $keycloak_image: }
 
