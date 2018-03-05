@@ -33,7 +33,7 @@ services:
     links:
       - dukecon-postgres:postgres
     environment:
-      - "JAVA_OPTS=-XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dukecon/heapdumps"
+      - "JAVA_OPTS=-XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/dukecon/heapdumps -Xbootclasspath/p:/opt/inspectit/agent/inspectit-agent.jar -javaagent:/opt/inspectit/agent/inspectit-agent.jar -Dinspectit.repository=inspectit:9070 -Dinspectit.agent.name=<%= @dukecon_instance_name %>"
       - "SPRING_CONFIG_LOCATION=/opt/dukecon/config"
       - "SPRING_PROFILES_ACTIVE=<%= @dukecon_instance_name %>,postgresql,docker"
     networks:
@@ -46,6 +46,7 @@ services:
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/config:/opt/dukecon/config"
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/heapdumps:/opt/dukecon/heapdumps"
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/logs:/opt/dukecon/logs"
+      - "/opt/inspectit:/opt/inspectit"
 
   dukecon-edge:
     image: dukecon/dukecon-httpd-edge:<%= @dukecon_instance_label %>
