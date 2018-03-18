@@ -6,88 +6,139 @@ Dukecon Server is just a Spring Boot app which can be started with `java -jar ..
 
 Configuration and initial setup of Dukecon infrastructure can be found here: https://github.com/dukecon/dukecon_infra
 
+== Building Blocks
+
 === Tools, Server, Frameworks
 
+[columns=3 options='header']
 |===
-|Tools (OS/Server/Provisioning) |Description |Usage
+| Tools (OS/Server/Provisioning) |Description |Usage
 
 |Ubuntu
-|
-|
+  |
+  |
 
 |Vagrant
-|
-|
+  |
+  |
 
 |Puppet
-|
-|
+  |
+  |
 
 |Docker
-|
-|
+  |
+  |
 
 |Keycloak
-|
-|
+  |
+  |
 
 |Databases
-|
-|
+  |
+  |
 
 |Jenkins
-|
-|
+  |
+  |
 
 |Nexus
-|
-|
+  |
+  |
 
 |Maven
-|
-|
-
+  |
+  |
 |===
 
-== Host System (Ubuntu)
+=== Host Systems (Ubuntu)
 
-
-.Important folders
+.Important folders for Docker instances
 |===
 |Folder |Description |Used by
 
 |/data/dukecon
-|
-|
+  |
+  |
 
 |/data/grafana
-|
-|
+  |
+  |
 
 |/data/influxdb
-|
-|
+  |
+  |
 
 |/data/inspectit
-|
-|
+  |
+  |
 
 |/data/keycloak
-|
-|
+  |
+  |
 
 |/data/postgresql
-|
-|
+  |
+  |
 
 |/data/sonatype
-|
-|
-
+  |
+  |
 |===
 
+=== Docker-Images
 
-== Docker-Images
+=== Jenkins
 
-== Jenkins
+== Processes
 
+=== Infrastructure Provisioning
+
+=== Staging
+
+==== Stages
+
+We currently have three stages to bring DukeCon into production. Each of them is associated with a Docker tag per image.
+
+[[latest-build]]
+`latest`:: This is automatically provisioned by Jenkins after every single build.
+
+`testing`:: Artifacts from <<latest-build>> can be manually promoted to the testing stage.
+
+`release`:: Production environments are additionally distinguished by conference type, e.g., we provide two instances
+for Javaland and DOAG conferences on a production server while the other stages are run on our development server.
+
+==== Stage Promotion
+
+The `latest` tag is automatically assigned during the build. After succesful build, the latest instances are
+automatically restarted. The other Tags can be promoted by the script `/local/sbin/docker-dukecon-promote` which requires
+two arguments, the first is the current tag the second is the tag to be assigned, e.g.,
+
+ /local/sbin/docker-dukecon-promote latest testing
+
+This will give all DukeCon Docker images with tag `latest` the new tag `testing` and they will be pushed to Docker hub
+as well.
+
+None of the newly tagged images will be automatically started as container. If you want to (re) start them the easiest
+way is to stop the Docker compose suite and start it over again:
+
+ docker-compose -f /etc/docker-compose/dukecon-testing/docker-compose.yml down
+
+and
+
+ docker-compose -f /etc/docker-compose/dukecon-testing/docker-compose.yml up -d
+
+The `-d` starts the containers in detached mode.
+
+If you want to release a version we recommend to give to tags to the new version, `release` and `release-YYYYMMDD-HHMM`
+with the current date and time.
+
+ /local/sbin/docker-dukecon-promote testing release-20180318-1500
+ /local/sbin/docker-dukecon-promote release-20180318-1500 release
+
+If you ever need to rollback a release you will be happy if you can easily just use the explicitly given date/time tag
+for the common `release`:
+
+ /local/sbin/docker-dukecon-promote release-20171224-1800 release
+
+CAUTION: Don't forget to restart the services after tagging them!
