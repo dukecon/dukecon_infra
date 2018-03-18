@@ -36,10 +36,10 @@ apache::vhost { 'programm.javaland.eu':
   ip                    => '85.214.231.45',
   port                  => '443',
   ssl                   => true,
-  ssl_cert              => '/etc/tls/javaland.crt',
-  ssl_key               => '/etc/tls/javaland.key',
+  ssl_cert              => '/etc/tls/javaland_2018.crt',
+  ssl_key               => '/etc/tls/javaland_2018.key',
   ssl_verify_client     => 'none',
-  ssl_ca                => '/etc/tls/intermediate.crt',
+  ssl_ca                => '/etc/tls/javaland_inter.crt',
   docroot               => '/var/www/html',
   allow_encoded_slashes => 'nodecode',
   # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
