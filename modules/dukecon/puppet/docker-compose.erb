@@ -47,6 +47,7 @@ services:
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/heapdumps:/opt/dukecon/heapdumps"
       - "/data/dukecon/<%= @dukecon_instance_name %>/server/logs:/opt/dukecon/logs"
       - "/opt/inspectit:/opt/inspectit"
+      - "/etc/ssl/certs/java/cacerts:/etc/ssl/certs/java/cacerts"
 
   dukecon-edge:
     image: dukecon/dukecon-httpd-edge:<%= @dukecon_instance_label %>
