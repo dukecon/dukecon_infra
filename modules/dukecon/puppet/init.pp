@@ -16,6 +16,8 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
     'server_port'     => '9060',
     'internal_port'   => '9061',
     'postgres_port'   => '9062',
+    # Set the feedback port to 'undef' to avoid setting up the feedback Docker
+    'feedback_port'   => undef,
   }
 ])
 
@@ -44,6 +46,7 @@ $dukecon_docker_instances.each |$docker_instance| {
   $dukecon_instance_server_port = $docker_instance['server_port']
   $dukecon_instance_internal_port = $docker_instance['internal_port']
   $dukecon_instance_postgres_port = $docker_instance['postgres_port']
+  $dukecon_instance_feedback_port = $docker_instance['feedback_port']
   file { "/data/dukecon/$dukecon_instance_name":
     ensure        =>      directory,
     mode          =>      '0755',
@@ -85,6 +88,31 @@ $dukecon_docker_instances.each |$docker_instance| {
   }
   ->
   file { "/data/dukecon/$dukecon_instance_name/server/logs":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/feedback":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/feedback/config":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/feedback/cache":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/feedback/heapdumps":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/feedback/logs":
     ensure        =>      directory,
     mode          =>      '0755',
   }
