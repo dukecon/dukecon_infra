@@ -65,7 +65,7 @@ services:
       - default
       - inspectit
     ports:
-      - "127.0.0.1:<%= @dukecon_instance_feedback_port %>:8080"
+      - "127.0.0.1:<%= @dukecon_instance_feedback_port %>:8090"
     volumes:
       - "/data/dukecon/<%= @dukecon_instance_name %>/feedback/cache:/opt/dukecon/cache"
       - "/data/dukecon/<%= @dukecon_instance_name %>/feedback/config:/opt/dukecon/config"
