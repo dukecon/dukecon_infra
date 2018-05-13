@@ -49,7 +49,7 @@ services:
       - "/opt/inspectit:/opt/inspectit"
       - "/etc/ssl/certs/java/cacerts:/etc/ssl/certs/java/cacerts"
 
-<% if @dukecon_instance_feedback_port != nil -%>
+<% if @dukecon_instance_feedback_port != "" -%>
   dukecon-feedback:
     image: dukecon/dukecon-feedback:<%= @dukecon_instance_label %>
     restart: always

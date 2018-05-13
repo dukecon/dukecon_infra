@@ -16,8 +16,8 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
     'server_port'     => '9060',
     'internal_port'   => '9061',
     'postgres_port'   => '9062',
-    # Set the feedback port to 'undef' to avoid setting up the feedback Docker
-    'feedback_port'   => undef,
+    # Set the feedback port to '' to avoid setting up the feedback Docker
+    'feedback_port'   => '',
   }
 ])
 
