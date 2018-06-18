@@ -1,0 +1,160 @@
+= Setup DukeCon Infrastructure
+
+:toc:
+
+Setup DukeCon infrastructure in a Server or Virtual Server:
+
+* Install vanilla Ubuntu 16.04 (LTS), "xenial", and perform the following actions as root in a locally checked out dukecon_infra repository, or
+* Setup a virtual server in a Vagrant box.
+
+== Preparations
+
+Check out the whole project into a suitable place on your system and change
+your working directory to this place, e.g.,
+
+    mkdir -p ~/wrk
+    cd ~/wrk
+    git clone https://github.com/dukecon/dukecon_infra.git
+    cd dukecon_infra
+
+The remaining steps are performed from this directory (unless mentioned otherwise).
+
+== Vagrant box (optional)
+
+For development and testing (or virtualization) purposes of the infrastructure we
+provide a http://vagrantup.com[Vagrant] box setup. This is optional, skip this
+step if you want to install the overall infrastructure on a native Linux box or some virtual server which is created by
+other means (e.g., Cloud VM).
+
+Just run the following command to get the virtual box up and running
+
+    vagrant up
+
+This will print a lot of information to keep you informed about the progress. You may run into some problems. In this
+case just run the vagrant provisioning process again:
+
+    vagrant provision
+
+If the box comes up you can login to the new box:
+
+    vagrant ssh
+
+You will find all files in /vagrant directory of the box (your working directory
+is mounted there).
+
+    cd /vagrant
+
+Proceed with the remaining steps from here, if you had problems with the automatic setup.
+
+== DukeCon infrastructure composites
+
+The Vagrant setup automatically provisions the new virtual machine. If you run into problems with the automatic setup,
+or if you changes some configurations you could run the following steps completely or only some modules.
+
+The complete (automatic) setup is called by the following script:
+
+    ./composites/scripts/run.sh production
+    
+The parameter `production` (cf. <<source:composite-production>>),can also be replaced by one of the other composites (see below):
+
+* `minimal` (cf. <<source:composite-minimal>>),
+* `jenkins` (cf. <<source:composite-jenkins>>),
+* `full` (cf. <<source:composite-full>>),
+
+The composite setup just calls some of the modules below. In fact it just iterates over the modules listed in the files
+in link:composites/lists[] with the composite names above. For each module the composite run calls its `init.sh` script,
+e.g., `modules/apache/scripts/init.sh`.
+
+[[source:composite-production]]
+[source, txt]
+.Composite: `production`
+----
+include::composites/lists/production[]
+----
+
+[[source:composite-minimal]]
+[source, txt]
+.Composite: `minimal`
+----
+include::composites/lists/minimal[]
+----
+
+[[source:composite-jenkins]]
+[source, txt]
+.Composite: `jenkins`
+----
+include::composites/lists/jenkins[]
+----
+
+[[source:composite-full]]
+[source, txt]
+.Composite: `full`
+----
+include::composites/lists/full[]
+----
+
+
+== DukeCon infrastructure modules
+
+Each module setup is implemented as a shell script. In almost all cases the shell script just performs some initial
+actions (e.g., installs some particular http://puppetlabs.org[Puppet] modules) and then runs a Puppet manifest to do
+_the real work_. All of those (Pupett based) modules have the initial manifest located in the `puppet/` sub directory of
+the respective module, e.g. `modules/apache/puppet/init.pp`.
+
+The modules cover the following targets. Some are mandatory, others are optional, depending of the final purpose of the
+server.
+
+`base`:: Base installations like etckeeper, git and others.
+
+`docker`:: Installation of Docker.
+
+`dukecon`:: This is were DukeCon is set up as a number of Docker containers with their bindings, mounted volumes etc. It
+prepares a Docker compose file in `/etc/docker-compose` for each DukeCon instance (`javaland`/`doag` for production,
+`latest` etc.). It can be configured/extended by a local `/etc/puppetlabs/puppet/hieradata/common.yaml` file. This
+becomes part of almost all instances. But in fact it is optional, e.g., if you only want to run a build server you do
+not need to have DukeCon running locally.
+
+`apache`:: Configures a proxy and vhost based entry points for all other services. DukeCon instances and optional services like Jenkins or Nexus are integrated.
+
+TODO: Perform a better configuration of all services based on a central (host based) configuration.
+
+`nexus`:: Provide an artifact repository server (local caching and central entry point for build server).
+
+TODO: Add these to scripts/puppet
+
+    mkdir -p /data/sonatype
+    chown 200:200 /data/sonatype
+    cp -p scripts/nexus-security.sh ~/bin
+    # Set new passwords for Nexus
+    vi ~/bin/nexus-security.sh
+
+    puppet apply puppet/manifests/docker-nexus.pp
+    ~/bin/nexus-security.sh
+
+`jenkins-native`:: Set up a build server for DukeCon. Jenkins is running natively (not as Docker as most other services).
+`jdk8`:: TODO: Remove this!
+`influxdb`:: InfluxDB is used as a time series database for Grafana and InspectIt.
+`grafana`:: Grafana provides a nice frontend for monitoring dashboards from InspectIt
+`inspectit-cmr`:: We use http://inspectit.xxx[] as application performance monitor.
+
+== Legacy setup
+
+There are currently some setups left which do not comply with the described pattern of having a `init.sh` shell script,
+and a `init.pp` Puppet manifest to run the installations.
+
+=== Setup Maven
+
+You may run this as different user (not root, e.g. "jenkins")
+
+    mkdir ~/.m2
+    cp maven/settings-localhost.xml ~/.m2/settings.xml
+    # Set deployment password from ~root/bin/nexus-security.sh
+    vi ~/.m2/settings.xml
+
+Run Maven to test it:
+
+    mkdir ~/wrk
+    cd ~/wrk
+    git clone https://github.com/dukecon/dukecon_html5.git
+    cd dukecon_html5
+    mvn clean deploy
