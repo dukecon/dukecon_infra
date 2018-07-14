@@ -77,4 +77,13 @@ apache::vhost { 'nossl-programm.javaland.eu':
   redirect_source       => ['/'],
   redirect_dest         => ['https://programm.javaland.eu/']
 }
+apache::vhost { 'nossl-programm.doag.org':
+  servername            => 'programm.doag.org',
+  ip                    => '85.214.231.45',
+  port                  =>  '80',
+  docroot               =>  '/var/www/html',
+  allow_encoded_slashes =>  'nodecode',
+  redirect_source       => ['/'],
+  redirect_dest         => ['https://programm.doag.org/']
+}
 
