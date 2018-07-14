@@ -83,3 +83,11 @@ services:
       - dukecon-server
     ports:
       - "127.0.0.1:<%= @dukecon_instance_server_port %>:80"
+
+  autoheal:
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
