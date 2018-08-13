@@ -1,5 +1,7 @@
 = Infrastructure Dukecon
 
+:toc:
+
 == Overview
 
 Dukecon Server is just a Spring Boot app which can be started with `java -jar ...`. But integration of database, security, etc. needs a more complicated setup. The goal of this document is to describe the whole Dukecon infrastructure and the interaction between its building blocks and tools.
@@ -111,7 +113,7 @@ for Javaland and DOAG conferences on a production server while the other stages 
 ==== Stage Promotion
 
 The `latest` tag is automatically assigned during the build. After succesful build, the latest instances are
-automatically restarted. The other Tags can be promoted by the script `/local/sbin/docker-dukecon-promote` which requires
+automatically restarted. The other tags can be promoted by the script `/local/sbin/docker-dukecon-promote` which requires
 two arguments, the first is the current tag the second is the tag to be assigned, e.g.,
 
  /local/sbin/docker-dukecon-promote latest testing
@@ -119,7 +121,7 @@ two arguments, the first is the current tag the second is the tag to be assigned
 This will give all DukeCon Docker images with tag `latest` the new tag `testing` and they will be pushed to Docker hub
 as well.
 
-None of the newly tagged images will be automatically started as container. If you want to (re) start them the easiest
+None of the newly tagged images will be automatically started as container. If you want to (re-) start them, the easiest
 way is to stop the Docker compose suite and start it over again:
 
  docker-compose -f /etc/docker-compose/dukecon-testing/docker-compose.yml down
@@ -130,15 +132,34 @@ and
 
 The `-d` starts the containers in detached mode.
 
-If you want to release a version we recommend to give to tags to the new version, `release` and `release-YYYYMMDD-HHMM`
+If you want to release a version we recommend to give two tags to the new version, `release` and `release-YYYYMMDD-HHMM`
 with the current date and time.
 
  /local/sbin/docker-dukecon-promote testing release-20180318-1500
  /local/sbin/docker-dukecon-promote release-20180318-1500 release
+
+This might help in a rollback if necessary (see below).
+
+==== Rollout Release
+
+Once you have promoted a new release (it is automatically pushed to https://store.docker.com/profiles/dukecon[the
+DukeCon repository on Docker Hub]), you may want to run it on your production server (e.g., _Javaland production_ or
+_ApacheCon production_):
+
+* Just pull the current release
++
+ docker-compose -f /etc/docker-compose/dukecon-production/docker-compose.yml pull
+
+* Then restart the release
++
+  docker-compose -f /etc/docker-compose/dukecon-production/docker-compose.yml down
+  docker-compose -f /etc/docker-compose/dukecon-production/docker-compose.yml up -d
+
+==== Rollback Release
 
 If you ever need to rollback a release you will be happy if you can easily just use the explicitly given date/time tag
 for the common `release`:
 
  /local/sbin/docker-dukecon-promote release-20171224-1800 release
 
-CAUTION: Don't forget to restart the services after tagging them!
+CAUTION: Don't forget to restart (pull) the services after tagging them!
