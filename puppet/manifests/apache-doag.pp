@@ -63,8 +63,10 @@ apache::vhost { 'programm.javaland.eu':
       'url'       =>  'http://localhost:9090/javaland/$1',
     },
   ],
-  redirectmatch_regexp  => ['/auth',  '^/$',    '^/2016$', '^/2017$', '^/2018$', '^/(\d+)', '^/(\d+)/'],
-  redirectmatch_dest    => ['/auth/', '/2018/', '/2016/',  '/2017/',  '/2018/',  '/2018/',  '/2018/'  ],
+  # For a new conference: Add a new redirect from "regexep" to "dest" with the new conference instance, e.g. '^/2017$' -> '/2017/'
+  # For the current conference: replace the dest for the prevous year by the current year, e.g. 2018 -> 2019
+  redirectmatch_regexp  => ['/auth',  '^/$',    '^/2016$', '^/2017$', '^/2018$', '^/2019$', '^/(\d+)', '^/(\d+)/'],
+  redirectmatch_dest    => ['/auth/', '/2018/', '/2016/',  '/2017/',  '/2018/',  '/2019/',  '/2018/',  '/2018/'  ],
   # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
   headers               => 'set P3P "CP=\"Potato\""'
 } 
