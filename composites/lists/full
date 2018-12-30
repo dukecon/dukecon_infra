@@ -5,6 +5,7 @@ dukecon
 jdk8
 jenkins-native
 # scm-manager
+keycloak
 apache
 influxdb
 grafana
