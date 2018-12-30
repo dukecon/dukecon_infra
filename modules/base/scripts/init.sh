@@ -35,10 +35,21 @@ export PATH=$PATH:/opt/puppetlabs/bin
 
 $sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
-test -r /etc/puppetlabs/code/environments/production/modules/etckeeper || $sudo /opt/puppetlabs/bin/puppet module install thomasvandoren-etckeeper
-test -r /etc/puppetlabs/code/environments/production/modules/stdlib || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-stdlib
-test -r /etc/puppetlabs/code/environments/production/modules/apt || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apt --version 2.4.0 # Needed for rtyler-jenkins in an optional subsequent step
-test -r /etc/puppetlabs/code/environments/production/modules/inifile || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-inifile
+puppet_module() {
+    dir=$1
+    module=$2
+    
+    if test -r /etc/puppetlabs/code/environments/production/modules/${dir}; then
+        /opt/puppetlabs/bin/puppet module upgrade --ignore-changes ${module}
+    else
+        /opt/puppetlabs/bin/puppet module install ${module}
+    fi
+} 
+
+puppet_module etckeeper thomasvandoren-etckeeper
+puppet_module stdlib    puppetlabs-stdlib
+puppet_module apt       puppetlabs-apt # --version 2.4.0 # Needed for rtyler-jenkins in an optional subsequent step
+puppet_module inifile   puppetlabs-inifile
 
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
 
