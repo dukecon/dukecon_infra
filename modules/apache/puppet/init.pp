@@ -48,7 +48,7 @@ if $hiera_dukecon_apache_ssl {
     proxy_preserve_host    =>  'true',
     proxy_pass             =>  [
       { 'path'    =>  '/nexus/',
-        'url'     =>  'http://localhost:8081/',
+        'url'     =>  'http://localhost:8081/nexus/',
       },
     ],
     redirect_source        => [
@@ -119,8 +119,8 @@ if $hiera_dukecon_apache_ssl {
           'url'      => 'http://localhost:8080/jenkins',
           'keywords' => ['nocanon'],
         },
-        { 'path' => '/nexus/',
-          'url'  => 'http://localhost:8081/',
+        { 'path'     => '/nexus/',
+          'url'      => 'http://localhost:8081/nexus/',
         },
         { 'path'          =>  '/auth/',
           'url'           =>  'http://localhost:9041/auth/',
@@ -401,7 +401,7 @@ if $hiera_dukecon_apache_ssl {
         'keywords'  =>  ['nocanon'],
       },
       { 'path'    =>  '/nexus/',
-        'url'     =>  'http://localhost:8081/',
+        'url'     =>  'http://localhost:8081/nexus/',
       },
       { 'path'    =>  '/latest/',
         'url'     =>  'http://localhost:9080/javaland/',

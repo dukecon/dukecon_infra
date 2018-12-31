@@ -1,4 +1,6 @@
-docker::image { 'sonatype/nexus': }
+$image = 'sonatype/nexus:2.14.11-01'
+
+docker::image { $image: }
 
 file { '/data/nexus':
   ensure   => directory,
@@ -15,7 +17,7 @@ file { '/data/nexus/sonatype':
 }
 
 docker::run { 'nexus':
-  image    => 'sonatype/nexus',
+  image    => $image,
   volumes  => ['/data/nexus/sonatype:/sonatype-work'],
   ports    => ['8081:8081'],
 }
