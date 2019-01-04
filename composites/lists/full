@@ -6,6 +6,7 @@ dukecon
 jenkins-native
 # scm-manager
 keycloak
+archive
 apache
 influxdb
 grafana

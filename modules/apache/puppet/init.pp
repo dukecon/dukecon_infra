@@ -91,6 +91,18 @@ if $hiera_dukecon_apache_ssl {
     ],
   }
 
+  apache::vhost { 'archive.dukecon.org':
+    ip                     => '94.130.153.250',
+    port                   =>  '80',
+    docroot                =>  '/var/www/html',
+    allow_encoded_slashes  =>  'nodecode',
+    proxy_pass            => [
+      { 'path'     => '/',
+        'url'      => 'http://localhost:42080/',
+      },
+    ],
+  }
+
   # Iterate over an array is experimental in puppet 3.x - cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html
   $sslnames = ['', "dev.", "keycloak."]
   $sslnames.each |$sslname| {
