@@ -4,5 +4,5 @@ docker::image { $image: }
 
 docker::run { 'dukecon-conference-archive':
   image    => $image,
-  ports    => ['42080:80'],
+  ports    => ['127.0.0.1:42080:80'],
 }
