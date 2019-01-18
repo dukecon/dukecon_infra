@@ -18,7 +18,18 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-test -d /etc/puppetlabs/code/environments/production/modules/apache || $sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apache
+puppet_module() {
+    dir=$1
+    module=$2
+    
+    if test -r /etc/puppetlabs/code/environments/production/modules/${dir}; then
+        /opt/puppetlabs/bin/puppet module upgrade --ignore-changes ${module}
+    else
+        /opt/puppetlabs/bin/puppet module install ${module}
+    fi
+} 
+
+puppet_module apache puppetlabs-apache
 
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
 

@@ -18,7 +18,19 @@ EOM
 sudo=/usr/bin/sudo
 test -x $sudo || sudo=
 
-test -d /etc/puppetlabs/code/environments/production/modules/jenkins || $sudo /opt/puppetlabs/bin/puppet module install rtyler-jenkins --version '>=1.7.0'
+puppet_module() {
+    dir=$1
+    module=$2
+    options=$3
+    
+    if test -r /etc/puppetlabs/code/environments/production/modules/${dir}; then
+        /opt/puppetlabs/bin/puppet module upgrade ${options} --ignore-changes ${module}
+    else
+        /opt/puppetlabs/bin/puppet module install ${options} ${module}
+    fi
+} 
+
+puppet_module jenkins rtyler-jenkins "--version '>=1.7.0'"
 
 # Set up Jenkins
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
