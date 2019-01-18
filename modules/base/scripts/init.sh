@@ -23,11 +23,11 @@ if test -d /opt/puppetlabs; then
 else
     $sudo /bin/sh -c '
       cd /tmp \
-      && wget https://apt.puppetlabs.com/puppet5-release-xenial.deb \
-      && dpkg -i puppet5-release-xenial.deb \
+      && wget https://apt.puppetlabs.com/puppet5-release-bionic.deb \
+      && dpkg -i puppet5-release-bionic.deb \
       && apt-get update \
       && apt-get install -qq puppetserver \
-      && /bin/rm -f puppet5-release-xenial.deb \
+      && /bin/rm -f puppet5-release-bionic.deb \
       '
 fi
 
