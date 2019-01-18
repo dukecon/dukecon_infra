@@ -13,12 +13,16 @@ port_unique = ENV['VAGRANT_PORT_UNIQUE'] || "55"
 
 Vagrant.configure(2) do |config|
   # Generic/Defaults
-  config.vm.box = "bento/ubuntu-18.04"
   config.vm.hostname = name
   config.vm.synced_folder "cache/apt-archives", "/var/cache/apt/archives"
   config.vm.synced_folder ".", "/vagrant"
 
+  config.vm.provider "docker" do |d|
+    d.image = "ubuntu:18.04"
+  end
+
   config.vm.provider "virtualbox" do |vbox, override|
+    config.vm.box = "bento/ubuntu-18.04"
     vbox.name = name
     vbox.memory = memory
     # workaround for "NAT interface disconnected at startup"
