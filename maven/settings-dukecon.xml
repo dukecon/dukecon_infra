@@ -11,6 +11,10 @@
         </mirror>
     </mirrors>
 
+    <pluginGroups>
+        <pluginGroup>fr.jcgay.maven.plugins</pluginGroup>
+    </pluginGroups>
+
     <!--<activeProfiles>-->
         <!--<activeProfile>dukecon</activeProfile>-->
     <!--</activeProfiles>-->
