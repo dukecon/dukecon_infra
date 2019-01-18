@@ -38,16 +38,18 @@ $sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-conf
 puppet_module() {
     dir=$1
     module=$2
+    options=${3:-}
     
     if test -r /etc/puppetlabs/code/environments/production/modules/${dir}; then
-        /opt/puppetlabs/bin/puppet module upgrade --ignore-changes ${module}
+        /opt/puppetlabs/bin/puppet module upgrade ${options} --ignore-changes ${module}
     else
-        /opt/puppetlabs/bin/puppet module install ${module}
+        /opt/puppetlabs/bin/puppet module install ${options} ${module}
     fi
-} 
+}
 
 puppet_module etckeeper thomasvandoren-etckeeper
 puppet_module stdlib    puppetlabs-stdlib
+puppet_module translate puppetlabs-translate "--version 1.1.0" # Needed for puppetlabs-docker
 puppet_module apt       puppetlabs-apt # --version 2.4.0 # Needed for rtyler-jenkins in an optional subsequent step
 puppet_module inifile   puppetlabs-inifile
 
