@@ -47,14 +47,6 @@ Vagrant.configure(2) do |config|
     override.vm.network "forwarded_port", guest: 2375, host: "#{port_unique}375"
   end
 
-  config.vm.provider "parallels" do |parallels, override|
-    parallels.update_guest_tools = true
-    override.vm.box = "parallels/ubuntu-14.04" # "debian-8.3"
-    parallels.name = name
-    parallels.memory = memory
-    override.vm.network "private_network", ip: "10.211.55.#{ip_unique}", virtualbox__intnet: true
-  end
-
   # Install libvirt provider: vagrant plugin install vagrant-libvirt
   config.vm.provider "libvirt" do |domain, override|
     override.vm.box = "baremettle/ubuntu-14.04"
