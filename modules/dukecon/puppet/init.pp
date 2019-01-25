@@ -1,7 +1,7 @@
 $docker_compose_version = lookup("docker.compose.version", String, 'deep', '1.18.0')
 
 # If you want to run inspectit, set a hiera property 'dukecon.inspectit.agent' to, e.g., ` -Xbootclasspath/p:/opt/inspectit/agent/inspectit-agent.jar -javaagent:/opt/inspectit/agent/inspectit-agent.jar -Dinspectit.repository=inspectit:9070`
-$inspectit_agent = lookup ("dukecon.inspectit.agent", "")
+$inspectit_agent = lookup ("dukecon.inspectit.agent", String, 'deep', '')
 
 $dukecon_postgres_version = '9.5'
 $dukecon_docker_instances = lookup ("dukecon.docker.instances",
