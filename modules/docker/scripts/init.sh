@@ -29,6 +29,6 @@ puppet_module() {
     fi
 }
 
-puppet_module docker puppetlabs-docker
+puppet_module docker puppetlabs-docker "--version 3.1.0"
 
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
