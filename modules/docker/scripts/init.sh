@@ -21,11 +21,12 @@ test -x $sudo || sudo=
 puppet_module() {
     dir=$1
     module=$2
+    version=$3
 
     if test -r /etc/puppetlabs/code/environments/production/modules/${dir}; then
-        /opt/puppetlabs/bin/puppet module upgrade --ignore-changes ${module}
+        /opt/puppetlabs/bin/puppet module upgrade --ignore-changes ${module} ${version}
     else
-        /opt/puppetlabs/bin/puppet module install ${module}
+        /opt/puppetlabs/bin/puppet module install ${module} ${version}
     fi
 }
 
