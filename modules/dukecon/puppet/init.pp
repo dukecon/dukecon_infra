@@ -21,6 +21,7 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
     'postgres_port'   => '9052',
     # Set the feedback port to '' to avoid setting up the feedback Docker
     'feedback_port'   => '', # '9053',
+    'prometheus_port' => '9054',
   }
 ])
 
@@ -50,6 +51,7 @@ $dukecon_docker_instances.each |$docker_instance| {
   $dukecon_instance_internal_port = $docker_instance['internal_port']
   $dukecon_instance_postgres_port = $docker_instance['postgres_port']
   $dukecon_instance_feedback_port = $docker_instance['feedback_port']
+  $dukecon_instance_prometheus_port = $docker_instance['prometheus_port']
   file { "/data/dukecon/$dukecon_instance_name":
     ensure        =>      directory,
     mode          =>      '0755',
@@ -127,6 +129,27 @@ EOF
   file { "/data/dukecon/$dukecon_instance_name/feedback/logs":
     ensure        =>      directory,
     mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/prometheus":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/prometheus/etc":
+    ensure        =>      directory,
+    mode          =>      '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/prometheus/etc/prometheus.yml":
+    ensure  => present,
+    mode    => "0644",
+    content => template("${module_basedir}/puppet/prometheus.erb"),
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/prometheus/data":
+    ensure        =>      directory,
+    mode          =>      '0777',
   }
   ->
   file { "/etc/docker-compose/dukecon-$dukecon_instance_name":

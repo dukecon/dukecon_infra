@@ -89,6 +89,20 @@ services:
     volumes:
       - "/data/dukecon/<%= @dukecon_instance_name %>/htdocs:/usr/local/apache2/htdocs"
 
+  prometheus:
+    image: prom/prometheus:v2.7.1
+    restart: always
+    depends_on:
+      - dukecon-server
+<% if @dukecon_instance_feedback_port != "" -%>
+        - dukecon-feedback
+<% end -%>
+    ports:
+      - "127.0.0.1:<%= @dukecon_instance_prometheus_port %>:9090"
+    volumes:
+      - "/data/dukecon/<%= @dukecon_instance_name %>/prometheus/etc:/etc/prometheus"
+      - "/data/dukecon/<%= @dukecon_instance_name %>/prometheus/data:/prometheus"
+
   autoheal:
     restart: always
     image: willfarrell/autoheal
