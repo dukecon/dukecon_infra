@@ -11,6 +11,9 @@ package { 'nfs-common':
 package { 'rpcbind':
   ensure  => "purged"
 }
+package { 'postfix':
+  ensure  => "purged"
+}
 
 include stdlib
 
