@@ -68,6 +68,8 @@ hierarchy:
     path: "os/%{facts.os.family}.yaml"
   - name: "Common data"
     path: "common.yaml"
+  - name: "DukeCon data"
+    path: "dukecon.yaml"
 ',
 }
 file { '/etc/puppetlabs/puppet/hieradata':
@@ -100,14 +102,31 @@ docker:
 # Only create it if it does not yet exist!
 exec { 'create /etc/puppetlabs/puppet/hieradata/common.yaml':
   unless   => '/usr/bin/test -r /etc/puppetlabs/puppet/hieradata/common.yaml',
-  command  => '/bin/cat >/etc/puppetlabs/puppet/hieradata/common.yaml<<EOF
+  command  => "/bin/cat >/etc/puppetlabs/puppet/hieradata/common.yaml<<EOF
+# File intentionally left empty - replace with local contents if necessary
+EOF"
+}
+->
+# Only create it if it does not yet exist!
+exec { 'create /etc/puppetlabs/puppet/hieradata/dukecon.yaml':
+  unless   => '/usr/bin/test -r /etc/puppetlabs/puppet/hieradata/dukecon.yaml',
+  command  => "/bin/cat >/etc/puppetlabs/puppet/hieradata/dukecon.yaml<<EOF
 dukecon:
     apache:
         ssl: false
-EOF
-',
+    docker:
+        instances:
+            -
+              name: 'latest'
+              label: 'latest'
+              server_port: '9050'
+              internal_port: '9051'
+              postgres_port: '9052'
+              feedback_port: ''
+              prometheus_port: '9054'
+EOF",
 }
-
+->
 # Enable puppet future parser (experimental in Puppet 3.x >= 3.2, cf. https://docs.puppet.com/puppet/3/experiments_lambdas.html)
 ini_setting { "future parser for puppet":
   ensure  => present,
