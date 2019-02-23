@@ -83,7 +83,6 @@ file { '/etc/puppetlabs/puppet/hieradata/networks':
   owner   => 'root',
   group   => 'root',
   mode    => '0755',
-  require => File['/etc/puppetlabs/puppet/hieradata'],
 }
 ->
 file { '/etc/puppetlabs/puppet/hieradata/networks/10.0.2.0.yaml':
@@ -96,7 +95,6 @@ docker:
     registry:
         mirror: 10.0.2.3:5000
 ',
-  require => File['/etc/puppetlabs/puppet/hieradata/networks'],
 }
 ->
 # Only create it if it does not yet exist!
