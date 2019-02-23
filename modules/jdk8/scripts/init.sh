@@ -24,13 +24,13 @@ test -x $sudo || sudo=
 puppet_module() {
     dir=$1
     module=$2
-    
+
     if test -r /etc/puppetlabs/code/environments/production/modules/${dir}; then
-        /opt/puppetlabs/bin/puppet module upgrade --ignore-changes ${module}
+        $sudo /opt/puppetlabs/bin/puppet module upgrade --ignore-changes ${module}
     else
-        /opt/puppetlabs/bin/puppet module install ${module}
+        $sudo /opt/puppetlabs/bin/puppet module install ${module}
     fi
-} 
+}
 
 puppet_module oraclejdk8 zuinnote-oraclejdk8
 

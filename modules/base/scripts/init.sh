@@ -39,11 +39,11 @@ puppet_module() {
     dir=$1
     module=$2
     options=${3:-}
-    
+
     if test -r /etc/puppetlabs/code/environments/production/modules/${dir}; then
-        /opt/puppetlabs/bin/puppet module upgrade ${options} --ignore-changes ${module}
+        $sudo /opt/puppetlabs/bin/puppet module upgrade ${options} --ignore-changes ${module}
     else
-        /opt/puppetlabs/bin/puppet module install ${options} ${module}
+        $sudo /opt/puppetlabs/bin/puppet module install ${options} ${module}
     fi
 }
 
