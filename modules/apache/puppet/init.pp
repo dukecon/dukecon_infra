@@ -416,7 +416,7 @@ if $hiera_dukecon_apache_ssl {
         'url'     =>  'http://localhost:8081/nexus/',
       },
       { 'path'    =>  '/latest/',
-        'url'     =>  'http://localhost:9080/javaland/',
+        'url'     =>  'http://localhost:9050/',
       },
       { 'path'    =>  '/testing/',
         'url'     =>  'http://localhost:9060/',
