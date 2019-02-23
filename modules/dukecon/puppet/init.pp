@@ -132,8 +132,11 @@ $dukecon_docker_instances.each |$docker_instance| {
     content => template("${module_basedir}/puppet/docker-compose.erb"),
   }
   ->
-  docker_compose { "/etc/docker-compose/dukecon-$dukecon_instance_name/docker-compose.yml":
-    ensure => present,
+  docker_compose { "dukecon-$dukecon_instance_name":
+    compose_files => [
+      "/etc/docker-compose/dukecon-$dukecon_instance_name/docker-compose.yml"
+    ],
+    ensure        => present,
   }
   ->
   # TODO: Store password to ~/.pgpass
