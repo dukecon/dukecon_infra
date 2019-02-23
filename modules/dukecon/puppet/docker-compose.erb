@@ -95,7 +95,7 @@ services:
     depends_on:
       - dukecon-server
 <% if @dukecon_instance_feedback_port != "" -%>
-        - dukecon-feedback
+      - dukecon-feedback
 <% end -%>
     ports:
       - "127.0.0.1:<%= @dukecon_instance_prometheus_port %>:9090"

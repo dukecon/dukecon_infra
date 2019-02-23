@@ -14,3 +14,11 @@ scrape_configs:
     scrape_interval: 15s
     static_configs:
       - targets: ['dukecon-server:8080']
+<% if @dukecon_instance_feedback_port != "" -%>
+  - job_name: 'dukecon-feedback'
+
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['dukecon-feedback:8090']
+<% end %>
