@@ -80,6 +80,15 @@ $dukecon_docker_instances.each |$docker_instance| {
     mode          =>      '0755',
   }
   ->
+  exec { "create /data/dukecon/$dukecon_instance_name/server/config/conferences.yml":
+    unless   => "/usr/bin/test -r /data/dukecon/$dukecon_instance_name/server/config/conferences.yml",
+    command  => "/bin/cat >/data/dukecon/$dukecon_instance_name/server/config/conferences.yml<<EOF
+# This file must exist - so it is initially and intentionally created with empty contents
+# Replace with a real conference configuration if possible!
+EOF
+",
+  }
+  ->
   file { "/data/dukecon/$dukecon_instance_name/server/cache":
     ensure        =>      directory,
     mode          =>      '0755',
