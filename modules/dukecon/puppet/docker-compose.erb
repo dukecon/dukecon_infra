@@ -81,6 +81,9 @@ services:
     depends_on:
       - dukecon-pwa
       - dukecon-server
+<% if @dukecon_instance_feedback_port != "" -%>
+      - dukecon-feedback
+<% end -%>
     ports:
       - "127.0.0.1:<%= @dukecon_instance_server_port %>:80"
     volumes:
