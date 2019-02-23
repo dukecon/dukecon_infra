@@ -23,4 +23,4 @@ test -x $sudo || sudo=
 
 #export
 
-$sudo FACTER_module_basedir=`realpath "${basedir}"` /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
+$sudo FACTER_module_basedir=`realpath "${basedir}"` /opt/puppetlabs/bin/puppet apply ${PUPPET_DEBUG:-} ${basedir}/puppet/init.pp
