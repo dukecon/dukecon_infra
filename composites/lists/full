@@ -2,7 +2,7 @@ base
 docker
 nexus
 dukecon
-# jdk8
+jdk8
 jenkins-native
 # scm-manager
 keycloak
