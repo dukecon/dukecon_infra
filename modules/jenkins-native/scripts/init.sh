@@ -30,7 +30,7 @@ puppet_module() {
     fi
 }
 
-puppet_module jenkins rtyler-jenkins "--version '>=1.7.0'"
+puppet_module jenkins rtyler-jenkins "--version >=1.7.0 --ignore-dependencies"
 
 # Set up Jenkins
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp

@@ -32,7 +32,7 @@ puppet_module() {
     fi
 }
 
-puppet_module oraclejdk8 zuinnote-oraclejdk8
+puppet_module java puppetlabs-java '--version 3.3.0 --ignore-dependencies'
 
 $sudo /opt/puppetlabs/bin/puppet apply ${basedir}/puppet/init.pp
 # For some reason the first attempt fails very often if not always - so give it a second try
