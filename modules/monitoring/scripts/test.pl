@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use WWW::Mechanize;
-use Test::Simple tests => 1;
+use Test::Simple tests => 2;
 
 # Create a new mechanize object
 my $mech = WWW::Mechanize->new();
