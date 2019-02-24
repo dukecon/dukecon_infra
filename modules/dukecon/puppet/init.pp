@@ -37,11 +37,6 @@ file { "/data/dukecon":
   ensure        =>      directory,
   mode          =>      '0755',
 }
-->
-file { "/etc/docker-compose":
-  ensure        => 'directory',
-  mode          => '0755',
-}
 # ->
 $dukecon_docker_instances.each |$docker_instance| {
   $dukecon_instance_name = $docker_instance['name']
@@ -132,7 +127,6 @@ EOF
   file { "/etc/docker-compose/dukecon-$dukecon_instance_name":
     ensure        => 'directory',
     mode          => '0755',
-    require       => File['/etc/docker-compose']
   }
   ->
   file { "create docker-compose/dukecon-$dukecon_instance_name":

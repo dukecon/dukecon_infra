@@ -17,6 +17,10 @@ file { "/data":
   ensure           =>      directory,
   mode             =>      '0755',
 }
+file { "/etc/docker-compose":
+  ensure        => 'directory',
+  mode          => '0755',
+}
 
 exec { '/bin/echo "This is a Vagrant Host"':
   onlyif           => '/bin/grep -q vagrant /etc/passwd',
