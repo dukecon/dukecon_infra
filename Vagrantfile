@@ -35,6 +35,8 @@ Vagrant.configure(2) do |config|
     override.vm.network "forwarded_port", guest: 5000, host: "#{port_unique}050"
     # CMR Agent (inspectIT)
     override.vm.network "forwarded_port", guest: 9070, host: "#{port_unique}070"
+    # Prometheus
+    override.vm.network "forwarded_port", guest: 9090, host: "#{port_unique}090"
     # Apache
     override.vm.network "forwarded_port", guest: 80, host: "#{port_unique}080"
     # Nexus

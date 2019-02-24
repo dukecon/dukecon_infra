@@ -30,6 +30,7 @@ services:
   dukecon-server:
     image: dukecon/dukecon-server:<%= @dukecon_instance_label %>
     restart: always
+    container_name: dukecon-server-<%= @dukecon_instance_name %>
     depends_on:
       - dukecon-postgres
     links:
@@ -41,6 +42,7 @@ services:
     networks:
       - default
       - inspectit
+      - monitoring
     ports:
       - "127.0.0.1:<%= @dukecon_instance_internal_port %>:8080"
     volumes:
@@ -55,6 +57,7 @@ services:
   dukecon-feedback:
     image: dukecon/dukecon-feedback:<%= @dukecon_instance_label %>
     restart: always
+    container_name: dukecon-feedback-<%= @dukecon_instance_name %>
     depends_on:
       - dukecon-postgres
     links:
@@ -66,6 +69,7 @@ services:
     networks:
       - default
       - inspectit
+      - monitoring
     ports:
       - "127.0.0.1:<%= @dukecon_instance_feedback_port %>:8090"
     volumes:
@@ -90,26 +94,6 @@ services:
       - "127.0.0.1:<%= @dukecon_instance_server_port %>:80"
     volumes:
       - "/data/dukecon/<%= @dukecon_instance_name %>/htdocs:/usr/local/apache2/htdocs"
-
-<% if @dukecon_instance_prometheus_port != "" %>
-  prometheus:
-    image: prom/prometheus:v2.7.1
-    restart: always
-    container_name: prometheus-<%= @dukecon_instance_name %>
-    networks:
-      - default
-      - monitoring
-    depends_on:
-      - dukecon-server
-<% if @dukecon_instance_feedback_port != "" -%>
-      - dukecon-feedback
-<% end -%>
-    ports:
-      - "127.0.0.1:<%= @dukecon_instance_prometheus_port %>:9090"
-    volumes:
-      - "/data/dukecon/<%= @dukecon_instance_name %>/prometheus/etc:/etc/prometheus"
-      - "/data/dukecon/<%= @dukecon_instance_name %>/prometheus/data:/prometheus"
-<% end %>
 
   autoheal:
     restart: always

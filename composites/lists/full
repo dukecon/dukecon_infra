@@ -1,13 +1,13 @@
 base
 docker
-nexus
 dukecon
+monitoring
+nexus
 jdk8
 jenkins-native
 # scm-manager
 keycloak
 archive
 apache
-influxdb
-grafana
-inspectit-cmr
+# influxdb
+# inspectit-cmr

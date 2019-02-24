@@ -14,8 +14,7 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
       'internal_port'   => '9051',
       'postgres_port'   => '9052',
       # Set the feedback port to '' to avoid setting up the feedback Docker
-      'feedback_port'   => '', # '9053',
-      'prometheus_port' => '9054',
+      'feedback_port'   => '', # '9053'
     }
   ])
 
@@ -42,20 +41,41 @@ file { "/data/grafana/data":
   mode          =>      '0777',
 }
 ->
-file { "/etc/docker-compose/grafana":
+file { "/data/prometheus":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
+file { "/data/prometheus/etc":
+  ensure        =>      directory,
+  mode          =>      '0755',
+}
+->
+file { "/data/prometheus/etc/prometheus.yml":
+  ensure  => present,
+  mode    => "0644",
+  content => template("${module_basedir}/puppet/prometheus.erb"),
+}
+->
+file { "/data/prometheus/data":
+  ensure        =>      directory,
+  mode          =>      '0777',
+}
+->
+file { "/etc/docker-compose/monitoring":
   ensure        => 'directory',
   mode          => '0755',
 }
 ->
-file { "create docker-compose/grafana":
-  path    => "/etc/docker-compose/grafana/docker-compose.yml",
+file { "create docker-compose/monitoring":
+  path    => "/etc/docker-compose/monitoring/docker-compose.yml",
   mode    => "0644",
   content => template("${module_basedir}/puppet/docker-compose.erb"),
 }
 ->
-docker_compose { "grafana":
+docker_compose { "monitoring":
   compose_files => [
-    "/etc/docker-compose/grafana/docker-compose.yml"
+    "/etc/docker-compose/monitoring/docker-compose.yml"
   ],
   ensure        => present,
 }

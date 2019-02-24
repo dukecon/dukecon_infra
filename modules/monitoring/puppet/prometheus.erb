@@ -7,18 +7,20 @@ global:
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
+<% @dukecon_docker_instances.each do |dukecon_docker_instance| -%>
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: 'dukecon-server'
+  - job_name: 'dukecon-server-<%= dukecon_docker_instance['name'] %>'
 
     metrics_path: '/prometheus'
     scrape_interval: 15s
     static_configs:
-      - targets: ['dukecon-server:8080']
-<% if @dukecon_instance_feedback_port != "" -%>
-  - job_name: 'dukecon-feedback'
+      - targets: ['dukecon-server-<%= dukecon_docker_instance['name'] %>:8080']
+<% if dukecon_docker_instance['feedback_port'] != "" -%>
+  - job_name: 'dukecon-feedback-<%= dukecon_docker_instance['name'] %>'
 
     metrics_path: '/actuator/prometheus'
     scrape_interval: 15s
     static_configs:
-      - targets: ['dukecon-feedback:8090']
+      - targets: ['dukecon-feedback-<%= dukecon_docker_instance['name'] %>:8090']
+<% end %>
 <% end %>

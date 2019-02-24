@@ -123,7 +123,6 @@ dukecon:
               internal_port: '9051'
               postgres_port: '9052'
               feedback_port: ''
-              prometheus_port: '9054'
 EOF",
 }
 ->

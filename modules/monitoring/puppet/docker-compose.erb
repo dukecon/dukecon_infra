@@ -1,0 +1,40 @@
+version: "2"
+
+networks:
+  default:
+  monitoring:
+    external: true
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.7.1
+    restart: always
+    networks:
+      - default
+      - monitoring
+    external_links:
+<% @dukecon_docker_instances.each do |dukecon_docker_instance| -%>
+      - dukecon-server-<%= dukecon_docker_instance['name'] -%>:dukecon-server-<%= dukecon_docker_instance['name'] %>
+<% if dukecon_docker_instance["feedback_port"] != "" %>
+      - dukecon-feedback-<%= dukecon_docker_instance["name"] -%>:dukecon-feedback-<%= dukecon_docker_instance["name"] %>
+<% end -%>
+<% end %>
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - "/data/prometheus/etc:/etc/prometheus"
+      - "/data/prometheus/data:/prometheus"
+
+  grafana:
+    image: grafana/grafana
+    restart: always
+    networks:
+      - default
+      - monitoring
+    depends_on:
+      - prometheus
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - "/data/grafana/etc:/etc/grafana"
+      - "/data/grafana/data:/var/lib/grafana"
