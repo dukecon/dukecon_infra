@@ -4,6 +4,8 @@ networks:
   default:
   inspectit:
     external: true
+  monitoring:
+    external: true
 
 services:
   dukecon-pwa:
@@ -93,6 +95,10 @@ services:
   prometheus:
     image: prom/prometheus:v2.7.1
     restart: always
+    container_name: prometheus-<%= @dukecon_instance_name %>
+    networks:
+      - default
+      - monitoring
     depends_on:
       - dukecon-server
 <% if @dukecon_instance_feedback_port != "" -%>

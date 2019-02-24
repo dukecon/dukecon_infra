@@ -8,7 +8,7 @@ class { 'docker':
   extra_parameters => "--registry-mirror=http://$hiera_docker_registry_mirror --insecure-registry $hiera_docker_registry_mirror",
 }
 ->
-docker_network { 'inspectit':
+docker_network { ['inspectit', 'monitoring']:
   ensure           => 'present',
 }
 
