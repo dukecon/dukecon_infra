@@ -82,8 +82,7 @@ file { "/etc/cron.daily/backup-postgres-$instance":
   owner          =>      'root',
   content        =>      "#!/bin/bash
 
-export PGPASSWORD=$keycloak_hiera_postgres_password
-exec /usr/bin/pg_dump -h localhost -p $localpgport -U keycloak -f $rootdir/backup/keycloak.sql keycloak",
+exec docker exec postgres-$instance pg_dump -U keycloak > $rootdir/backup/keycloak.sql",
   mode           =>      '0700',
   require        =>      [
     Service["docker-postgres-$instance"],
