@@ -92,10 +92,10 @@ exec docker exec postgres-$instance pg_dump -U keycloak > $rootdir/backup/keyclo
 
 docker::run { "$instance":
   image         => $keycloak_image,
-  env           => ["POSTGRES_DATABASE=keycloak",
-    'POSTGRES_USER=keycloak',
-    "POSTGRES_PASSWORD=$keycloak_hiera_postgres_password",
-    "POSTGRES_PORT=5432", # Workaround for failure in PG 9.6 Docker image
+  env           => ["DB_DATABASE=keycloak",
+    'DB_USER=keycloak',
+    "DB_PASSWORD=$keycloak_hiera_postgres_password",
+    "DB_PORT=5432", # Workaround for failure in PG 9.6 Docker image
     "PROXY_ADDRESS_FORWARDING=true", # cf. https://stackoverflow.com/questions/53564499/keycloak-invalid-parameter-redirect-uri-behind-a-reverse-proxy
   ],
   links         => ["postgres-$instance:postgres",],
