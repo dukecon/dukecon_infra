@@ -17,9 +17,9 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
       'feedback_port'   => '', # '9053'
     }
   ])
-$grafana_base_url = lookup ("grafana.base.url")
-$keycloak_base_url = lookup ("keycloak.base.url")
-$keycloak_client_secret = lookup ("keycloak.infrastructure.client.secret")
+$grafana_base_url = lookup ("grafana.base.url", String, 'deep', 'localhost:3000')
+$keycloak_base_url = lookup ("keycloak.base.url", String, 'deep', 'localhost:8080')
+$keycloak_client_secret = lookup ("keycloak.infrastructure.client.secret", String, deep, 'none')
 
 file { '/data/grafana':
   ensure   => directory,
