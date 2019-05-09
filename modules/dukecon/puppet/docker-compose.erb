@@ -87,7 +87,25 @@ services:
     ports:
       - "127.0.0.1:<%= @dukecon_instance_server_port %>:80"
     volumes:
-      - "/data/dukecon/<%= @dukecon_instance_name %>/htdocs:/usr/local/apache2/htdocs"
+      - "/data/dukecon/<%= @dukecon_instance_name %>/edge/logs:/usr/local/apache2/logs"
+      - "/data/dukecon/<%= @dukecon_instance_name %>/edge/htdocs:/usr/local/apache2/htdocs"
+
+<% if @dukecon_instance_edge_with_static_port != "" -%>
+  dukecon-edge-with-static:
+    image: dukecon/dukecon-httpd-edge-with-static:<%= @dukecon_instance_label %>
+    restart: always
+    depends_on:
+      - dukecon-pwa
+      - dukecon-server
+<% if @dukecon_instance_feedback_port != "" -%>
+      - dukecon-feedback
+<% end -%>
+    ports:
+      - "127.0.0.1:<%= @dukecon_instance_edge_with_static_port %>:80"
+    volumes:
+      - "/data/dukecon/<%= @dukecon_instance_name %>/edge-with-static/logs:/usr/local/apache2/logs"
+      - "/data/dukecon/<%= @dukecon_instance_name %>/edge-with-static/htdocs:/usr/local/apache2/htdocs"
+<% end -%>
 
   autoheal:
     restart: always

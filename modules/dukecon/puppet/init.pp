@@ -16,8 +16,10 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
     'server_port'     => '9050',
     'internal_port'   => '9051',
     'postgres_port'   => '9052',
-    # Set the feedback port to '' to avoid setting up the feedback Docker
+    # Set the feedback port to '' to avoid setting up the feedback Docker container
     'feedback_port'   => '', # '9053'
+    # Set the edge_with_static port to '' to avoid setting up the edge-with-static Docker container
+    'edge_with_static_port' => '', # '9059'
   }
 ])
 
@@ -42,6 +44,7 @@ $dukecon_docker_instances.each |$docker_instance| {
   $dukecon_instance_internal_port = $docker_instance['internal_port']
   $dukecon_instance_postgres_port = $docker_instance['postgres_port']
   $dukecon_instance_feedback_port = $docker_instance['feedback_port']
+  $dukecon_instance_edge_with_static_port = $docker_instance['edge_with_static_port']
   file { "/data/dukecon/$dukecon_instance_name":
     ensure        =>      directory,
     mode          =>      '0755',
@@ -121,7 +124,32 @@ EOF
     mode          =>      '0755',
   }
   ->
-  file { "/etc/docker-compose/dukecon-$dukecon_instance_name":
+  file { "/data/dukecon/$dukecon_instance_name/edge":
+    ensure        => 'directory',
+    mode          => '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/edge/logs":
+    ensure        => 'directory',
+    mode          => '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/edge/htdocs":
+    ensure        => 'directory',
+    mode          => '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/edge-with-static":
+    ensure        => 'directory',
+    mode          => '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/edge-with-static/logs":
+    ensure        => 'directory',
+    mode          => '0755',
+  }
+  ->
+  file { "/data/dukecon/$dukecon_instance_name/edge-with-static/htdocs":
     ensure        => 'directory',
     mode          => '0755',
   }
