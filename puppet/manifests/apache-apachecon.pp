@@ -35,3 +35,22 @@ apache::vhost { 'ssl-apachecon.dukecon.org':
   # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
   headers               => 'set P3P "CP=\"Potato\""'
 }
+
+apache::vhost { 'nossl-topdesk.dukecon.org':
+  servername            => 'topdesk.dukecon.org',
+  ip                    => '88.99.79.88',
+  port                  => '80',
+  docroot               => '/var/www/html',
+  allow_encoded_slashes => 'nodecode',
+  proxy_preserve_host   => 'true',
+  proxy_pass_match      => [
+    { 'path'      =>  '^/(.+)',
+      'url'       =>  'http://localhost:9059/topdesk/$1',
+    },
+  ],
+  redirectmatch_regexp  => ['^/?$',      ],
+  redirectmatch_dest    => ['/2019/'],
+  # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+  headers               => 'set P3P "CP=\"Potato\""'
+}
+
