@@ -155,6 +155,14 @@ if $hiera_dukecon_apache_ssl {
     }
   }
 
+  file { '/data/dukecon/latest':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
+  file { '/data/dukecon/latest/htdocs':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
   apache::vhost { 'ssl-latest.dukecon.org':
     servername            => 'latest.dukecon.org',
     ip                    => '94.130.153.250',
@@ -162,7 +170,7 @@ if $hiera_dukecon_apache_ssl {
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
     ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
-    docroot               => '/data/dukecon/html/latest',
+    docroot               => '/data/dukecon/latest/htdocs',
     docroot_owner         => 'jenkins',
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
@@ -193,6 +201,60 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest         => ['https://latest.dukecon.org/']
   }
 
+  file { '/data/dukecon/latest-static':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
+  file { '/data/dukecon/latest-static/htdocs':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
+  apache::vhost { 'ssl-latest-static.dukecon.org':
+    servername            => 'latest-static.dukecon.org',
+    ip                    => '94.130.153.250',
+    port                  => '443',
+    ssl                   => true,
+    ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
+    ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
+    docroot               => '/data/dukecon/latest-static/htdocs',
+    docroot_owner         => 'jenkins',
+    allow_encoded_slashes => 'nodecode',
+    # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+    request_headers       => [ 'set X-Forwarded-Proto https' ],
+    proxy_preserve_host   => 'true',
+    proxy_pass_match      => [
+      { 'path'      =>  '^/(.+)',
+        'url'       =>  'http://localhost:9059/$1',
+      },
+    ],
+    # The following seems a bit odd: If there are more than one conferences we need multiple redirects, e.g.,
+    # for javaland: the first (ones) for outdated conferences, the last one to match everything else to the current
+    # instance. For other conferences we redirect to the current one.
+    redirectmatch_regexp  => ['^/$',             '^/javaland/2016$', '^/javaland/2017$', '^/javaland/?(\d+/?)?$', '^/doag/?(\d+/?)?$', '^/apex/?(\d+/?)?$', '^/datavision/?(\d+/?)?$', '^/jfs/?(\d+/?)?$', '^/herbstcampus/?(\d+/?)?$' ],
+    redirectmatch_dest    => ['/javaland/2018/', '/javaland/2016/',  '/javaland/2017/' , '/javaland/2018/',       '/doag/2016/',       '/apex/2017/',       '/datavision/2017/',       '/jfs/2016/',       '/herbstcampus/2016/'       ],
+
+    # http://stackoverflow.com/questions/32120129/keycloak-is-causing-ie-to-have-an-infinite-loop
+    headers               => 'set P3P "CP=\"Potato\""'
+  }
+
+  apache::vhost { 'latest-static.dukecon.org':
+    servername            => 'latest-static.dukecon.org',
+    ip                    => '94.130.153.250',
+    port                  =>  '80',
+    docroot               =>  '/var/www/html',
+    allow_encoded_slashes =>  'nodecode',
+    redirect_source       => ['/'],
+    redirect_dest         => ['https://latest-static.dukecon.org/']
+  }
+
+  file { '/data/dukecon/jfs-demo':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
+  file { '/data/dukecon/jfs-demo/htdocs':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
   apache::vhost { 'ssl-jfs-demo.dukecon.org':
     servername            => 'jfs-demo.dukecon.org',
     ip                    => '94.130.153.250',
@@ -200,7 +262,7 @@ if $hiera_dukecon_apache_ssl {
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
     ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
-    docroot               => '/data/dukecon/html/jfs-demo',
+    docroot               => '/data/dukecon/jfs-demo/htdocs',
     docroot_owner         => 'jenkins',
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
@@ -233,6 +295,14 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest         => ['https://jfs-demo.dukecon.org/']
   }
 
+  file { '/data/dukecon/jfs':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
+  file { '/data/dukecon/jfs/htdocs':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
   apache::vhost { 'ssl-jfs.dukecon.org':
     servername            => 'jfs.dukecon.org',
     ip                    => '94.130.153.250',
@@ -240,7 +310,7 @@ if $hiera_dukecon_apache_ssl {
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
     ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
-    docroot               => '/data/dukecon/html/jfs',
+    docroot               => '/data/dukecon/jfs/htdocs',
     docroot_owner         => 'jenkins',
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
@@ -276,6 +346,14 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest         => ['https://jfs.dukecon.org/']
   }
 
+  file { '/data/dukecon/testing':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
+  file { '/data/dukecon/testing/htdocs':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
   apache::vhost { 'ssl-testing.dukecon.org':
     servername            => 'testing.dukecon.org',
     ip                    => '94.130.153.250',
@@ -283,7 +361,7 @@ if $hiera_dukecon_apache_ssl {
     ssl                   => true,
     ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
     ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
-    docroot               => '/data/dukecon/testing/html',
+    docroot               => '/data/dukecon/testing/htdocs',
     docroot_owner         => 'jenkins',
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
@@ -350,6 +428,14 @@ if $hiera_dukecon_apache_ssl {
     redirect_dest         => ['https://programm.doag.org/']
   }
 
+  file { '/data/dukecon/javaland':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
+  file { '/data/dukecon/javaland/htdocs':
+    ensure           =>      directory,
+    mode             =>      '0755',
+  } ->
   apache::vhost { 'ssl-programm.javaland.eu':
     servername            => 'programm.javaland.eu',
     ip                    => '94.130.153.250',
@@ -358,7 +444,7 @@ if $hiera_dukecon_apache_ssl {
     ssl_cert              => '/etc/tls/javaland.crt',
     ssl_key               => '/etc/tls/javaland.key',
     ssl_ca                => '/etc/tls/RapidSSL_SHA256_CA.txt',
-    docroot               => '/data/dukecon/html/javaland',
+    docroot               => '/data/dukecon/javaland/htdocs',
     docroot_owner         => 'jenkins',
     allow_encoded_slashes => 'nodecode',
     # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
