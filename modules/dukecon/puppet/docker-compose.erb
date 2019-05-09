@@ -17,9 +17,13 @@ services:
   dukecon-postgres:
     image: "postgres:<%= @dukecon_postgres_version %>"
     restart: always
+    container_name: dukecon-postgres-<%= @dukecon_instance_name %>
     environment:
       - "POSTGRES_USER=dukecon"
       - "POSTGRES_PASSWORD=dukecon"
+    networks:
+      - default
+      - monitoring
     ports:
       - "127.0.0.1:<%= @dukecon_instance_postgres_port %>:5432"
     volumes:
