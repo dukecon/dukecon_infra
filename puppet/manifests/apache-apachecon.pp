@@ -42,6 +42,21 @@ apache::vhost { 'nossl-topdesk.dukecon.org':
   port                  => '80',
   docroot               => '/var/www/html',
   allow_encoded_slashes => 'nodecode',
+  redirect_source       => ['/'],
+  redirect_dest         => ['https://topdesk.dukecon.org/']
+}
+
+apache::vhost { 'ssl-topdesk.dukecon.org':
+  servername            => 'topdesk.dukecon.org',
+  ip                    => '88.99.79.88',
+  port                  => '443',
+  ssl                   => true,
+  ssl_cert              => '/local/letsencrypt/certs/dukecon.org/fullchain.pem',
+  ssl_key               => '/local/letsencrypt/certs/dukecon.org/privkey.pem',
+  docroot               => '/var/www/html',
+  allow_encoded_slashes => 'nodecode',
+  # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
+  request_headers       => [ 'set X-Forwarded-Proto https' ],
   proxy_preserve_host   => 'true',
   proxy_pass_match      => [
     { 'path'      =>  '^/(.+)',
