@@ -154,7 +154,13 @@ EOF
     mode          => '0755',
   }
   ->
-  file { "create docker-compose/dukecon-$dukecon_instance_name":
+  file { "create docker-compose directory dukecon-$dukecon_instance_name":
+    path    => "/etc/docker-compose/dukecon-$dukecon_instance_name",
+    ensure  => 'directory',
+    mode    => "0755",
+  }
+  ->
+  file { "create docker-compose file dukecon-$dukecon_instance_name di":
     path    => "/etc/docker-compose/dukecon-$dukecon_instance_name/docker-compose.yml",
     mode    => "0644",
     content => template("${module_basedir}/puppet/docker-compose.erb"),
