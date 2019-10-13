@@ -8,11 +8,19 @@ networks:
 services:
   dukecon-pwa:
     image: dukecon/dukecon-pwa:<%= @dukecon_instance_label %>
+    container_name: dukecon-pwa-<%= @dukecon_instance_name %>
     restart: always
+    networks:
+      - default
+      - monitoring
 
   dukecon-admin-client:
     image: dukecon/dukecon-admin-client:<%= @dukecon_instance_label %>
+    container_name: dukecon-admin-client-<%= @dukecon_instance_name %>
     restart: always
+    networks:
+      - default
+      - monitoring
 
   dukecon-postgres:
     image: "postgres:<%= @dukecon_postgres_version %>"
@@ -81,7 +89,11 @@ services:
 
   dukecon-edge:
     image: dukecon/dukecon-httpd-edge:<%= @dukecon_instance_label %>
+    container_name: dukecon-httpd-edge-<%= @dukecon_instance_name %>
     restart: always
+    networks:
+      - default
+      - monitoring
     depends_on:
       - dukecon-pwa
       - dukecon-server
@@ -97,6 +109,7 @@ services:
 <% if @dukecon_instance_edge_with_static_port != "" -%>
   dukecon-edge-with-static:
     image: dukecon/dukecon-httpd-edge-with-static:<%= @dukecon_instance_label %>
+    container_name: dukecon-httpd-edge-with-static-<%= @dukecon_instance_name %>
     restart: always
     depends_on:
       - dukecon-pwa
@@ -114,6 +127,7 @@ services:
   autoheal:
     restart: always
     image: willfarrell/autoheal
+    container_name: dukecon-autoheal-<%= @dukecon_instance_name %>
     environment:
       - AUTOHEAL_CONTAINER_LABEL=all
     volumes:

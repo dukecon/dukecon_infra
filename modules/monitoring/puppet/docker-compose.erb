@@ -14,7 +14,11 @@ services:
       - default
       - monitoring
     external_links:
+      - dukecon-conference-archive:dukecon-conference-archive
 <% @dukecon_docker_instances.each do |dukecon_docker_instance| -%>
+      - dukecon-admin-client-<%= dukecon_docker_instance['name'] -%>:dukecon-admin-client-<%= dukecon_docker_instance['name'] %>
+      - dukecon-httpd-edge-<%= dukecon_docker_instance['name'] -%>:dukecon-httpd-edge-<%= dukecon_docker_instance['name'] %>
+      - dukecon-pwa-<%= dukecon_docker_instance['name'] -%>:dukecon-pwa-<%= dukecon_docker_instance['name'] %>
       - dukecon-server-<%= dukecon_docker_instance['name'] -%>:dukecon-server-<%= dukecon_docker_instance['name'] %>
 <% if dukecon_docker_instance["feedback_port"] != "" %>
       - dukecon-feedback-<%= dukecon_docker_instance["name"] -%>:dukecon-feedback-<%= dukecon_docker_instance["name"] %>
