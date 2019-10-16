@@ -24,8 +24,8 @@ services:
 
   dukecon-postgres:
     image: "postgres:<%= @dukecon_postgres_version %>"
-    restart: always
     container_name: dukecon-postgres-<%= @dukecon_instance_name %>
+    restart: always
     environment:
       - "POSTGRES_USER=dukecon"
       - "POSTGRES_PASSWORD=dukecon"
@@ -38,9 +38,9 @@ services:
       - "/data/dukecon/<%= @dukecon_instance_name %>/postgresql/data:/var/lib/postgresql/data"
 
   dukecon-server:
-    image: dukecon/dukecon-server:<%= @dukecon_instance_label %>
-    restart: always
+    image: dukecon/dukecon-server:<%= @dukecon_instance_label %><% if @dukecon_instance_with_static_data == "true" %>-static<% end %>
     container_name: dukecon-server-<%= @dukecon_instance_name %>
+    restart: always
     depends_on:
       - dukecon-postgres
     links:
@@ -64,8 +64,8 @@ services:
 <% if @dukecon_instance_feedback_port != "" -%>
   dukecon-feedback:
     image: dukecon/dukecon-feedback:<%= @dukecon_instance_label %>
-    restart: always
     container_name: dukecon-feedback-<%= @dukecon_instance_name %>
+    restart: always
     depends_on:
       - dukecon-postgres
     links:
@@ -88,8 +88,13 @@ services:
 <% end -%>
 
   dukecon-edge:
+<% if @dukecon_instance_with_static_data == "true" %>
+    image: dukecon/dukecon-httpd-edge-with-static:<%= @dukecon_instance_label %>
+    container_name: dukecon-httpd-edge-<%= @dukecon_instance_name %>
+<% else %>
     image: dukecon/dukecon-httpd-edge:<%= @dukecon_instance_label %>
     container_name: dukecon-httpd-edge-<%= @dukecon_instance_name %>
+<% end %>
     restart: always
     networks:
       - default
@@ -106,28 +111,10 @@ services:
       - "/data/dukecon/<%= @dukecon_instance_name %>/edge/logs:/usr/local/apache2/logs"
       - "/data/dukecon/<%= @dukecon_instance_name %>/edge/htdocs:/usr/local/apache2/htdocs"
 
-<% if @dukecon_instance_edge_with_static_port != "" -%>
-  dukecon-edge-with-static:
-    image: dukecon/dukecon-httpd-edge-with-static:<%= @dukecon_instance_label %>
-    container_name: dukecon-httpd-edge-with-static-<%= @dukecon_instance_name %>
-    restart: always
-    depends_on:
-      - dukecon-pwa
-      - dukecon-server
-<% if @dukecon_instance_feedback_port != "" -%>
-      - dukecon-feedback
-<% end -%>
-    ports:
-      - "127.0.0.1:<%= @dukecon_instance_edge_with_static_port %>:80"
-    volumes:
-      - "/data/dukecon/<%= @dukecon_instance_name %>/edge-with-static/logs:/usr/local/apache2/logs"
-      - "/data/dukecon/<%= @dukecon_instance_name %>/edge-with-static/htdocs:/usr/local/apache2/htdocs"
-<% end -%>
-
   autoheal:
-    restart: always
     image: willfarrell/autoheal
     container_name: dukecon-autoheal-<%= @dukecon_instance_name %>
+    restart: always
     environment:
       - AUTOHEAL_CONTAINER_LABEL=all
     volumes:

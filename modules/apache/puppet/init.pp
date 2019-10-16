@@ -224,7 +224,7 @@ if $hiera_dukecon_apache_ssl {
     proxy_preserve_host   => 'true',
     proxy_pass_match      => [
       { 'path'      =>  '^/(.+)',
-        'url'       =>  'http://localhost:9059/$1',
+        'url'       =>  'http://localhost:9070/$1',
       },
     ],
     # The following seems a bit odd: If there are more than one conferences we need multiple redirects, e.g.,
