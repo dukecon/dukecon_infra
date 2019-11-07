@@ -5,11 +5,11 @@
 
 composite = ENV['VAGRANT_COMPOSITE'] || "production"
 
-name = ENV['VAGRANT_NAME'] || "dukecon-vagrant"
-memory = ENV['VAGRANT_MEMORY'] || 3072
+name = ENV['VAGRANT_NAME'] || "dukecon-vagrant-rancher"
+memory = ENV['VAGRANT_MEMORY'] || 4096
 
-ip_unique = ENV['VAGRANT_IP_UNIQUE'] || "55"
-port_unique = ENV['VAGRANT_PORT_UNIQUE'] || "55"
+ip_unique = ENV['VAGRANT_IP_UNIQUE'] || "51"
+port_unique = ENV['VAGRANT_PORT_UNIQUE'] || ip_unique
 
 Vagrant.configure(2) do |config|
   # Generic/Defaults
