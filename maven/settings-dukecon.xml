@@ -15,9 +15,9 @@
         <pluginGroup>fr.jcgay.maven.plugins</pluginGroup>
     </pluginGroups>
 
-    <!--<activeProfiles>-->
-        <!--<activeProfile>dukecon</activeProfile>-->
-    <!--</activeProfiles>-->
+    <activeProfiles>
+        <activeProfile>dukecon</activeProfile>
+    </activeProfiles>
 
     <profiles>
         <profile>
