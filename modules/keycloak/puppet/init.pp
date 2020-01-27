@@ -5,7 +5,7 @@ $localkcport = 9041         # default: 9041
 
 $postgres_version = "9.6"
 $postgres_client_version = "10" # Ubuntu 18.04 LTS!
-$keycloak_version = "1.2-SNAPSHOT"
+$keycloak_version = "1.3-SNAPSHOT"
 # Computed
 $rootdir = "/data/$instance"
 $postgres_image = "postgres:$postgres_version"
@@ -92,13 +92,14 @@ exec docker exec postgres-$instance pg_dump -U keycloak > $rootdir/backup/keyclo
 
 docker::run { "$instance":
   image         => $keycloak_image,
-  env           => ["POSTGRES_DATABASE=keycloak",
-    'POSTGRES_USER=keycloak',
-    "POSTGRES_PASSWORD=$keycloak_hiera_postgres_password",
-    "POSTGRES_PORT=5432", # Workaround for failure in PG 9.6 Docker image
+  env           => ["DB_DATABASE=keycloak",
+    'DB_USER=keycloak',
+    "DB_PASSWORD=$keycloak_hiera_postgres_password",
+    "DB_ADDR=postgres-keycloak",
+    "DB_PORT=5432", # Workaround for failure in PG 9.6 Docker image
     "PROXY_ADDRESS_FORWARDING=true", # cf. https://stackoverflow.com/questions/53564499/keycloak-invalid-parameter-redirect-uri-behind-a-reverse-proxy
   ],
-  links         => ["postgres-$instance:postgres",],
+  links         => ["postgres-$instance:postgres-keycloak",],
   volumes       => ["$rootdir/server/log:/opt/jboss/keycloak/standalone/log"],
   ports         => ["127.0.0.1:$localkcport:8080"],
   depends       => ["postgres-$instance",],
