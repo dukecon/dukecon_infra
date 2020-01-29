@@ -5,7 +5,7 @@ $localkcport = 9041         # default: 9041
 
 $postgres_version = "9.6"
 $postgres_client_version = "10" # Ubuntu 18.04 LTS!
-$keycloak_version = "1.3-SNAPSHOT"
+$keycloak_version = "1.4-SNAPSHOT"
 # Computed
 $rootdir = "/data/$instance"
 $postgres_image = "postgres:$postgres_version"
