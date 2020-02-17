@@ -174,4 +174,13 @@ export PGPASSWORD=dukecon
 exec /usr/bin/pg_dump -h localhost -p $dukecon_instance_postgres_port -U dukecon -f /data/dukecon/$dukecon_instance_name/postgresql/backup/dukecon-$dukecon_instance_name.sql dukecon",
     mode           =>      '0700',
   }
+  ->
+  file { "/usr/local/bin/dukecon-converters-$dukecon_instance_name.sh":
+    owner          =>      'root',
+    content        =>      "#!/bin/bash
+
+docker exec dukecon-server-$dukecon_instance_name java -jar dukecon-server-converters.jar file:config/conferences-static.yml",
+    mode           =>      '0755',
+  }
+
 }
