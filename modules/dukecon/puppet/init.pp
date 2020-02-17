@@ -13,6 +13,7 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
   {
     'name'            => 'latest',
     'label'           => 'latest',
+    'spring_profiles' => 'latest',
     'server_port'     => '9050',
     'internal_port'   => '9051',
     'postgres_port'   => '9052',
@@ -41,6 +42,7 @@ file { "/data/dukecon":
 $dukecon_docker_instances.each |$docker_instance| {
   $dukecon_instance_name = $docker_instance['name']
   $dukecon_instance_label = $docker_instance['label']
+  $dukecon_instance_spring_profiles = $docker_instance['spring_profiles']
   $dukecon_instance_server_port = $docker_instance['server_port']
   $dukecon_instance_internal_port = $docker_instance['internal_port']
   $dukecon_instance_postgres_port = $docker_instance['postgres_port']
