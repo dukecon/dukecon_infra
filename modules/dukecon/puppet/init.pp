@@ -187,7 +187,7 @@ exec /usr/bin/pg_dump -h localhost -p $dukecon_instance_postgres_port -U dukecon
     owner          =>      'root',
     content        =>      "#!/bin/bash
 
-docker exec dukecon-server-$dukecon_instance_name java -jar dukecon-server-converters.jar file:config/conferences-static.yml",
+docker exec dukecon-server-$dukecon_instance_name java -jar dukecon-server-converters.jar file:config/conferences.yml resources",
     mode           =>      '0755',
   }
 
