@@ -13,6 +13,7 @@ $dukecon_docker_instances = lookup ("dukecon.docker.instances",
   {
     'name'            => 'latest',
     'label'           => 'latest',
+    'server_label'    => undef,
     'spring_profiles' => 'latest',
     'server_port'     => '9050',
     'internal_port'   => '9051',
@@ -50,7 +51,14 @@ $dukecon_docker_instances.each |$docker_instance| {
   $dukecon_instance_edge_with_static_port = $docker_instance['edge_with_static_port']
   $dukecon_instance_with_static_data = $docker_instance['with_static_data'] ? {
     /(true|false)/ => $docker_instance['with_static_data'],
-    default        => "false"
+    default        => "false",
+  }
+  $dukecon_instance_server_label = $docker_instance['server_label'] ? {
+    /.+/           => $dukecon_instance_label,
+    default        => $dukecon_instance_with_static_data ? {
+      /true/         => "${dukecon_instance_label}-static",
+      default        => $dukecon_instance_label,
+    },
   }
   file { "/data/dukecon/$dukecon_instance_name":
     ensure        =>      directory,
