@@ -63,8 +63,13 @@ file { "$rootdir/server/log":
   mode          =>      '0777',
 }
 
+docker_network { ['keycloak']:
+  ensure           => 'present',
+}
+->
 docker::run { "postgres-$instance":
   image    => $postgres_image,
+  net      => 'keycloak',
   env      => ["POSTGRES_DATABASE=keycloak",
     'POSTGRES_USER=keycloak',
     "POSTGRES_PASSWORD=$keycloak_hiera_postgres_password",
@@ -92,6 +97,7 @@ exec docker exec postgres-$instance pg_dump -U keycloak > $rootdir/backup/keyclo
 
 docker::run { "$instance":
   image         => $keycloak_image,
+  net           => 'keycloak',
   env           => ["DB_DATABASE=keycloak",
     'DB_USER=keycloak',
     "DB_PASSWORD=$keycloak_hiera_postgres_password",
