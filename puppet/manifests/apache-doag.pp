@@ -8,10 +8,10 @@ apache::vhost { 'programm.doag.org':
   ip                    => '85.214.231.45',
   port                  => '443',
   ssl                   => true,
-  ssl_cert              => '/etc/tls/doag2017.crt',
-  ssl_key               => '/etc/tls/doag2014.key',
+  ssl_cert              => '/etc/tls/wildcard.doag.org.crt',
+  ssl_key               => '/etc/tls/wildcard.doag.org.key',
   ssl_verify_client     => 'none',
-  ssl_ca                => '/etc/tls/intermediate.crt',
+  ssl_ca                => '/etc/tls/intermediate2021.crt',
   docroot               => '/var/www/html',
   allow_encoded_slashes => 'nodecode',
   # add "X-Forwarded-Proto: https" to all forwarded requests on this SSL port
